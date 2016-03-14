@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">DopeApp</string>
+    <string name="facebook_app_id">1246684788694366</string>
+
+    <string name="welcome_screen_welcome_message">Welcome to Dope</string>
+    <string name="welcome_screen_sign_in_choise_text">Sign in or create a free account</string>
+    <string name="welcome_screen_skip_login">Skip Login</string>
+    <string name="welcome_screen_already_have_an_account_message">Already have an account?</string>
+    <string name="welcome_screen_sign_in_now">Sign in now</string>
+</resources>
