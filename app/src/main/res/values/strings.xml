@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">DopeApp</string>
-    <string name="facebook_app_id">1246684788694366</string>
+    <string name="facebook_app_id">182549025457993</string>
 
     <string name="welcome_screen_welcome_message">Welcome to Dope</string>
     <string name="welcome_screen_sign_in_choise_text">Sign in or create a free account</string>
