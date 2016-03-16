@@ -3,4 +3,6 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+    <color name="welcome_white_messages">#CCC</color>
+    <color name="welcome_grey_messages">#777</color>
 </resources>
