@@ -9,4 +9,13 @@
     <string name="welcome_screen_sign_in_now">Sign in now</string>
     <string name="signin_activity_label">Login</string>
     <string name="skip">Skip</string>
+
+    <string name="lower_tab_daily_dope">Daily Dope</string>
+    <string name="lower_tab_tranding">Tranding</string>
+    <string name="lower_tab_friends">Friends</string>
+    <string name="lower_tab_profile">Profile</string>
+
+    <string name="fish_question">Some of the girls nicer and more beautiful?</string>
+    <string name="fish_votes_quantity">565 Votes</string>
+    <string name="fish_contact_name">Alisa Parker</string>
 </resources>

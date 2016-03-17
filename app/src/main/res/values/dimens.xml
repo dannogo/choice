@@ -8,4 +8,23 @@
     <dimen name="welcome_message_size">33sp</dimen>
     <dimen name="welcome_sign_or_create_account_message_size">15sp</dimen>
     <dimen name="welcome_skip_login_message_size">16sp</dimen>
+
+    <dimen name="toolbar_button_size">31dp</dimen>
+    <dimen name="toolbar_button_padding">6dp</dimen>
+    <dimen name="toolbar_title_font_size">15sp</dimen>
+    <dimen name="toolbar_button_right_margin">12dp</dimen>
+
+    <dimen name="lower_tab_height">44dp</dimen>
+    <dimen name="lower_tab_font_size">9sp</dimen>
+    <dimen name="lower_tab_icon_size">30dp</dimen>
+    <dimen name="lower_tab_friends_icon_width">43dp</dimen>
+    <dimen name="lower_tab_icon_padding">4dp</dimen>
+
+    <dimen name="main_screen_question_font_size">16sp</dimen>
+    <dimen name="main_screen_votes_font_size">12sp</dimen>
+
+    <dimen name="main_screen_contact_bar_padding">12dp</dimen>
+    <dimen name="main_screen_contact_avatar_size">36dp</dimen>
+    <dimen name="main_screen_margin_between_avatar_and_contact_name">7dp</dimen>
+    <dimen name="main_screen_margin_between_icons">15dp</dimen>
 </resources>

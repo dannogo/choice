@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/lower_tab_height"
+    android:background="@color/main_activity_primary_color"
+    android:orientation="horizontal"
+    android:weightSum="5">
+
+    <LinearLayout
+        android:id="@+id/daily_dope_linlay"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="@dimen/lower_tab_icon_size"
+            android:layout_height="@dimen/lower_tab_icon_size"
+            android:layout_gravity="center_horizontal"
+            android:padding="@dimen/lower_tab_icon_padding"
+            android:scaleType="centerInside"
+            android:src="@drawable/lower_tab_active_daily"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/lower_tab_daily_dope"
+            android:textColor="@color/lower_bar_active_color"
+            android:textSize="@dimen/lower_tab_font_size"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tranding_linlay"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="@dimen/lower_tab_icon_size"
+            android:layout_height="@dimen/lower_tab_icon_size"
+            android:layout_gravity="center_horizontal"
+            android:padding="@dimen/lower_tab_icon_padding"
+            android:src="@drawable/lower_tab_tranding"
+            android:scaleType="centerInside" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/lower_tab_tranding"
+            android:textColor="@color/lower_tab_text_color"
+            android:textSize="@dimen/lower_tab_font_size"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/plus_linlay"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:orientation="vertical"
+        >
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:padding="@dimen/lower_tab_icon_padding"
+            android:src="@drawable/lower_tab_center_plus"
+            android:scaleType="centerCrop" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/friends_linlay"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="@dimen/lower_tab_friends_icon_width"
+            android:layout_height="@dimen/lower_tab_icon_size"
+            android:layout_gravity="center_horizontal"
+            android:padding="@dimen/lower_tab_icon_padding"
+            android:scaleType="centerInside"
+            android:src="@drawable/lower_tab_friends"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/lower_tab_friends"
+            android:textColor="@color/lower_tab_text_color"
+            android:textSize="@dimen/lower_tab_font_size"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/profile_linlay"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:clickable="true"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="@dimen/lower_tab_icon_size"
+            android:layout_height="@dimen/lower_tab_icon_size"
+            android:layout_gravity="center_horizontal"
+            android:padding="@dimen/lower_tab_icon_padding"
+            android:scaleType="centerInside"
+            android:src="@drawable/lower_tab_profile"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/lower_tab_profile"
+            android:textColor="@color/lower_tab_text_color"
+            android:textSize="@dimen/lower_tab_font_size"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>
