@@ -11,7 +11,33 @@
     <color name="lower_bar_active_color">#37B5BE</color>
     <color name="lower_tab_text_color">#929D9E</color>
 
-    <color name="main_screen_question_font_color">#191919</color>
+    <color name="main_screen_question_font_color">#000</color>
     <color name="main_screen_votes_font_color">#8A9596</color>
+    <color name="accent_color">#B5BCBC</color>
+
+
+    <color name="welcome_facebook_button_primary_color">#3B5998</color>
+    <color name="welcome_facebook_button_focus_color">#FF293D69</color>
+    <color name="welcome_twitter_button_primary_color">#3AACEC</color>
+    <color name="welcome_twitter_button_focus_color">#FF26749F</color>
+
+    <color name="friends_instagram_button_primary_color">#2A5B83</color>
+    <color name="friends_instagram_button_focus_color">#193750</color>
+    <color name="friends_search_button_primary_color">#37B5BE</color>
+    <color name="friends_search_button_focus_color">#27848b</color>
+
+
+    <color name="friends_desription_text_color">#B5BCBC</color>
+    <!--<color name="friends_desription_text_color">#7D898A</color>-->
+
+    <color name="message_tab_plus_button_inactive_primary">#D1DEDE</color>
+    <color name="message_tab_plus_button_inactive_focus">#9da7a7</color>
+    <color name="message_behind_button_background">#EBF4F4</color>
+    <color name="message_tab_plus_border_color">#BEC3C3</color>
+    <color name="message_edittext_outer_color">#DEE5E5</color>
+    <color name="white">#FFF</color>
+    <color name="message_list_checked_item_background">#ECF3F3</color>
+
+
 
 </resources>

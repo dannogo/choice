@@ -5,9 +5,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -103,6 +106,26 @@ public class WelcomeActivity extends AppCompatActivity {
 
             }
         });
+//        buttonsAppearenceHandling();
+
+
+    }
+
+    private void buttonsAppearenceHandling(){
+        android.view.ViewGroup.LayoutParams params = facebookButton.getLayoutParams();
+        int height = params.height;
+
+        facebookButton.getIconImageObject().setLayoutParams(new LinearLayout.LayoutParams(80, 80));
+        LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
+        float n = getResources().getDimension(R.dimen.friends_profile_message_margin_4);
+        lp1.setMargins(0, (int)n, 0, 0);
+        facebookButton.setLayoutParams(lp1);
+
+        twitterButton.getIconImageObject().setLayoutParams(new LinearLayout.LayoutParams(80, 80));
+        LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
+        n = getResources().getDimension(R.dimen.friends_profile_message_margin_5);
+        lp2.setMargins(0, (int) n, 0, 0);
+        twitterButton.setLayoutParams(lp2);
 
 
     }

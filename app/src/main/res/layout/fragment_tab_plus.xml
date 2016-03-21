@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.18"
+
+        >
+        <TextView
+            android:layout_centerInParent="true"
+            android:textColor="@color/friends_desription_text_color"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/message_tab_plus_what_is_your_question"
+            android:textSize="@dimen/message_tab_plus_title"
+            />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.66"
+        android:orientation="horizontal"
+        >
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:gravity="center"
+            android:background="@drawable/top_right_bottom_border"
+            >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                >
+                
+                <ImageView
+                    android:layout_width="@dimen/circle_add_plus_icon_size"
+                    android:layout_height="@dimen/circle_add_plus_icon_size"
+                    android:src="@drawable/circle_add_plus"
+                    />
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add First Image"
+                    android:textColor="@color/friends_desription_text_color"
+                    />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_weight="0.5"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:gravity="center"
+            android:background="@drawable/top_bottom_border"
+            >
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                >
+
+                <ImageView
+                    android:layout_width="@dimen/circle_add_plus_icon_size"
+                    android:layout_height="@dimen/circle_add_plus_icon_size"
+                    android:src="@drawable/circle_add_plus"
+                    />
+
+                <TextView
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Add Second Image"
+                    android:textColor="@color/friends_desription_text_color"
+                    />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.16"
+        android:paddingRight="@dimen/activity_custom_horizontal_padding"
+        android:paddingLeft="@dimen/activity_custom_horizontal_padding"
+        android:background="@color/message_behind_button_background"
+        >
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:layout_marginTop="@dimen/friends_profile_message_margin_4"
+            android:id="@+id/send_new_message"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:layout_centerInParent="true"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            fancy:fb_defaultColor="@color/message_tab_plus_button_inactive_primary"
+            fancy:fb_focusColor="@color/message_tab_plus_button_inactive_focus"
+            fancy:fb_iconResource="@drawable/paper_plane"
+            fancy:fb_iconPosition="left"
+            fancy:fb_radius="@dimen/buttons_corner_radius"
+            fancy:fb_text="@string/message_first_screen_button_text"
+            fancy:fb_textSize="@dimen/button_text_size"
+            fancy:fb_textColor="@color/white_text_color"
+            android:background="#BBB"
+            />
+
+    </RelativeLayout>
+
+</LinearLayout>

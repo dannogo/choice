@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_custom_horizontal_padding"
+    android:paddingRight="@dimen/activity_custom_horizontal_padding"
+    android:gravity="center_horizontal"
+    >
+
+    <ImageView
+        android:layout_marginTop="@dimen/friends_profile_message_margin_1"
+        android:layout_width="@dimen/friends_giant_icon_size"
+        android:layout_height="@dimen/friends_giant_icon_size"
+        android:src="@drawable/profile_giant_icon"
+        />
+
+    <TextView
+        android:layout_marginTop="@dimen/friends_profile_message_margin_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/friends_notregistered_create_an_account"
+        android:textColor="@color/main_screen_question_font_color"
+        android:textSize="@dimen/friends_main_message_font_size"
+        android:textStyle="bold"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:layout_marginTop="@dimen/friends_profile_message_margin_3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/friends_notregistered_description_1"
+        android:textColor="@color/friends_desription_text_color"
+        android:textSize="@dimen/friends_description_font_size"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/friends_notregistered_description_2"
+        android:textColor="@color/friends_desription_text_color"
+        android:textSize="@dimen/friends_description_font_size"
+        />
+
+    <mehdi.sakout.fancybuttons.FancyButton
+        android:layout_marginTop="@dimen/friends_profile_message_margin_4"
+        android:id="@+id/create_username"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        fancy:fb_defaultColor="@color/friends_search_button_primary_color"
+        fancy:fb_focusColor="@color/friends_search_button_focus_color"
+        fancy:fb_iconPosition="left"
+        fancy:fb_radius="@dimen/buttons_corner_radius"
+        fancy:fb_text="@string/friends_notregistered_create_username"
+        fancy:fb_textSize="@dimen/button_text_size"
+        fancy:fb_textColor="@color/white_text_color" />
+
+    <mehdi.sakout.fancybuttons.FancyButton
+        android:layout_marginTop="@dimen/friends_profile_message_margin_5"
+        android:id="@+id/alreary_a_user"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginBottom="50dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp"
+        fancy:fb_defaultColor="@color/friends_search_button_primary_color"
+        fancy:fb_focusColor="@color/friends_search_button_focus_color"
+        fancy:fb_borderWidth="@dimen/button_border_width"
+        fancy:fb_borderColor="@color/friends_search_button_primary_color"
+        fancy:fb_iconPosition="left"
+        fancy:fb_radius="@dimen/buttons_corner_radius"
+        fancy:fb_text="@string/friends_notregistered_already_a_user"
+        fancy:fb_textSize="@dimen/button_text_size"
+        fancy:fb_textColor="@color/main_screen_question_font_color"
+        fancy:fb_ghost="true"
+        />
+
+</LinearLayout>

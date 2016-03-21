@@ -3,7 +3,7 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="activity_custom_horizontal_padding">40dp</dimen>
-    <dimen name="button_height">52dp</dimen>
+    <dimen name="button_height">48dp</dimen>
     <dimen name="button_text_size">16sp</dimen>
     <dimen name="welcome_message_size">33sp</dimen>
     <dimen name="welcome_sign_or_create_account_message_size">15sp</dimen>
@@ -13,6 +13,7 @@
     <dimen name="toolbar_button_padding">6dp</dimen>
     <dimen name="toolbar_title_font_size">15sp</dimen>
     <dimen name="toolbar_button_right_margin">12dp</dimen>
+    <dimen name="toolbar_button_left_margin">0dp</dimen>
 
     <dimen name="lower_tab_height">44dp</dimen>
     <dimen name="lower_tab_font_size">9sp</dimen>
@@ -27,4 +28,39 @@
     <dimen name="main_screen_contact_avatar_size">36dp</dimen>
     <dimen name="main_screen_margin_between_avatar_and_contact_name">7dp</dimen>
     <dimen name="main_screen_margin_between_icons">15dp</dimen>
+
+    <dimen name="buttons_corner_radius">30dp</dimen>
+    <dimen name="friends_giant_icon_size">160dp</dimen>
+    <dimen name="friends_main_message_font_size">18sp</dimen>
+    <dimen name="friends_description_font_size">14sp</dimen>
+    
+    <dimen name="button_border_width">2dp</dimen>
+
+    <dimen name="friends_profile_message_margin_1">48dp</dimen>
+    <dimen name="friends_profile_message_margin_2">35dp</dimen>
+    <dimen name="friends_profile_message_margin_3">3dp</dimen>
+    <dimen name="friends_profile_message_margin_4">25dp</dimen>
+    <dimen name="friends_profile_message_margin_5">17dp</dimen>
+
+    <dimen name="circle_add_plus_icon_size">40dp</dimen>
+    <dimen name="message_tab_plus_title">16sp</dimen>
+    <dimen name="message_edittext_height">32dp</dimen>
+    <dimen name="message_edittext_container_height">40dp</dimen>
+
+    <dimen name="message_list_row_height">67dp</dimen>
+    <dimen name="message_list_checkmark_size">23dp</dimen>
+    <dimen name="message_list_avatar_size">43dp</dimen>
+    <dimen name="message_list_online_status_size">6dp</dimen>
+    <!--<dimen name="message_list_online_status_size">15dp</dimen>-->
+    <dimen name="message_list_left_padding">15dp</dimen>
+    <dimen name="message_list_right_padding">10dp</dimen>
+    <dimen name="message_list_checkmark_avatar_margin">10dp</dimen>
+    <dimen name="message_list_avatar_text_margin">10dp</dimen>
+    <dimen name="message_list_contact_name_online_status_margin">7dp</dimen>
+
+    <dimen name="message_list_contact_name_font_size">17sp</dimen>
+    <dimen name="message_list_contact_recent_activity_font_size">14sp</dimen>
+    <dimen name="message_list_date_font_size">14sp</dimen>
+    <dimen name="message_edittext_corner_size">7dp</dimen>
+    <dimen name="message_search_font_size">15sp</dimen>
 </resources>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/new_message_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_above="@+id/bottom_area"
+        android:layout_weight="0.84"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/message_edittext_container_height"
+            android:background="@drawable/bottom_border_for_search_container"
+            android:padding="6dp"
+            >
+
+            <EditText
+                android:id="@+id/search"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/rounded_rectangle"
+                android:hint="Search"
+                android:gravity="center"
+                android:textColorHint="@color/friends_desription_text_color"
+                android:textSize="@dimen/message_search_font_size"
+                android:inputType="textPersonName"
+                />
+                <!--android:hint="\u2315 Search"-->
+
+                <!--android:drawablePadding="7dp"-->
+                <!--android:drawableLeft="@drawable/search_box_magnifier_icon"-->
+                <!--android:layout_height="@dimen/message_edittext_height"-->
+
+        </RelativeLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/bottom_area"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.16"
+        android:background="@drawable/top_border"
+        android:paddingLeft="@dimen/activity_custom_horizontal_padding"
+        android:paddingRight="@dimen/activity_custom_horizontal_padding">
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/fancy_button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/friends_profile_message_margin_4"
+            android:background="#BBB"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            fancy:fb_defaultColor="@color/lower_bar_active_color"
+            fancy:fb_focusColor="@color/friends_search_button_focus_color"
+            fancy:fb_iconPosition="left"
+            fancy:fb_iconResource="@drawable/paper_plane"
+            fancy:fb_radius="@dimen/buttons_corner_radius"
+            fancy:fb_text="@string/message_first_screen_button_text"
+            fancy:fb_textColor="@color/white_text_color"
+            fancy:fb_textSize="@dimen/button_text_size" />
+
+    </RelativeLayout>
+
+
+</LinearLayout>

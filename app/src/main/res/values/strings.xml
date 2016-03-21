@@ -18,4 +18,37 @@
     <string name="fish_question">Some of the girls nicer and more beautiful?</string>
     <string name="fish_votes_quantity">565 Votes</string>
     <string name="fish_contact_name">Alisa Parker</string>
+
+    <string name="friends_first_screen_main_message">Every is more fun with Friends</string>
+    <string name="friends_first_screen_description_1">Search for your friends or follow someone</string>
+    <string name="friends_first_screen_description_2">new based on our recommendations</string>
+
+    <string name="friends_instagram_button_text">   Find from Instagram</string>
+    <string name="friends_search_button_text">   Search friends in Dope</string>
+
+    <string name="friends_notregistered_create_an_account">Create an Account</string>
+    <string name="friends_notregistered_description_1">Join Dope to follow your friends.</string>
+    <string name="friends_notregistered_description_2">Create cards and get thousands of votes</string>
+
+    <string name="friends_notregistered_create_username">Create username</string>
+    <string name="friends_notregistered_already_a_user">Already a User? Sign in</string>
+
+    <string name="message_first_screen_title">Have more fun with Direct Messages</string>
+    <string name="message_first_screen_description_1">Tap "+" in the top right corner to start</string>
+    <string name="message_first_screen_description_2">a private conversation with friends</string>
+    <string name="message_first_screen_text_3">You must both follow each other first!</string>
+
+    <string name="message_first_screen_button_text">Send New Message</string>
+    <string name="message_tab_plus_what_is_your_question">What is your question?</string>
+    <string name="search">Search</string>
+
+    <string name="message_title_1">Direct Messages</string>
+    <string name="message_title_2">Message</string>
+    <string name="message_title_3">New Message</string>
+    <string name="message_title_4">Create Group</string>
+    <string name="message_title_5">New Message</string>
+
+    <string name="create_group">Create Group</string>
+    <string name="send_group_message">Send Group Message</string>
+
 </resources>

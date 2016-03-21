@@ -29,7 +29,7 @@ public class SignInActivity extends AppCompatActivity {
 
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        toolbar.setNavigationIcon(R.drawable.back_arrow);
+//        toolbar.setNavigationIcon(R.drawable.toolbar_left_arrow_light);
     }
 
     @Override

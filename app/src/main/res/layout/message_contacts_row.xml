@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/message_list_row_height"
+    android:orientation="horizontal"
+    android:paddingRight="@dimen/message_list_right_padding"
+    android:paddingLeft="@dimen/message_list_left_padding"
+    android:gravity="center_vertical"
+    android:background="@drawable/bottom_border"
+    >
+
+    <ImageView
+        android:visibility="gone"
+        android:id="@+id/checkmark"
+        android:layout_width="@dimen/message_list_checkmark_size"
+        android:layout_height="@dimen/message_list_checkmark_size"
+        android:src="@drawable/list_checkmark_empty"
+        android:layout_marginRight="@dimen/message_list_checkmark_avatar_margin"
+        />
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:src="@drawable/fr1"
+        android:layout_width="@dimen/message_list_avatar_size"
+        android:layout_height="@dimen/message_list_avatar_size"
+        android:layout_marginRight="@dimen/message_list_avatar_text_margin"
+        />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/list_contact_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Some Name"
+                android:textSize="@dimen/message_list_contact_name_font_size"
+                android:textColor="@color/main_screen_question_font_color"
+                />
+
+            <ImageButton
+                android:id="@+id/list_online_status"
+                android:src="@drawable/online_status"
+                android:layout_width="@dimen/message_list_online_status_size"
+                android:layout_height="@dimen/message_list_online_status_size"
+                android:layout_marginLeft="@dimen/message_list_contact_name_online_status_margin"
+                />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/contact_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Some activity"
+            android:textSize="@dimen/message_list_contact_recent_activity_font_size"
+            android:textColor="@color/friends_desription_text_color"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="13:32"
+        android:textColor="@color/friends_desription_text_color"
+        android:textSize="@dimen/message_list_date_font_size"
+        />
+
+
+
+</LinearLayout>

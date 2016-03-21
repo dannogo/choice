@@ -50,14 +50,14 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:paddingTop="10dp"
-            fancy:fb_defaultColor="#3B5998"
-            fancy:fb_focusColor="#FF293D69"
+            fancy:fb_defaultColor="@color/welcome_facebook_button_primary_color"
+            fancy:fb_focusColor="@color/welcome_facebook_button_focus_color"
             fancy:fb_iconResource="@drawable/fb"
             fancy:fb_iconPosition="left"
-            fancy:fb_radius="30dp"
+            fancy:fb_radius="@dimen/buttons_corner_radius"
             fancy:fb_text="Login with Facebook"
             fancy:fb_textSize="@dimen/button_text_size"
-            fancy:fb_textColor="@color/welcome_white_messages" />
+            fancy:fb_textColor="@color/white_text_color" />
 
         <mehdi.sakout.fancybuttons.FancyButton
             android:id="@+id/twitter_login_button"
@@ -68,14 +68,14 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:paddingTop="10dp"
-            fancy:fb_defaultColor="#3AACEC"
-            fancy:fb_focusColor="#FF26749F"
+            fancy:fb_defaultColor="@color/welcome_twitter_button_primary_color"
+            fancy:fb_focusColor="@color/welcome_twitter_button_focus_color"
             fancy:fb_iconResource="@drawable/twitter"
             fancy:fb_iconPosition="left"
-            fancy:fb_radius="30dp"
+            fancy:fb_radius="@dimen/buttons_corner_radius"
             fancy:fb_text="Login with Twitter     "
             fancy:fb_textSize="@dimen/button_text_size"
-            fancy:fb_textColor="@color/welcome_white_messages" />
+            fancy:fb_textColor="@color/white_text_color" />
 
         <TextView
             android:id="@+id/skipLogin"
