@@ -36,8 +36,26 @@
     <color name="message_tab_plus_border_color">#BEC3C3</color>
     <color name="message_edittext_outer_color">#DEE5E5</color>
     <color name="white">#FFF</color>
+    <color name="black">#000</color>
     <color name="message_list_checked_item_background">#ECF3F3</color>
 
+    <color name="context_options_outer_background_color">#DEE5E5</color>
+    <color name="context_options_cancel_bottom_text_color">#DF0800</color>
+    <color name="share_panel_instagram_default_color">#295C7F</color>
+    <color name="share_panel_instagram_focus_color">#1c3f58</color>
+    <color name="share_panel_facebook_default_color">#3A5998</color>
+    <color name="share_panel_facebook_focus_color">#273c68</color>
+    <color name="share_panel_whatsapp_default_color">#6ABB50</color>
+    <color name="share_panel_whatsapp_focus_color">#4e8b3b</color>
+    <color name="share_panel_more_default_color">#415357</color>
+    <color name="share_panel_more_focus_color">#252f31</color>
+
+    <color name="dope_created_behind_bottom_button_background_color">#152028</color>
+    <color name="dope_created_line_color">#47535B</color>
+    <color name="dope_created_description_color">#7D8A8B</color>
+    <color name="tab_plus_edittext_text_and_hint_color">#9FA8A9</color>
+
+    <color name="context_options_overlay_color">#90000000</color>
 
 
 </resources>

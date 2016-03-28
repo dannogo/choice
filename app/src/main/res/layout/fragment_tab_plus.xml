@@ -1,133 +1,173 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:fancy="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.18"
-
-        >
-        <TextView
-            android:layout_centerInParent="true"
-            android:textColor="@color/friends_desription_text_color"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/message_tab_plus_what_is_your_question"
-            android:textSize="@dimen/message_tab_plus_title"
-            />
-    </RelativeLayout>
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.66"
-        android:orientation="horizontal"
-        >
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <include
+            android:id="@+id/main_app_bar"
+            layout="@layout/main_app_bar" />
 
         <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:gravity="center"
-            android:background="@drawable/top_right_bottom_border"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.18"
+
             >
 
-            <LinearLayout
+            <EditText
+                android:id="@+id/users_question"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                >
-                
-                <ImageView
-                    android:layout_width="@dimen/circle_add_plus_icon_size"
-                    android:layout_height="@dimen/circle_add_plus_icon_size"
-                    android:src="@drawable/circle_add_plus"
-                    />
-
-                <TextView
-                    android:layout_marginTop="10dp"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Add First Image"
-                    android:textColor="@color/friends_desription_text_color"
-                    />
-
-            </LinearLayout>
+                android:layout_centerInParent="true"
+                android:background="@android:color/transparent"
+                android:gravity="center_horizontal"
+                android:hint="@string/message_tab_plus_what_is_your_question"
+                android:inputType="textCapSentences"
+                android:textColor="@color/tab_plus_edittext_text_and_hint_color"
+                android:textColorHint="@color/tab_plus_edittext_text_and_hint_color"
+                android:textSize="@dimen/message_tab_plus_title" />
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:gravity="center"
-            android:background="@drawable/top_bottom_border"
-            >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.66"
+            android:orientation="horizontal">
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center"
-                >
+            <RelativeLayout
+                android:id="@+id/left_working_part"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@drawable/top_right_bottom_border"
+                android:clickable="true">
 
-                <ImageView
-                    android:layout_width="@dimen/circle_add_plus_icon_size"
-                    android:layout_height="@dimen/circle_add_plus_icon_size"
-                    android:src="@drawable/circle_add_plus"
-                    />
+                <it.sephiroth.android.library.imagezoom.ImageViewTouch
+                    android:id="@+id/imageLeft"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-                <TextView
-                    android:layout_marginTop="10dp"
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Add Second Image"
-                    android:textColor="@color/friends_desription_text_color"
-                    />
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
-            </LinearLayout>
+                    <ImageView
+                        android:id="@+id/left_plus_button"
+                        android:layout_width="@dimen/circle_add_plus_icon_size"
+                        android:layout_height="@dimen/circle_add_plus_icon_size"
+                        android:src="@drawable/circle_add_plus" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Add First Image"
+                        android:textColor="@color/friends_desription_text_color" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/right_working_part"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:background="@drawable/top_bottom_border"
+                android:clickable="true">
+
+                <it.sephiroth.android.library.imagezoom.ImageViewTouch
+                    android:id="@+id/imageRight"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/right_plus_button"
+                        android:layout_width="@dimen/circle_add_plus_icon_size"
+                        android:layout_height="@dimen/circle_add_plus_icon_size"
+                        android:src="@drawable/circle_add_plus" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:text="Add Second Image"
+                        android:textColor="@color/friends_desription_text_color" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.16"
+            android:background="@color/message_behind_button_background"
+            android:paddingLeft="@dimen/activity_custom_horizontal_padding"
+            android:paddingRight="@dimen/activity_custom_horizontal_padding">
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/send_new_message"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/button_height"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="@dimen/friends_profile_message_margin_4"
+                android:background="#BBB"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"
+                fancy:fb_defaultColor="@color/message_tab_plus_button_inactive_primary"
+                fancy:fb_focusColor="@color/message_tab_plus_button_inactive_focus"
+                fancy:fb_iconPosition="left"
+                fancy:fb_iconResource="@drawable/paper_plane"
+                fancy:fb_radius="@dimen/buttons_corner_radius"
+                fancy:fb_text="@string/message_first_screen_button_text"
+                fancy:fb_textColor="@color/white_text_color"
+                fancy:fb_textSize="@dimen/button_text_size" />
 
         </RelativeLayout>
-
     </LinearLayout>
 
-    <RelativeLayout
+    <View
+        android:id="@+id/overlay"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.16"
-        android:paddingRight="@dimen/activity_custom_horizontal_padding"
-        android:paddingLeft="@dimen/activity_custom_horizontal_padding"
-        android:background="@color/message_behind_button_background"
+        android:layout_height="match_parent"
+        android:background="@color/context_options_overlay_color"
+        android:visibility="gone"
         >
 
-        <mehdi.sakout.fancybuttons.FancyButton
-            android:layout_marginTop="@dimen/friends_profile_message_margin_4"
-            android:id="@+id/send_new_message"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/button_height"
-            android:layout_centerInParent="true"
-            android:paddingBottom="10dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:paddingTop="10dp"
-            fancy:fb_defaultColor="@color/message_tab_plus_button_inactive_primary"
-            fancy:fb_focusColor="@color/message_tab_plus_button_inactive_focus"
-            fancy:fb_iconResource="@drawable/paper_plane"
-            fancy:fb_iconPosition="left"
-            fancy:fb_radius="@dimen/buttons_corner_radius"
-            fancy:fb_text="@string/message_first_screen_button_text"
-            fancy:fb_textSize="@dimen/button_text_size"
-            fancy:fb_textColor="@color/white_text_color"
-            android:background="#BBB"
-            />
+    </View>
 
-    </RelativeLayout>
 
-</LinearLayout>
+    <include layout="@layout/context_options"
+        android:id="@+id/context_options_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+    />
+
+</RelativeLayout>

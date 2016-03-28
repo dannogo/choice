@@ -51,4 +51,15 @@
     <string name="create_group">Create Group</string>
     <string name="send_group_message">Send Group Message</string>
 
+    <string name="context_options_take_photo">Take Photo</string>
+    <string name="context_options_choose_from_library">Choose from Library</string>
+    <string name="context_options_search_web">Search Web</string>
+    <string name="context_options_cancel">Cancel</string>
+    <string name="dope_created_done">Done</string>
+    <string name="dope_created_dope_created_message">Dope Created!</string>
+    <string name="dope_created_description_1">We get many cards submitted everyday, so</string>
+    <string name="dope_created_description_2">cross your fingers we select yours to be featured!</string>
+
+    <string name="tab_plus_button_text">Create new Dope</string>
+
 </resources>

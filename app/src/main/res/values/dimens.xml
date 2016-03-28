@@ -63,4 +63,26 @@
     <dimen name="message_list_date_font_size">14sp</dimen>
     <dimen name="message_edittext_corner_size">7dp</dimen>
     <dimen name="message_search_font_size">15sp</dimen>
+
+    <dimen name="context_options_horizontal_padding">7dp</dimen>
+    <dimen name="context_options_top_padding">15dp</dimen>
+    <dimen name="context_options_bottom_padding">10dp</dimen>
+    <dimen name="context_options_cancel_button_top_margin">10dp</dimen>
+    <dimen name="context_options_height">62dp</dimen>
+    <dimen name="context_options_cancel_height">53dp</dimen>
+    <dimen name="context_options_text_size">16sp</dimen>
+
+    <dimen name="share_panel_button_size">64dp</dimen>
+    <dimen name="share_panel_button_corner_radius">55dp</dimen>
+    
+    <dimen name="dope_created_button_height">51dp</dimen>
+    <dimen name="dope_created_button_text_size">16sp</dimen>
+    <dimen name="dope_created_margin_1">45dp</dimen>
+    <dimen name="dope_created_margin_2">20dp</dimen>
+    <dimen name="dope_created_margin_3">6dp</dimen>
+    <!--<dimen name="dope_created_margin_4">20dp</dimen>-->
+    <dimen name="dope_created_margin_5">33dp</dimen>
+
+
+
 </resources>

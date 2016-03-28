@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="Share on"
+        android:textColor="@color/white"
+        android:layout_marginBottom="15dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        >
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25">
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/share_panel_instagram_button"
+                style="@style/SharePanelButtonsStyle"
+                android:padding="18dp"
+                fancy:fb_defaultColor="@color/share_panel_instagram_default_color"
+                fancy:fb_focusColor="@color/share_panel_instagram_focus_color"
+                fancy:fb_iconPosition="left"
+                fancy:fb_iconResource="@drawable/instagram_icon"
+                fancy:fb_radius="@dimen/share_panel_button_corner_radius" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25">
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/share_panel_facebook_button"
+                style="@style/SharePanelButtonsStyle"
+                android:padding="22dp"
+                fancy:fb_defaultColor="@color/share_panel_facebook_default_color"
+                fancy:fb_focusColor="@color/share_panel_facebook_focus_color"
+                fancy:fb_iconPosition="left"
+                fancy:fb_iconResource="@drawable/facebook_icon"
+                fancy:fb_radius="@dimen/share_panel_button_corner_radius" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25">
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/share_panel_whatsapp_button"
+                style="@style/SharePanelButtonsStyle"
+                android:padding="12dp"
+                fancy:fb_defaultColor="@color/share_panel_whatsapp_default_color"
+                fancy:fb_focusColor="@color/share_panel_whatsapp_focus_color"
+                fancy:fb_iconPosition="left"
+                fancy:fb_iconResource="@drawable/whatsapp_icon"
+                fancy:fb_radius="@dimen/share_panel_button_corner_radius" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.25">
+
+            <mehdi.sakout.fancybuttons.FancyButton
+                android:id="@+id/share_panel_more_button"
+                style="@style/SharePanelButtonsStyle"
+                fancy:fb_defaultColor="@color/share_panel_more_default_color"
+                fancy:fb_focusColor="@color/share_panel_more_focus_color"
+                fancy:fb_radius="@dimen/share_panel_button_corner_radius"
+                fancy:fb_text="More" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

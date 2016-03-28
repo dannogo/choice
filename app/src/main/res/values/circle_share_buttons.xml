@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="SharePanelButtonsStyle">
+        <item name="android:layout_centerInParent">true</item>
+        <item name="android:layout_width">@dimen/share_panel_button_size</item>
+        <item name="android:layout_height">@dimen/share_panel_button_size</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+</resources>

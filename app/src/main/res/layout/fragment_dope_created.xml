@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg3_2"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.85">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal"
+            >
+
+            <ImageView
+                android:layout_width="@dimen/friends_giant_icon_size"
+                android:layout_height="@dimen/friends_giant_icon_size"
+                android:layout_marginTop="@dimen/dope_created_margin_1"
+                android:src="@drawable/diamond_giant_icon" />
+
+            <TextView
+                android:id="@+id/dope_created_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dope_created_dope_created_message"
+                android:textColor="@color/white_text_color"
+                android:textSize="@dimen/friends_main_message_font_size"
+                android:textStyle="bold"
+                android:layout_marginTop="@dimen/dope_created_margin_2"/>
+
+            <TextView
+                android:id="@+id/dope_created_description_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dope_created_description_1"
+                android:textColor="@color/dope_created_description_color"
+                android:textSize="@dimen/friends_description_font_size"
+                android:layout_marginTop="@dimen/dope_created_margin_3"
+                />
+
+            <TextView
+                android:id="@+id/dope_created_description_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/dope_created_description_2"
+                android:textColor="@color/dope_created_description_color"
+                android:textSize="@dimen/friends_description_font_size" />
+
+        </LinearLayout>
+
+        <include
+            android:id="@+id/share_panel"
+            layout="@layout/share_options_panel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/dope_created_margin_5" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.15"
+        android:background="@drawable/dope_created_above_line"
+        android:paddingLeft="@dimen/activity_custom_horizontal_padding"
+        android:paddingRight="@dimen/activity_custom_horizontal_padding">
+        <!--android:background="@color/dope_created_behind_bottom_button_background_color"-->
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/dope_created_done_button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dope_created_button_height"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/friends_profile_message_margin_4"
+            android:paddingBottom="10dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="10dp"
+            fancy:fb_defaultColor="@color/friends_search_button_primary_color"
+            fancy:fb_focusColor="@color/friends_search_button_focus_color"
+            fancy:fb_radius="@dimen/buttons_corner_radius"
+            fancy:fb_text="@string/dope_created_done"
+            fancy:fb_textColor="@color/white_text_color"
+            fancy:fb_textSize="@dimen/dope_created_button_text_size" />
+
+    </RelativeLayout>
+
+</LinearLayout>

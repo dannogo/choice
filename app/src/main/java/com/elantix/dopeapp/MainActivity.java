@@ -2,6 +2,7 @@ package com.elantix.dopeapp;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -163,7 +164,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 switchPageHandler(Page.Tranding, R.string.lower_tab_tranding);
             }
         }else if (id == plusLL.getId()){
-            Toast.makeText(MainActivity.this, "Plus", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(MainActivity.this, TabPlusActivity.class);
+            startActivity(intent);
         }else if (id == friendsLL.getId()){
             if (page != Page.Friends){
                 switchPageHandler(Page.Friends, R.string.lower_tab_friends);
