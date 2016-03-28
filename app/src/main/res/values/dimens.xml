@@ -83,6 +83,24 @@
     <!--<dimen name="dope_created_margin_4">20dp</dimen>-->
     <dimen name="dope_created_margin_5">33dp</dimen>
 
+    <dimen name="search_web_gallery_item_padding">5dp</dimen>
+    <dimen name="search_web_gallery_item_size">100dp</dimen>
 
+    <dimen name="share_dope_badge_size">32dp</dimen>
+    <dimen name="share_dope_badge_text_size">16sp</dimen>
+    <dimen name="share_dope_title_text_size">17sp</dimen>
+    <dimen name="share_dope_question_text_size">16sp</dimen>
+    <dimen name="share_dope_badge_margin_bottom">6dp</dimen>
+    <dimen name="share_dope_max_image_height">208dp</dimen>
+    <dimen name="share_dope_left_toolbar_button_left_margin">26dp</dimen>
+    <dimen name="share_dope_left_toolbar_button_size">15dp</dimen>
+    <dimen name="share_dope_margin_1">24dp</dimen>
+    <dimen name="share_dope_margin_2">31dp</dimen>
+    <dimen name="share_dope_margin_3">27dp</dimen>
+    <dimen name="share_dope_margin_4">33dp</dimen>
+    <dimen name="share_dope_margin_5">11dp</dimen>
+    <dimen name="share_dope_margin_6">23dp</dimen>
+    <!--<dimen name="share_dope_images_container_horizontal_padding">59dp</dimen>-->
+    <dimen name="share_dope_images_container_horizontal_padding">50dp</dimen>
 
 </resources>

@@ -1,9 +1,11 @@
 package com.elantix.dopeapp;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -26,6 +28,15 @@ public class TabPlusActivity extends AppCompatActivity {
 
         launchFragment(page);
 
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1886 && resultCode == Activity.RESULT_OK){
+            int imagePosition = data.getIntExtra("result", 999);
+            Toast.makeText(this, "Image: "+imagePosition, Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**

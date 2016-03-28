@@ -13,6 +13,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +56,7 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
     private ImageViewTouch imageRight;
     private static final int CAPTURE_IMAGE_WITH_CAMERA = 1888;
     private static final int PICK_IMAGE_FROM_GALLERY = 1887;
+    private static final int PICK_IMAGE_FROM_WEB = 1886;
     private Uri[] outputFileUris = {null, null};
     private Side currentSide;
     private View overlay;
@@ -72,6 +74,7 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
     // handle checking presence of both pictures to going forward (Dialog)
     // Add search web
     // get pictures from views to send them to the server
+    // delete taken pictures before going to the next page
 
     @Nullable
     @Override
@@ -135,14 +138,22 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        Log.w("On Activity Result", "Occur");
         if (requestCode == CAPTURE_IMAGE_WITH_CAMERA && resultCode == Activity.RESULT_OK) {
             setImageIntoImageViewTouch(currentSide, ImageSource.Camera, null);
         }else if (requestCode == PICK_IMAGE_FROM_GALLERY && resultCode == Activity.RESULT_OK){
             Uri selectedImage = data.getData();
             setImageIntoImageViewTouch(currentSide, ImageSource.Gallery, selectedImage);
         }
+
+        // Moved to TabPlusActivity
+//        else if (requestCode == PICK_IMAGE_FROM_WEB && resultCode == Activity.RESULT_OK){
+//            Log.w("On Activity Result", "My case Occurs");
+//            int imagePosition = data.getIntExtra("result", 999);
+//            Toast.makeText(getActivity(), "Image: "+imagePosition, Toast.LENGTH_SHORT).show();
+//        }
     }
+
 
     /**
      * Sets an image from uri to the chosen side
@@ -257,6 +268,11 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
         sendNewMessageButton.setLayoutParams(lp1);
     }
 
+
+    /**
+     * Shows and Hides context options panel
+     * @param show
+     */
     private void showHideContextOptions(Boolean show){
 
         if (show){
@@ -349,7 +365,7 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
             currentSide = Side.Right;
             showHideContextOptions(true);
         }else if (v.getId() == leftToolbarButton.getId()){
-            showHideContextOptions(true);
+            getActivity().finish();
         }else if(v.getId() == overlay.getId()){
             showHideContextOptions(false);
         }else if(v.getId() == contextOptionsTakePhoto.getId()){
@@ -360,7 +376,8 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
             chooseFromLibrary();
         }
         else if(v.getId() == contextOptionsSearchWeb.getId()){
-//            Log.w("Log", "Search Web");
+            Intent intent = new Intent(getActivity(), SearchWebActivity.class);
+            getActivity().startActivityForResult(intent, PICK_IMAGE_FROM_WEB);
         }
         else if(v.getId() == contextOptionsCancel.getId()){
             showHideContextOptions(false);
@@ -368,6 +385,8 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
 //            Log.w("Log", "Options Panel");
         }
     }
+
+
 
 
     /**

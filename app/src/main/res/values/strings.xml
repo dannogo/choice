@@ -61,5 +61,10 @@
     <string name="dope_created_description_2">cross your fingers we select yours to be featured!</string>
 
     <string name="tab_plus_button_text">Create new Dope</string>
+    <string name="search_web_edittext_hint">Enter keyword</string>
+    <string name="share_dope_title_text">Share</string>
+    <string name="share_dope_dummy_question_text">Some of the girls nicer and more beautiful?</string>
+    <string name="share_dope_dummy_link_text">http://dope.com/share/2143535766/</string>
+    <string name="share_dope_main_button_text">Copy link</string>
 
 </resources>

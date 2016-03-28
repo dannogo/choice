@@ -7,12 +7,13 @@
     >
 
     <TextView
+        android:id="@+id/share_options_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="Share on"
         android:textColor="@color/white"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="10dp"
         />
 
     <LinearLayout
