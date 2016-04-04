@@ -72,7 +72,6 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
     // TODO:
     // set back button behaviour both for toolbar back button and back navigation bar button
     // handle checking presence of both pictures to going forward (Dialog)
-    // Add search web
     // get pictures from views to send them to the server
     // delete taken pictures before going to the next page
 
@@ -278,7 +277,7 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
         if (show){
             WindowManager.LayoutParams mLP = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.MATCH_PARENT,
-                    getStatusBarHeight(),
+                    Utilites.getStatusBarHeight(getActivity()),
                     // Allows the view to be on top of the StatusBar
                     WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
                     // Keeps the button presses from going to the background window
@@ -330,18 +329,18 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
 
     }
 
-    /**
-     * Returns height of status bar
-     * @return
-     */
-    public int getStatusBarHeight() {
-        int result = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
-        }
-        return result;
-    }
+//    /**
+//     * Returns height of status bar
+//     * @return
+//     */
+//    public int getStatusBarHeight() {
+//        int result = 0;
+//        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+//        if (resourceId > 0) {
+//            result = getResources().getDimensionPixelSize(resourceId);
+//        }
+//        return result;
+//    }
 
     @Override
     public void onClick(View v) {

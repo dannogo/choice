@@ -25,6 +25,7 @@
             >
 
             <TextView
+                android:id="@+id/context_options_1_textview"
                 style="@style/ContextOptionsTextStyle"
                 android:text="@string/context_options_take_photo" />
 
@@ -38,6 +39,7 @@
             >
 
             <TextView
+                android:id="@+id/context_options_2_textview"
                 style="@style/ContextOptionsTextStyle"
                 android:text="@string/context_options_choose_from_library" />
 
@@ -50,6 +52,7 @@
             >
 
             <TextView
+                android:id="@+id/context_options_3_textview"
                 style="@style/ContextOptionsTextStyle"
                 android:text="@string/context_options_search_web" />
 
@@ -64,6 +67,7 @@
         android:background="@drawable/rounded_rectangle">
 
         <TextView
+            android:id="@+id/context_options_cancel_textview"
             style="@style/ContextOptionsTextStyle"
             android:text="@string/context_options_cancel"
             android:textColor="@color/context_options_cancel_bottom_text_color"

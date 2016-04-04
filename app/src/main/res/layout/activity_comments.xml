@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <include
+        android:id="@+id/comments_toolbar"
+        layout="@layout/main_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_button_size"
+        android:layout_alignParentTop="true" />
+
+    <LinearLayout
+        android:id="@+id/comments_info_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/comments_info_bar_height"
+        android:layout_below="@+id/comments_toolbar"
+        android:background="@drawable/bottom_border"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/share_dope_dummy_question_text"
+            android:textColor="@color/main_screen_question_font_color"
+            android:textSize="@dimen/main_screen_question_font_size" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fish_votes_quantity"
+            android:textColor="@color/main_screen_votes_font_color"
+            android:textSize="@dimen/main_screen_votes_font_size" />
+
+    </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/comments_scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/comments_add_comment_bar"
+        android:layout_below="@+id/comments_info_bar">
+
+        <LinearLayout
+            android:id="@+id/comments_comments_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        </LinearLayout>
+    </ScrollView>
+
+    <RelativeLayout
+        android:id="@+id/comments_add_comment_bar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/comments_add_comment_bar"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/comments_top_border_1_px">
+
+        <ImageButton
+            android:id="@+id/comments_plus_button"
+            android:layout_width="@dimen/comments_plus_button_width"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:background="@color/lower_bar_active_color"
+            android:padding="@dimen/comments_plus_button_padding"
+            android:scaleType="centerInside"
+            android:src="@drawable/comments_plus_button_icon" />
+
+        <EditText
+            android:id="@+id/comments_new_comment_field"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@+id/comments_send_button"
+            android:layout_toRightOf="@+id/comments_plus_button"
+            android:background="@drawable/left_right_border_1_px"
+            android:hint="@string/comments_edittext_hint"
+            android:inputType="textCapSentences"
+            android:paddingLeft="@dimen/comments_edittext_horizontal_padding"
+            android:paddingRight="@dimen/comments_edittext_horizontal_padding"
+            android:textColorHint="@color/tab_plus_edittext_text_and_hint_color"
+            android:textSize="@dimen/comments_edittext_text_size" />
+
+        <ImageButton
+            android:id="@+id/comments_send_button"
+            android:layout_width="@dimen/comments_send_button_width"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@android:color/transparent"
+            android:padding="@dimen/comments_plus_button_padding"
+            android:scaleType="centerInside"
+            android:src="@drawable/comments_send_button_icon" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

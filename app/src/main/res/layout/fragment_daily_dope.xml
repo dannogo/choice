@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <LinearLayout
+        android:id="@+id/daily_dope_info_bar"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.16"
@@ -18,7 +19,8 @@
             android:layout_height="wrap_content"
             android:text="@string/fish_question"
             android:textColor="@color/main_screen_question_font_color"
-            android:textSize="@dimen/main_screen_question_font_size" />
+            android:textSize="@dimen/main_screen_question_font_size"
+            />
 
         <TextView
             android:id="@+id/votes"
@@ -26,7 +28,8 @@
             android:layout_height="wrap_content"
             android:text="@string/fish_votes_quantity"
             android:textColor="@color/main_screen_votes_font_color"
-            android:textSize="@dimen/main_screen_votes_font_size" />
+            android:textSize="@dimen/main_screen_votes_font_size"
+            />
 
     </LinearLayout>
 

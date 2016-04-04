@@ -71,7 +71,7 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp"
         android:paddingTop="10dp"
-        fancy:fb_iconResource="@drawable/twitter"
+        fancy:fb_iconResource="@drawable/button_magnifier_icon"
         fancy:fb_iconPosition="left"
         fancy:fb_defaultColor="@color/friends_search_button_primary_color"
         fancy:fb_focusColor="@color/friends_search_button_focus_color"

@@ -67,4 +67,44 @@
     <string name="share_dope_dummy_link_text">http://dope.com/share/2143535766/</string>
     <string name="share_dope_main_button_text">Copy link</string>
 
+    <string name="search_friends_follow_string">Follow</string>
+    <string name="search_friends_following_string">Following</string>
+    <string name="search_friends_toolbar_title">Search Friends</string>
+
+    <string name="main_activity_context_option_1_text">Share this Post</string>
+    <string name="main_activity_context_option_2_text">View Profile</string>
+    <string name="main_activity_context_option_3_text">Report this Post</string>
+    <string name="main_activity_context_option_cancel_text">Cancel</string>
+
+    <string name="profile_overview_left_button_text">Follow</string>
+    <string name="profile_overview_right_button_text">Share in Socials</string>
+    <string name="profile_overview_dummy_user_name">Anya@</string>
+    <string name="profile_overview_dummy_user_description">Anya Solov</string>
+
+    <string name="report_post_title_text">Report Post</string>
+    <string name="report_post_cause_question">Why are reporting this post?</string>
+    <string name="report_post_option_cause_1">I just dont like it</string>
+    <string name="report_post_option_cause_2">It shows nudity or graphic violence</string>
+    <string name="report_post_option_cause_3">This user is bullying harassing me</string>
+
+    <string name="comments_edittext_hint">Add a Comment</string>
+    <string name="comments_toolbar_title">Comments</string>
+
+    <string name="single_comment_dummy_user_name_1">Yana Sheleykis</string>
+    <string name="single_comment_dummy_user_name_2">Nataliya Trush</string>
+    <string name="single_comment_dummy_user_name_3">Heidi Cruz</string>
+
+    <string name="single_comment_dummy_text_1">Hello!</string>
+    <string name="single_comment_dummy_text_2">Being raised in Cyprus, I have always been thought to be a one-man band, which led me to study Computer Science &amp; New Media Design at Rochester Institute of Technology in New York.</string>
+    <string name="single_comment_dummy_text_3">New Media Design at Rochester of Technology in New York.</string>
+
+    <string name="share_profile_title_text">Share Profile</string>
+
+    <string name="profile_followers_toolbar_title">Followers</string>
+    <string name="profile_following_toolbar_title">Following</string>
+
+    <string name="dope_statistics_comments_text">Comments</string>
+    <string name="dope_statistics_share_text">Share</string>
+    <string name="dope_statistics_toolbar_title">Statistics</string>
+
 </resources>

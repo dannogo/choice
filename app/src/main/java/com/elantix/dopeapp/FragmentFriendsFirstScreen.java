@@ -1,11 +1,8 @@
 package com.elantix.dopeapp;
 
-import android.app.ActionBar;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +26,12 @@ public class FragmentFriendsFirstScreen extends Fragment {
         fancyButtonInstagram = (FancyButton) fragmentView.findViewById(R.id.instagram_button);
         fancyButtonSearch = (FancyButton) fragmentView.findViewById(R.id.search_button);
         buttonsAppearenceHandling();
+        fancyButtonSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((MainActivity)getActivity()).switchPageHandler(MainActivity.Page.FriendsSearch);
+            }
+        });
 
         return fragmentView;
     }

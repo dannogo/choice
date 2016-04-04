@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg3_2"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        >
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/share_dope_margin_1">
+
+            <ImageButton
+                android:id="@+id/report_post_left_toolbar_button"
+                android:layout_width="@dimen/share_dope_left_toolbar_button_size"
+                android:layout_height="@dimen/share_dope_left_toolbar_button_size"
+                android:padding="7dp"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/share_dope_left_toolbar_button_left_margin"
+                android:background="@android:color/transparent"
+                android:scaleType="centerInside"
+                android:src="@drawable/white_cross" />
+
+            <TextView
+                android:id="@+id/report_post_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/report_post_title_text"
+                android:textColor="@color/white_text_color"
+                android:textSize="@dimen/share_dope_title_text_size" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="@dimen/report_post_margin_2"
+            android:background="@drawable/red_ring"
+            android:layout_width="@dimen/report_post_red_ring_size"
+            android:layout_height="@dimen/report_post_red_ring_size"
+            >
+
+            <ImageView
+                android:layout_centerInParent="true"
+                android:layout_width="@dimen/report_post_icon_size"
+                android:layout_height="@dimen/report_post_icon_size"
+                android:src="@drawable/report_post_icon"
+                android:paddingLeft="@dimen/report_post_icon_left_padding"
+                />
+
+        </RelativeLayout>
+
+
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/report_post_margin_3"
+        android:paddingLeft="@dimen/report_post_cause_options_panel_horizontal_padding"
+        android:paddingRight="@dimen/report_post_cause_options_panel_horizontal_padding"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/report_post_cause_question_color"
+            android:text="@string/report_post_cause_question"
+            android:layout_marginBottom="@dimen/report_post_margin_4"
+            android:textSize="@dimen/report_post_cause_text_size"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/report_post_cause_options_panel_height"
+            android:orientation="vertical"
+            android:background="@drawable/report_post_rounded_rect"
+            >
+
+            <TextView
+                android:id="@+id/report_post_option_1"
+                android:clickable="true"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.333"
+                android:text="@string/report_post_option_cause_1"
+                android:textColor="@color/white_text_color"
+                android:gravity="center"
+                android:textSize="@dimen/report_post_cause_text_size"
+                />
+
+            <TextView
+                android:id="@+id/report_post_option_2"
+                android:clickable="true"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.333"
+                android:text="@string/report_post_option_cause_2"
+                android:textColor="@color/white_text_color"
+                android:gravity="center"
+                android:textSize="@dimen/report_post_cause_text_size"
+                android:background="@drawable/report_post_cause_top_bottom_borders"
+                />
+
+            <TextView
+                android:id="@+id/report_post_option_3"
+                android:clickable="true"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="0.333"
+                android:text="@string/report_post_option_cause_3"
+                android:textColor="@color/white_text_color"
+                android:gravity="center"
+                android:textSize="@dimen/report_post_cause_text_size"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

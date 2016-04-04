@@ -24,4 +24,21 @@
         android:layout_height="@dimen/lower_tab_height"
         android:layout_alignParentBottom="true" />
 
+    <View
+        android:id="@+id/main_activity_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/context_options_overlay_color"
+        android:visibility="gone"
+        >
+    </View>
+
+    <include layout="@layout/context_options"
+        android:id="@+id/main_activity_context_options_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        />
+
 </RelativeLayout>

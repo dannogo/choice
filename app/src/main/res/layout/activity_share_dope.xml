@@ -20,6 +20,7 @@
                 android:id="@+id/share_dope_left_toolbar_button"
                 android:layout_width="@dimen/share_dope_left_toolbar_button_size"
                 android:layout_height="@dimen/share_dope_left_toolbar_button_size"
+                android:padding="7dp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/share_dope_left_toolbar_button_left_margin"
@@ -63,6 +64,7 @@
                 android:gravity="right"
                 >
                     <ImageView
+                        android:id="@+id/share_dope_picture_1"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentRight="true"
@@ -97,6 +99,7 @@
                 >
 
                     <ImageView
+                        android:id="@+id/share_dope_picture_2"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_alignParentLeft="true"

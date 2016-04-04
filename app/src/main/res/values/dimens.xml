@@ -22,7 +22,7 @@
     <dimen name="lower_tab_icon_padding">4dp</dimen>
 
     <dimen name="main_screen_question_font_size">16sp</dimen>
-    <dimen name="main_screen_votes_font_size">12sp</dimen>
+    <dimen name="main_screen_votes_font_size">13sp</dimen>
 
     <dimen name="main_screen_contact_bar_padding">12dp</dimen>
     <dimen name="main_screen_contact_avatar_size">36dp</dimen>
@@ -93,14 +93,84 @@
     <dimen name="share_dope_badge_margin_bottom">6dp</dimen>
     <dimen name="share_dope_max_image_height">208dp</dimen>
     <dimen name="share_dope_left_toolbar_button_left_margin">26dp</dimen>
-    <dimen name="share_dope_left_toolbar_button_size">15dp</dimen>
-    <dimen name="share_dope_margin_1">24dp</dimen>
-    <dimen name="share_dope_margin_2">31dp</dimen>
+    <dimen name="share_dope_left_toolbar_button_size">29dp</dimen>
+    <dimen name="share_dope_margin_1">20dp</dimen>
+    <dimen name="share_dope_margin_2">28dp</dimen>
     <dimen name="share_dope_margin_3">27dp</dimen>
     <dimen name="share_dope_margin_4">33dp</dimen>
     <dimen name="share_dope_margin_5">11dp</dimen>
     <dimen name="share_dope_margin_6">23dp</dimen>
     <!--<dimen name="share_dope_images_container_horizontal_padding">59dp</dimen>-->
     <dimen name="share_dope_images_container_horizontal_padding">50dp</dimen>
+    <dimen name="search_friends_row_button_width">90dp</dimen>
+    <dimen name="search_friends_row_button_height">35dp</dimen>
+    <dimen name="search_friends_ghost_button_border_width">1dp</dimen>
+
+    <dimen name="profile_overview_margin_1">13dp</dimen>
+    <dimen name="profile_overview_margin_2">5dp</dimen>
+    <dimen name="profile_overview_margin_3">0dp</dimen>
+    <dimen name="profile_overview_margin_4">12dp</dimen>
+    <dimen name="profile_overview_margin_5">21dp</dimen>
+    <dimen name="profile_overview_margin_6">10dp</dimen>
+
+    <dimen name="profile_overview_circular_avatar_size">115dp</dimen>
+    <dimen name="profile_overview_circular_avatar_outer_border_shape_size">117dp</dimen>
+
+    <dimen name="profile_overview_numbers_panel_height">56dp</dimen>
+    <dimen name="profile_overview_user_name_text_size">18sp</dimen>
+    <dimen name="profile_overview_user_name_description_text_size">13sp</dimen>
+    <dimen name="profile_overview_number_text_size">18sp</dimen>
+    <dimen name="profile_overview_number_description_text_size">13sp</dimen>
+    <dimen name="profile_overview_distance_between_number_and_description">-2dp</dimen>
+
+    <dimen name="profile_overview_buttons_width">122dp</dimen>
+    <dimen name="profile_overview_buttons_height">31dp</dimen>
+    <dimen name="profile_overview_buttons_text_size">11sp</dimen>
+    <dimen name="profile_overview_disctance_between_buttons">10dp</dimen>
+    <dimen name="profile_overview_recycler_view_item_text_size">11sp</dimen>
+    <dimen name="profile_overview_recycler_view_padding">5dp</dimen>
+
+    <dimen name="report_post_red_ring_size">155dp</dimen>
+    <dimen name="report_post_red_ring_radius">72dp</dimen>
+    <dimen name="report_post_red_ring_thickness">4dp</dimen>
+    <dimen name="report_post_icon_size">90dp</dimen>
+    <dimen name="report_post_icon_left_padding">12dp</dimen>
+    <dimen name="report_post_margin_2">50dp</dimen>
+    <dimen name="report_post_margin_3">50dp</dimen>
+    <dimen name="report_post_margin_4">26dp</dimen>
+
+    <dimen name="report_post_cause_options_panel_height">188dp</dimen>
+    <dimen name="report_post_cause_options_panel_horizontal_padding">10dp</dimen>
+    <dimen name="report_post_cause_panel_corner_size">10dp</dimen>
+    <dimen name="report_post_cause_text_size">17sp</dimen>
+
+    <dimen name="comments_info_bar_height">75dp</dimen>
+    <dimen name="comments_add_comment_bar">40dp</dimen>
+    <dimen name="comments_plus_button_width">45dp</dimen>
+    <dimen name="comments_send_button_width">45dp</dimen>
+    <dimen name="comments_plus_button_padding">10dp</dimen>
+    <dimen name="comments_edittext_horizontal_padding">7dp</dimen>
+    <dimen name="comments_edittext_text_size">13sp</dimen>
+
+    <dimen name="single_comment_distance_between_avatar_and_text">10dp</dimen>
+
+    <dimen name="single_comment_user_name_text_size">16sp</dimen>
+    <dimen name="single_comment_comment_text_size">15sp</dimen>
+    <dimen name="single_comment_comment_time_text_size">12sp</dimen>
+
+    <dimen name="share_profile_avatar_ring_inner_radius">59dp</dimen>
+    <dimen name="share_profile_avatar_ring_thickness">1px</dimen>
+    <dimen name="share_profile_avatar_ring_size">120dp</dimen>
+    <dimen name="share_profile_avatar_size">110dp</dimen>
+
+    <dimen name="share_profile_margin_1">77dp</dimen>
+    <dimen name="share_profile_margin_2">5dp</dimen>
+    <dimen name="share_profile_margin_3">60dp</dimen>
+
+    <dimen name="share_profile_user_name_text_size">17sp</dimen>
+    <dimen name="share_profile_user_name_description_text_size">13sp</dimen>
+
+    <dimen name="dope_statistics_rate_text_size">23sp</dimen>
+    <dimen name="dope_statistics_lower_bar_descriptions_size">13sp</dimen>
 
 </resources>

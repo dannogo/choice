@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/dope_statistics_toolbar"
+        layout="@layout/main_app_bar" />
+
+    <LinearLayout
+        android:id="@+id/dope_statistics_info_bar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.16"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/dope_statistics_question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fish_question"
+            android:textColor="@color/main_screen_question_font_color"
+            android:textSize="@dimen/main_screen_question_font_size" />
+
+        <TextView
+            android:id="@+id/dope_statistics_votes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/fish_votes_quantity"
+            android:textColor="@color/main_screen_votes_font_color"
+            android:textSize="@dimen/main_screen_votes_font_size" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/lower_tab_height"
+        android:background="@drawable/comments_top_border_1_px">
+
+        <TextView
+            android:id="@+id/dope_statistics_left_image_rate"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:background="@drawable/right_border_1_px"
+            android:gravity="center"
+            android:text="43%"
+            android:textColor="@color/dope_statistics_fail_color"
+            android:textSize="@dimen/dope_statistics_rate_text_size" />
+
+        <TextView
+            android:id="@+id/dope_statistics_right_image_rate"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="57%"
+            android:textColor="@color/dope_statistics_success_color"
+            android:textSize="@dimen/dope_statistics_rate_text_size" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.72">
+
+        <LinearLayout
+            android:id="@+id/dope_statistics_blurred_linlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/dope_statistics_blurred_picture_1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:scaleType="centerCrop" />
+
+            <ImageView
+                android:id="@+id/dope_statistics_blurred_picture_2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:scaleType="centerCrop" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/dope_statistics_option_picture_1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5" />
+
+            <ImageView
+                android:id="@+id/dope_statistics_option_picture_2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.13"
+        android:padding="@dimen/main_screen_contact_bar_padding"
+        android:paddingRight="@dimen/main_screen_margin_between_icons">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/dope_statistics_comments"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:clickable="true"
+                android:background="@drawable/right_border_1_px"
+                android:gravity="center">
+
+                <ImageButton
+                    android:id="@+id/dope_statistics_message_button"
+                    android:layout_width="@dimen/lower_tab_icon_size"
+                    android:layout_height="@dimen/lower_tab_icon_size"
+                    android:background="@android:color/transparent"
+                    android:padding="@dimen/lower_tab_icon_padding"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/qmessage" />
+
+                <TextView
+                    android:id="@+id/dope_statistics_number_of_comments"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="3dp"
+                    android:textSize="@dimen/dope_statistics_lower_bar_descriptions_size"
+                    android:text="5" />
+
+                <TextView
+                    android:id="@+id/dope_statistics_comments_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/dope_statistics_lower_bar_descriptions_size"
+                    android:text="@string/dope_statistics_comments_text" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/dope_statistics_share"
+                android:clickable="true"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.5"
+                android:gravity="center">
+
+                <ImageButton
+                    android:id="@+id/dope_statistics_share_button"
+                    android:layout_width="@dimen/lower_tab_icon_size"
+                    android:layout_height="@dimen/lower_tab_icon_size"
+                    android:background="@android:color/transparent"
+                    android:padding="@dimen/lower_tab_icon_padding"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/dope_arrow_up_from_the_box" />
+
+                <TextView
+                    android:id="@+id/dope_statistics_share_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/dope_statistics_share_text"
+                    android:textSize="@dimen/dope_statistics_lower_bar_descriptions_size"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

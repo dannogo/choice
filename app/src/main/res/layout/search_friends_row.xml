@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/message_list_row_height"
+    android:orientation="horizontal"
+    android:paddingRight="@dimen/message_list_right_padding"
+    android:paddingLeft="@dimen/message_list_left_padding"
+    android:gravity="center_vertical"
+    android:background="@drawable/bottom_border"
+    >
+
+
+    <ImageView
+        android:id="@+id/avatar"
+        android:src="@drawable/fr1"
+        android:layout_width="@dimen/message_list_avatar_size"
+        android:layout_height="@dimen/message_list_avatar_size"
+        android:layout_marginRight="@dimen/message_list_avatar_text_margin"
+        />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/list_contact_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Some Name"
+                android:textSize="@dimen/message_list_contact_name_font_size"
+                android:textColor="@color/main_screen_question_font_color"
+                />
+
+
+        <TextView
+            android:id="@+id/contact_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Some activity"
+            android:textSize="@dimen/message_list_contact_recent_activity_font_size"
+            android:textColor="@color/friends_desription_text_color"
+            />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
+
+    <mehdi.sakout.fancybuttons.FancyButton
+        android:visibility="gone"
+        android:id="@+id/search_friends_follow_button"
+        android:layout_width="@dimen/search_friends_row_button_width"
+        android:layout_height="@dimen/search_friends_row_button_height"
+        android:layout_centerInParent="true"
+        android:background="#BBB"
+        android:paddingBottom="0dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:paddingTop="0dp"
+        fancy:fb_defaultColor="@color/lower_bar_active_color"
+        fancy:fb_focusColor="@color/friends_search_button_focus_color"
+        fancy:fb_iconPosition="left"
+        fancy:fb_iconResource="@drawable/blue_plus"
+        fancy:fb_radius="@dimen/buttons_corner_radius"
+        fancy:fb_text="@string/search_friends_follow_string"
+        fancy:fb_textColor="@color/main_screen_question_font_color"
+        fancy:fb_textSize="12sp"
+        fancy:fb_ghost="true"
+        fancy:fb_borderWidth="@dimen/search_friends_ghost_button_border_width"
+        fancy:fb_borderColor="@color/friends_search_button_primary_color"
+        />
+
+    <mehdi.sakout.fancybuttons.FancyButton
+        android:id="@+id/search_friends_follow_button_checked"
+        android:layout_width="@dimen/search_friends_row_button_width"
+        android:layout_height="@dimen/search_friends_row_button_height"
+        android:layout_centerInParent="true"
+        android:background="#BBB"
+        android:paddingBottom="0dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
+        android:paddingTop="0dp"
+        fancy:fb_defaultColor="@color/lower_bar_active_color"
+        fancy:fb_focusColor="@color/friends_search_button_focus_color"
+        fancy:fb_radius="@dimen/buttons_corner_radius"
+        fancy:fb_text="@string/search_friends_following_string"
+        fancy:fb_textColor="@color/white_text_color"
+        fancy:fb_textSize="12sp"
+        />
+
+
+
+
+</LinearLayout>

@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/bg3_2">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/share_dope_margin_1">
+
+            <ImageButton
+                android:id="@+id/share_profile_left_toolbar_button"
+                android:layout_width="@dimen/share_dope_left_toolbar_button_size"
+                android:layout_height="@dimen/share_dope_left_toolbar_button_size"
+                android:layout_alignParentLeft="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/share_dope_left_toolbar_button_left_margin"
+                android:background="@android:color/transparent"
+                android:padding="7dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/white_cross" />
+
+            <TextView
+                android:id="@+id/share_title_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/share_profile_title_text"
+                android:textColor="@color/white_text_color"
+                android:textSize="@dimen/share_dope_title_text_size" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="@dimen/share_profile_margin_1"
+            android:layout_width="@dimen/share_profile_avatar_ring_size"
+            android:layout_height="@dimen/share_profile_avatar_ring_size"
+            android:background="@drawable/share_profile_ring"
+            android:gravity="center"
+            >
+
+            <com.mikhaellopez.circularimageview.CircularImageView
+                android:id="@+id/share_profile_avatar"
+                android:layout_width="@dimen/share_profile_avatar_size"
+                android:layout_height="@dimen/share_profile_avatar_size"
+                android:src="@drawable/ania2"
+                app:civ_border_color="#fff"
+                app:civ_border_width="0dp"
+                />
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/share_profile_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/share_profile_margin_2"
+            android:text="@string/profile_overview_dummy_user_name"
+            android:textColor="@color/white_text_color"
+            android:textSize="@dimen/share_profile_user_name_text_size"
+            />
+        <TextView
+            android:id="@+id/share_profile_user_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profile_overview_dummy_user_description"
+            android:textColor="@color/dope_created_description_color"
+            android:textSize="@dimen/friends_description_font_size"
+            />
+
+        <TextView
+            android:id="@+id/share_profile_link_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/share_profile_margin_3"
+            android:layout_marginBottom="@dimen/share_dope_margin_5"
+            android:text="@string/share_dope_dummy_link_text"
+            android:textColor="@color/dope_created_description_color"
+            android:textSize="@dimen/share_profile_user_name_description_text_size" />
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/share_profile_copy_link_button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/button_height"
+            android:paddingBottom="10dp"
+            android:paddingLeft="35dp"
+            android:paddingRight="45dp"
+            android:paddingTop="10dp"
+            fancy:fb_defaultColor="@color/friends_search_button_primary_color"
+            fancy:fb_focusColor="@color/friends_search_button_focus_color"
+            fancy:fb_iconPosition="left"
+            fancy:fb_iconResource="@drawable/link_icon"
+            fancy:fb_radius="@dimen/buttons_corner_radius"
+            fancy:fb_text="@string/share_dope_main_button_text"
+            fancy:fb_textColor="@color/white_text_color"
+            fancy:fb_textSize="@dimen/button_text_size" />
+
+    </LinearLayout>
+
+    <include
+        android:id="@+id/share_profile_share_panel"
+        layout="@layout/share_options_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/share_dope_margin_6" />
+
+
+</RelativeLayout>
