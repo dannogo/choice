@@ -173,4 +173,14 @@
     <dimen name="dope_statistics_rate_text_size">23sp</dimen>
     <dimen name="dope_statistics_lower_bar_descriptions_size">13sp</dimen>
 
+    <dimen name="profile_settings_top_linear_layout_height">172dp</dimen>
+    <dimen name="profile_settings_distance_between_sections">40dp</dimen>
+    <dimen name="profile_settings_private_information_bar_height">80dp</dimen>
+    <dimen name="profile_settings_section_item_height">38dp</dimen>
+
+    <dimen name="profile_settings_section_item_text_size">13sp</dimen>
+    <dimen name="profile_settings_section_item_horizontal">10dp</dimen>
+    <dimen name="profile_settings_section_item_icon_padding">8dp</dimen>
+    <dimen name="profile_settings_distance_between_icon_and_text_in_section_item">5dp</dimen>
+
 </resources>

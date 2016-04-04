@@ -46,4 +46,5 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:23.1.+'
     compile 'it.sephiroth.android.library.imagezoom:imagezoom:+'
     compile 'com.mikhaellopez:circularimageview:3.0.2'
+    compile 'com.desarrollodroide:fragmenttransactionextended:1'
 }

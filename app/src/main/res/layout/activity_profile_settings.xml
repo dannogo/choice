@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/profile_settings_background_color"
+    >
+
+    <android.support.v7.widget.Toolbar
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/toolbar_button_size"
+        android:background="@color/main_activity_primary_color"
+        app:theme="@style/ThemeOverlay.AppCompat.Dark"
+        >
+
+        <TextView
+            android:id="@+id/profile_settings_left_button"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/toolbar_button_size"
+            android:background="@android:color/transparent"
+            android:layout_gravity="left"
+            android:gravity="center"
+            android:text="@string/profile_settings_left_toolbar_button_text"
+            android:layout_marginRight="@dimen/toolbar_button_left_margin"
+            />
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profile_settings_toolbar_title"
+            android:layout_gravity="center"
+            android:textSize="@dimen/toolbar_title_font_size"
+            android:textColor="@color/white_text_color"
+            />
+
+        <TextView
+            android:id="@+id/profile_settings_right_button"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/toolbar_button_size"
+            android:background="@android:color/transparent"
+            android:layout_gravity="right"
+            android:gravity="center"
+            android:text="@string/profile_settings_right_toolbar_button_text"
+            android:layout_marginRight="@dimen/toolbar_button_right_margin"
+            />
+
+    </android.support.v7.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/profile_settings_top_linear_layout_height"
+        android:gravity="center"
+        android:background="@drawable/bottom_border_1_px"
+        >
+
+        <RelativeLayout
+            android:background="@drawable/share_profile_ring"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+    <!--User Info Bar-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="@drawable/bottom_border_1_px_white_background"
+        >
+
+        <!--Username-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_settings_section_item_height"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/profile_settings_section_item_horizontal"
+            >
+
+            <ImageView
+                android:layout_width="@dimen/profile_settings_section_item_height"
+                android:layout_height="@dimen/profile_settings_section_item_height"
+                android:src="@drawable/comments_send_button_icon"
+                android:padding="@dimen/profile_settings_section_item_icon_padding"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginLeft="@dimen/profile_settings_distance_between_icon_and_text_in_section_item"
+                android:background="@drawable/bottom_border_1_px"
+                android:paddingRight="@dimen/profile_settings_section_item_horizontal"
+                >
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/profile_settings_username_field_hint"
+                    android:textSize="@dimen/profile_settings_section_item_text_size"
+                    android:background="@android:color/transparent"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--Name of User-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_settings_section_item_height"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/profile_settings_section_item_horizontal"
+            >
+
+            <ImageView
+                android:layout_width="@dimen/profile_settings_section_item_height"
+                android:layout_height="@dimen/profile_settings_section_item_height"
+                android:src="@drawable/comments_send_button_icon"
+                android:padding="@dimen/profile_settings_section_item_icon_padding"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginLeft="@dimen/profile_settings_distance_between_icon_and_text_in_section_item"
+                android:background="@drawable/bottom_border_1_px"
+                android:paddingRight="@dimen/profile_settings_section_item_horizontal"
+                >
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/profile_settings_username_field_hint"
+                    android:textSize="@dimen/profile_settings_section_item_text_size"
+                    android:background="@android:color/transparent"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--Gender-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_settings_section_item_height"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/profile_settings_section_item_horizontal"
+            >
+
+            <ImageView
+                android:layout_width="@dimen/profile_settings_section_item_height"
+                android:layout_height="@dimen/profile_settings_section_item_height"
+                android:src="@drawable/comments_send_button_icon"
+                android:padding="@dimen/profile_settings_section_item_icon_padding"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginLeft="@dimen/profile_settings_distance_between_icon_and_text_in_section_item"
+                android:background="@drawable/bottom_border_1_px"
+                android:paddingRight="@dimen/profile_settings_section_item_horizontal"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:text="@string/profile_settings_gender_item_default_text"
+                    android:textSize="@dimen/profile_settings_section_item_text_size"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--Bio-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_settings_section_item_height"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/profile_settings_section_item_horizontal"
+            >
+
+            <ImageView
+                android:layout_width="@dimen/profile_settings_section_item_height"
+                android:layout_height="@dimen/profile_settings_section_item_height"
+                android:src="@drawable/comments_send_button_icon"
+                android:padding="@dimen/profile_settings_section_item_icon_padding"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_marginLeft="@dimen/profile_settings_distance_between_icon_and_text_in_section_item"
+                android:paddingRight="@dimen/profile_settings_section_item_horizontal"
+                >
+
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:hint="@string/profile_settings_username_field_hint"
+                    android:textSize="@dimen/profile_settings_section_item_text_size"
+                    android:background="@android:color/transparent"
+                    />
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/profile_settings_distance_between_sections"
+        android:background="@drawable/bottom_border_1_px"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profile_settings_private_information_subtitle"
+            />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/profile_settings_private_information_bar_height"
+        android:orientation="vertical"
+        android:background="@drawable/bottom_border_1_px_white_background"
+        >
+        <!--android:background="@color/white"-->
+
+
+    </LinearLayout>
+
+</LinearLayout>

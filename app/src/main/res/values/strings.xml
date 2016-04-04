@@ -107,4 +107,13 @@
     <string name="dope_statistics_share_text">Share</string>
     <string name="dope_statistics_toolbar_title">Statistics</string>
 
+    <string name="profile_settings_left_toolbar_button_text">Cancel</string>
+    <string name="profile_settings_right_toolbar_button_text">Done</string>
+    <string name="profile_settings_toolbar_title">Settings</string>
+    <string name="profile_settings_private_information_subtitle">PRIVATE INFORMATION</string>
+
+    <string name="profile_settings_username_field_hint">Username</string>
+    <string name="profile_settings_username_field_dummy_text"></string>
+    <string name="profile_settings_gender_item_default_text">Gender</string>
+
 </resources>

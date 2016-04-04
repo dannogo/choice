@@ -63,12 +63,6 @@
     <!--<color name="profile_overview_recycler_view_item_text_color">#9FA8A9</color>-->
     <color name="profile_overview_recycler_view_item_text_color">#798081</color>
     <color name="report_post_red_ring_color">#E14A42</color>
-    <!--<color name="report_post_cause_options_panel_background_color">#01010101</color>-->
-    <!--<color name="report_post_cause_options_panel_background_color">#680a2b2e</color>-->
-    <!--<color name="report_post_cause_options_panel_background_color">#320a2b2e</color>-->
-    <!--<color name="report_post_cause_options_panel_background_color">#810a2b2e</color>-->
-    <!--<color name="report_post_cause_options_panel_background_color">#00176168</color>-->
-    <!--<color name="report_post_cause_options_panel_background_color">#01104348</color>-->
     <color name="report_post_cause_options_panel_background_color">#010a2b2e</color>
     <color name="report_post_second_cause_top_bottom_borders_color">#45FFFFFF</color>
     <color name="report_post_cause_question_color">#6A777A</color>
@@ -76,6 +70,8 @@
     <color name="single_comment_user_name_color">#999f9f</color>
     <color name="dope_statistics_fail_color">#E11F1E</color>
     <color name="dope_statistics_success_color">#00B373</color>
+    <color name="profile_settings_background_color_2">#EBF4F4</color>
+
 
 
 </resources>
