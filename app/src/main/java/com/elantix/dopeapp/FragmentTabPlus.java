@@ -54,9 +54,6 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
     private EditText usersQuestion;
     private ImageViewTouch imageLeft;
     private ImageViewTouch imageRight;
-    private static final int CAPTURE_IMAGE_WITH_CAMERA = 1888;
-    private static final int PICK_IMAGE_FROM_GALLERY = 1887;
-    private static final int PICK_IMAGE_FROM_WEB = 1886;
     private Uri[] outputFileUris = {null, null};
     private Side currentSide;
     private View overlay;
@@ -106,7 +103,7 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
         final String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/DopeAppPics/";
         File newdir = new File(dir);
         newdir.mkdirs();
-        String randomString = Utilites.createRandomFileName();
+        String randomString = Utilities.createRandomFileName();
         String file = dir+randomString+".jpg";
         File newfile = new File(file);
         currentSide = side;
@@ -126,21 +123,20 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
             outputFileUris[1] = Uri.fromFile(newfile);
         }
 
-        Utilites.hasPermissionInManifest(getActivity(), MediaStore.ACTION_IMAGE_CAPTURE);
+        Utilities.hasPermissionInManifest(getActivity(), MediaStore.ACTION_IMAGE_CAPTURE);
 
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, currentUri);
 
-        startActivityForResult(cameraIntent, CAPTURE_IMAGE_WITH_CAMERA);
+        startActivityForResult(cameraIntent, Utilities.CAPTURE_IMAGE_WITH_CAMERA);
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        Log.w("On Activity Result", "Occur");
-        if (requestCode == CAPTURE_IMAGE_WITH_CAMERA && resultCode == Activity.RESULT_OK) {
+        if (requestCode == Utilities.CAPTURE_IMAGE_WITH_CAMERA && resultCode == Activity.RESULT_OK) {
             setImageIntoImageViewTouch(currentSide, ImageSource.Camera, null);
-        }else if (requestCode == PICK_IMAGE_FROM_GALLERY && resultCode == Activity.RESULT_OK){
+        }else if (requestCode == Utilities.PICK_IMAGE_FROM_GALLERY && resultCode == Activity.RESULT_OK){
             Uri selectedImage = data.getData();
             setImageIntoImageViewTouch(currentSide, ImageSource.Gallery, selectedImage);
         }
@@ -277,10 +273,11 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
         if (show){
             WindowManager.LayoutParams mLP = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.MATCH_PARENT,
-                    Utilites.getStatusBarHeight(getActivity()),
+                    Utilities.getStatusBarHeight(getActivity()),
                     // Allows the view to be on top of the StatusBar
                     WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
                     // Keeps the button presses from going to the background window
+                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                     WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
                             // Enables the notification to recieve touch events
                             WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
@@ -329,18 +326,6 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
 
     }
 
-//    /**
-//     * Returns height of status bar
-//     * @return
-//     */
-//    public int getStatusBarHeight() {
-//        int result = 0;
-//        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-//        if (resourceId > 0) {
-//            result = getResources().getDimensionPixelSize(resourceId);
-//        }
-//        return result;
-//    }
 
     @Override
     public void onClick(View v) {
@@ -376,7 +361,7 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
         }
         else if(v.getId() == contextOptionsSearchWeb.getId()){
             Intent intent = new Intent(getActivity(), SearchWebActivity.class);
-            getActivity().startActivityForResult(intent, PICK_IMAGE_FROM_WEB);
+            getActivity().startActivityForResult(intent, Utilities.PICK_IMAGE_FROM_WEB);
         }
         else if(v.getId() == contextOptionsCancel.getId()){
             showHideContextOptions(false);
@@ -395,6 +380,6 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_FROM_GALLERY);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), Utilities.PICK_IMAGE_FROM_GALLERY);
     }
 }

@@ -33,7 +33,7 @@ public class TabPlusActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1886 && resultCode == Activity.RESULT_OK){
+        if (requestCode == Utilities.PICK_IMAGE_FROM_WEB && resultCode == Activity.RESULT_OK){
             int imagePosition = data.getIntExtra("result", 999);
             Toast.makeText(this, "Image: "+imagePosition, Toast.LENGTH_SHORT).show();
         }

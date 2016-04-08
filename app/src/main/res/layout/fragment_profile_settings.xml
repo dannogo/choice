@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/profile_settings_background_color"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/profile_settings_distance_between_sections"
+        android:background="@drawable/bottom_border_1_px"
+        android:paddingLeft="@dimen/profile_settings_section_item_horizontal_padding">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/profile_settings_private_information_textview_margin_bottom"
+            android:layout_marginLeft="6dp"
+            android:text="@string/profile_settings_fragment_account_section_title"
+            android:textColor="@color/profile_settings_hint_text_color"
+            android:textSize="@dimen/profile_settings_text_in_between_sections_size"
+
+            />
+
+    </RelativeLayout>
+
+    <!--First section-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_border_1_px_white_background"
+        android:orientation="vertical">
+
+        <!--Edit Profile-->
+        <LinearLayout
+            android:id="@+id/profile_settings_fragment_edit_profile"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_settings_section_item_height"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/profile_settings_section_item_horizontal_padding">
+
+            <ImageView
+                android:layout_width="@dimen/profile_settings_section_item_height"
+                android:layout_height="@dimen/profile_settings_section_item_height"
+                android:padding="@dimen/profile_settings_section_item_icon_padding"
+                android:src="@drawable/profile_edit_pencil_icon_blue" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/profile_settings_distance_between_icon_and_text_in_section_item"
+                android:background="@drawable/bottom_border_1_px"
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/profile_settings_section_item_horizontal_padding">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.0"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:text="@string/profile_settings_fragment_edit_profile"
+                    android:textColor="@color/black_text_color"
+                    android:textSize="@dimen/profile_settings_section_item_text_size" />
+
+                <ImageView
+                    android:layout_width="@dimen/profile_settings_expand_button_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="2dp"
+                    android:src="@drawable/profile_expand_icon" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <!--Change password-->
+        <LinearLayout
+            android:id="@+id/profile_settings_fragment_change_password"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_settings_section_item_height"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/profile_settings_section_item_horizontal_padding">
+
+            <ImageView
+                android:layout_width="@dimen/profile_settings_section_item_height"
+                android:layout_height="@dimen/profile_settings_section_item_height"
+                android:padding="@dimen/profile_settings_section_item_icon_padding"
+                android:src="@drawable/profile_lock_icon_blue" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/profile_settings_distance_between_icon_and_text_in_section_item"
+                android:background="@drawable/bottom_border_1_px"
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/profile_settings_section_item_horizontal_padding">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.0"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:text="@string/profile_settings_fragment_change_password"
+                    android:textColor="@color/black_text_color"
+                    android:textSize="@dimen/profile_settings_section_item_text_size" />
+
+                <ImageView
+                    android:layout_width="@dimen/profile_settings_expand_button_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="2dp"
+                    android:src="@drawable/profile_expand_icon" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/profile_settings_distance_between_sections"
+        android:background="@drawable/bottom_border_1_px"
+        android:paddingLeft="@dimen/profile_settings_section_item_horizontal_padding">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/profile_settings_private_information_textview_margin_bottom"
+            android:layout_marginLeft="6dp"
+            android:text="@string/profile_settings_fragment_about_section_title"
+            android:textColor="@color/profile_settings_hint_text_color"
+            android:textSize="@dimen/profile_settings_text_in_between_sections_size"
+
+            />
+
+    </RelativeLayout>
+
+    <!--Second section-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_border_1_px_white_background"
+        android:orientation="vertical">
+
+        <!--About DopeApp-->
+        <LinearLayout
+            android:id="@+id/profile_settings_fragment_about_dope"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_settings_section_item_height"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/profile_settings_section_item_horizontal_padding">
+
+            <ImageView
+                android:layout_width="@dimen/profile_settings_section_item_height"
+                android:layout_height="@dimen/profile_settings_section_item_height"
+                android:padding="@dimen/profile_settings_section_item_icon_padding"
+                android:src="@drawable/profile_diamond_blue" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/profile_settings_distance_between_icon_and_text_in_section_item"
+                android:background="@drawable/bottom_border_1_px"
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/profile_settings_section_item_horizontal_padding">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.0"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:text="@string/profile_settings_fragment_about_dope_app"
+                    android:textColor="@color/black_text_color"
+                    android:textSize="@dimen/profile_settings_section_item_text_size" />
+
+                <ImageView
+                    android:layout_width="@dimen/profile_settings_expand_button_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="2dp"
+                    android:src="@drawable/profile_expand_icon" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <!--Share with Friends-->
+        <LinearLayout
+            android:id="@+id/profile_settings_fragment_share_with_friends"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_settings_section_item_height"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/profile_settings_section_item_horizontal_padding">
+
+            <ImageView
+                android:layout_width="@dimen/profile_settings_section_item_height"
+                android:layout_height="@dimen/profile_settings_section_item_height"
+                android:padding="@dimen/profile_settings_section_item_icon_padding"
+                android:src="@drawable/profile_share_icon_blue" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/profile_settings_distance_between_icon_and_text_in_section_item"
+                android:background="@drawable/bottom_border_1_px"
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/profile_settings_section_item_horizontal_padding">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.0"
+                    android:background="@android:color/transparent"
+                    android:gravity="center_vertical"
+                    android:text="@string/profile_settings_fragment_share_with_friends"
+                    android:textColor="@color/black_text_color"
+                    android:textSize="@dimen/profile_settings_section_item_text_size" />
+
+                <ImageView
+                    android:layout_width="@dimen/profile_settings_expand_button_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="2dp"
+                    android:src="@drawable/profile_expand_icon" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--Contact us-->
+        <LinearLayout
+            android:id="@+id/profile_settings_fragment_contact_us"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_settings_section_item_height"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/profile_settings_section_item_horizontal_padding">
+
+            <ImageView
+                android:layout_width="@dimen/profile_settings_section_item_height"
+                android:layout_height="@dimen/profile_settings_section_item_height"
+                android:padding="@dimen/profile_settings_section_item_icon_padding"
+                android:src="@drawable/profile_email_icon_blue" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="@dimen/profile_settings_distance_between_icon_and_text_in_section_item"
+                android:background="@drawable/bottom_border_1_px"
+                android:orientation="horizontal"
+                android:paddingRight="@dimen/profile_settings_section_item_horizontal_padding">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1.0"
+                    android:gravity="center_vertical"
+                    android:text="@string/profile_settings_fragment_contact_us"
+                    android:textColor="@color/black_text_color"
+                    android:textSize="@dimen/profile_settings_section_item_text_size" />
+
+                <ImageView
+                    android:layout_width="@dimen/profile_settings_expand_button_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginRight="2dp"
+                    android:src="@drawable/profile_expand_icon" />
+
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/profile_settings_empty_view_between_sections_height"
+        android:background="@drawable/bottom_border_1_px"
+        />
+
+    <!--Third section-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bottom_border_1_px_white_background"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:id="@+id/profile_settings_fragment_restore_purchases"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_settings_section_item_height"
+            android:gravity="center_vertical"
+            android:background="@drawable/bottom_border_1_px"
+            android:text="@string/profile_settings_fragment_restore_purchases"
+            android:textColor="@color/black_text_color"
+            android:textSize="@dimen/profile_settings_section_item_text_size"
+            android:paddingLeft="@dimen/profile_settings_only_text_item_left_padding"
+            />
+
+        <TextView
+            android:id="@+id/profile_settings_fragment_log_out"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_settings_section_item_height"
+            android:gravity="center_vertical"
+            android:text="@string/profile_settings_fragment_log_out"
+            android:textColor="@color/dope_statistics_fail_color"
+            android:textSize="@dimen/profile_settings_section_item_text_size"
+            android:paddingLeft="@dimen/profile_settings_only_text_item_left_padding"
+            />
+
+    </LinearLayout>
+
+
+</LinearLayout>

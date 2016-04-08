@@ -31,11 +31,11 @@ public class FragmentProfileFollowers extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         Bundle bundle = this.getArguments();
-        Utilites.FollowingListType type;
+        Utilities.FollowingListType type;
         if (bundle.getBoolean("followers")){
-            type = Utilites.FollowingListType.ProfileFollowers;
+            type = Utilities.FollowingListType.ProfileFollowers;
         }else{
-            type = Utilites.FollowingListType.ProfileFollowing;
+            type = Utilities.FollowingListType.ProfileFollowing;
         }
 
         AdapterSearchFriends adapter = new AdapterSearchFriends(getActivity(), type);

@@ -110,10 +110,97 @@
     <string name="profile_settings_left_toolbar_button_text">Cancel</string>
     <string name="profile_settings_right_toolbar_button_text">Done</string>
     <string name="profile_settings_toolbar_title">Settings</string>
+    <string name="profile_settings_edit_profile_toolbar_title">Edit Profile</string>
+    <string name="profile_settings_edit_profile_left_button_text">Edit Profile</string>
     <string name="profile_settings_private_information_subtitle">PRIVATE INFORMATION</string>
 
     <string name="profile_settings_username_field_hint">Username</string>
+    <string name="profile_settings_first_last_name_field_hint">First and Last names</string>
+    <string name="profile_settings_bio_field_hint">Bio</string>
+    <string name="profile_settings_email_field_hint">E-mail</string>
+    <string name="profile_settings_phone_field_hint">Phone</string>
+
     <string name="profile_settings_username_field_dummy_text"></string>
     <string name="profile_settings_gender_item_default_text">Gender</string>
+    <string name="profile_settings_gender_item_helper_text">Not indicated</string>
+
+    <string name="profile_settings_username_placeholder_text">Me</string>
+    <string name="profile_settings_firstlastnames_placeholder_text">My Name</string>
+
+    <string name="profile_overview_there_are_no_dopes_text_1">Have a question you want an answer to?</string>
+    <string name="profile_overview_there_are_no_dopes_text_2">Create Dope now. You may even get</string>
+    <string name="profile_overview_there_are_no_dopes_text_3">featured in the Community!</string>
+    <string name="profile_overview_there_are_no_dopes_create_first_dope_button_text">Create your first Dope</string>
+
+    <!--FragmentProfileSettings-->
+    <string name="profile_settings_fragment_account_section_title">ACCOUNT</string>
+    <string name="profile_settings_fragment_edit_profile">Edit Profile</string>
+    <string name="profile_settings_fragment_change_password">Change Password</string>
+    <string name="profile_settings_fragment_about_section_title">ABOUT</string>
+    <string name="profile_settings_fragment_about_dope_app">About DopeApp</string>
+    <string name="profile_settings_fragment_share_with_friends">Share with Friends</string>
+    <string name="profile_settings_fragment_contact_us">Contact us</string>
+    <string name="profile_settings_fragment_restore_purchases">Restore Purchases</string>
+    <string name="profile_settings_fragment_log_out">Log out</string>
+
+    <string name="profile_settings_change_password_toolbar_title">Change Password</string>
+
+    <string name="change_password_first_section_title">CURRENT PASSWORD</string>
+    <string name="change_password_second_section_title">NEW PASSWORD</string>
+
+    <string name="change_password_current_password_field_hint">Enter Current Password</string>
+    <string name="change_password_create_password_field_hint">Create Password</string>
+    <string name="change_password_confirm_password_field_hint">Confirm</string>
+
+    <string name="contact_us_topic_text">DopeApp Feedback</string>
+    <string name="contact_us_email">santa_claus@laplandia.com</string>
+
+    <string name="about_dope_toolbar_title">About Dope</string>
+    <string name="about_dope_not_toolbar_title">Frequently Asked Questions</string>
+    <string name="about_dope_dummy_text_1">What is Instagram?</string>
+    <string name="about_dope_dummy_text_2">Instagram is a fun and quickie way to share your life with friends through a series of pictures. Snap a photo with your mobile phone, then choose a filter to transform the image into a memory to keep around forever. We`re building Instagram to allow you to experience moments in your friend`s lives through pictures as they happen. We imagine a world more connected through photos.</string>
+    <string name="about_dope_dummy_text_3">How much is your app?</string>
+    <string name="about_dope_dummy_text_4">$0.00 - available for free in the Apple App Store and Google Play store.</string>
+    <string name="about_dope_dummy_text_5">Where does the name come from?</string>
+    <string name="about_dope_dummy_text_6">When we were kids we loved playing around with cameras. We loved how different types of old cameras marketed themselves as "instant" - something we take for granted today. We also felt that the snapshots people were taking were kind of like telegrams in that they got.</string>
+
+    <string name="logout_confirmation_dialog_title">Confirm Logout</string>
+    <string name="logout_confirmation_dialog_question">Are you sure you want to logout?</string>
+    <string name="logout_confirmation_dialog_positive_button_text">Logout</string>
+    <string name="logout_confirmation_dialog_negative_button_text">Cancel</string>
+
 
 </resources>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

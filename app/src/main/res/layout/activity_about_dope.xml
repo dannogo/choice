@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/about_dope_toolbar"
+        layout="@layout/main_app_bar" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/about_dope_top_layout_height"
+        android:background="@drawable/bottom_border_1_px"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        >
+
+        <ImageView
+            android:layout_width="@dimen/about_dope_top_layout_height"
+            android:layout_height="@dimen/about_dope_top_layout_height"
+            android:padding="@dimen/about_dope_diamond_icon_padding"
+            android:src="@drawable/profile_diamond_blue" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/about_dope_not_toolbar_title"
+            android:textColor="@color/black_text_color"
+            android:textSize="@dimen/about_dope_non_toolbar_title_font_size"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/about_dope_horizontal_padding"
+        android:paddingRight="@dimen/about_dope_horizontal_padding"
+        >
+
+        <!--First question-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/about_dope_margin_1"
+            android:text="@string/about_dope_dummy_text_1"
+            android:textColor="@color/black_text_color"
+            android:textSize="@dimen/about_dope_question_font_size"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/about_dope_margin_2"
+            android:text="@string/about_dope_dummy_text_2"
+            android:textColor="@color/friends_desription_text_color"
+            android:textSize="@dimen/about_dope_answer_font_size"
+            android:lineSpacingMultiplier="1.26"
+            />
+
+        <!--Second Question-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/about_dope_margin_1"
+            android:text="@string/about_dope_dummy_text_3"
+            android:textColor="@color/black_text_color"
+            android:textSize="@dimen/about_dope_question_font_size"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/about_dope_margin_2"
+            android:text="@string/about_dope_dummy_text_4"
+            android:textColor="@color/friends_desription_text_color"
+            android:textSize="@dimen/about_dope_answer_font_size"
+            android:lineSpacingMultiplier="1.26"
+            />
+
+        <!--Third question-->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/about_dope_margin_1"
+            android:text="@string/about_dope_dummy_text_5"
+            android:textColor="@color/black_text_color"
+            android:textSize="@dimen/about_dope_question_font_size"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/about_dope_margin_2"
+            android:text="@string/about_dope_dummy_text_6"
+            android:textColor="@color/friends_desription_text_color"
+            android:textSize="@dimen/about_dope_answer_font_size"
+            android:lineSpacingMultiplier="1.26"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -47,9 +47,9 @@ public class AdapterSearchFriends extends RecyclerView.Adapter<AdapterSearchFrie
 
 
     ArrayList<Integer> checkedItems = new ArrayList<>();
-    private Utilites.FollowingListType mType;
+    private Utilities.FollowingListType mType;
 
-    public AdapterSearchFriends(Context context, Utilites.FollowingListType type) {
+    public AdapterSearchFriends(Context context, Utilities.FollowingListType type) {
         this.inflater = LayoutInflater.from(context);
         this.context = context;
         mType = type;

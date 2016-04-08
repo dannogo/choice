@@ -1,244 +1,384 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/profile_settings_background_color"
-    >
+    android:layout_height="match_parent">
 
-    <android.support.v7.widget.Toolbar
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_button_size"
-        android:background="@color/main_activity_primary_color"
-        app:theme="@style/ThemeOverlay.AppCompat.Dark"
-        >
+        android:layout_height="match_parent"
+        android:background="@color/profile_settings_background_color"
+        android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/profile_settings_left_button"
-            android:layout_width="wrap_content"
+        <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/toolbar_button_size"
-            android:background="@android:color/transparent"
-            android:layout_gravity="left"
-            android:gravity="center"
-            android:text="@string/profile_settings_left_toolbar_button_text"
-            android:layout_marginRight="@dimen/toolbar_button_left_margin"
-            />
+            android:background="@color/main_activity_primary_color"
+            app:theme="@style/ThemeOverlay.AppCompat.Dark">
 
-        <TextView
-            android:id="@+id/toolbar_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/profile_settings_toolbar_title"
-            android:layout_gravity="center"
-            android:textSize="@dimen/toolbar_title_font_size"
-            android:textColor="@color/white_text_color"
-            />
+            <TextView
+                android:id="@+id/profile_settings_left_button"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/toolbar_button_size"
+                android:layout_gravity="left"
+                android:layout_marginRight="@dimen/toolbar_button_left_margin"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:text="@string/profile_settings_left_toolbar_button_text" />
 
-        <TextView
-            android:id="@+id/profile_settings_right_button"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/toolbar_button_size"
-            android:background="@android:color/transparent"
-            android:layout_gravity="right"
-            android:gravity="center"
-            android:text="@string/profile_settings_right_toolbar_button_text"
-            android:layout_marginRight="@dimen/toolbar_button_right_margin"
-            />
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/profile_settings_edit_profile_toolbar_title"
+                android:textColor="@color/white_text_color"
+                android:textSize="@dimen/toolbar_title_font_size" />
 
-    </android.support.v7.widget.Toolbar>
+            <TextView
+                android:id="@+id/profile_settings_right_button"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/toolbar_button_size"
+                android:layout_gravity="right"
+                android:layout_marginRight="@dimen/toolbar_button_right_margin"
+                android:background="@android:color/transparent"
+                android:gravity="center"
+                android:text="@string/profile_settings_right_toolbar_button_text" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/profile_settings_top_linear_layout_height"
-        android:gravity="center"
-        android:background="@drawable/bottom_border_1_px"
-        >
+        </android.support.v7.widget.Toolbar>
 
+        <!--Avatar-->
         <RelativeLayout
-            android:background="@drawable/share_profile_ring"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_settings_top_linear_layout_height"
+            android:background="@drawable/bottom_border_1_px"
+            android:gravity="center">
+
+            <RelativeLayout
+                android:id="@+id/profile_settings_avatar_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/profile_settings_avatar_outer_circle"
+                android:gravity="center">
+
+                <RelativeLayout
+                    android:visibility="visible"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:background="@drawable/profile_settings_avatar_inner_circle"
+                    android:gravity="center">
+
+                    <com.mikhaellopez.circularimageview.CircularImageView
+                        android:visibility="gone"
+                        android:id="@+id/profile_settings_avatar"
+                        android:layout_width="@dimen/profile_settings_avatar_inner_circle_diameter"
+                        android:layout_height="@dimen/profile_settings_avatar_inner_circle_diameter"
+                        app:civ_border_color="#fff"
+                        app:civ_border_width="0dp"
+                        />
+
+                    <ImageView
+                        android:id="@+id/profile_settings_camera_icon"
+                        android:visibility="gone"
+                        android:layout_width="@dimen/profile_settings_avatar_camera_icon_size"
+                        android:layout_height="@dimen/profile_settings_avatar_camera_icon_size"
+                        android:src="@drawable/profile_camera_icon_i" />
+
+                </RelativeLayout>
+            </RelativeLayout>
 
         </RelativeLayout>
 
-    </RelativeLayout>
+
+        <!--User Info Bar-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bottom_border_1_px_white_background"
+            android:orientation="vertical">
+
+            <!--Username-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_settings_section_item_height"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/profile_settings_section_item_horizontal_padding">
+
+                <ImageView
+                    android:layout_width="@dimen/profile_settings_section_item_height"
+                    android:layout_height="@dimen/profile_settings_section_item_height"
+                    android:padding="@dimen/profile_settings_section_item_icon_padding"
+                    android:src="@drawable/profile_username_icon_blue" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/profile_settings_distance_between_icon_and_text_in_section_item"
+                    android:background="@drawable/bottom_border_1_px"
+                    android:orientation="horizontal"
+                    android:paddingRight="@dimen/profile_settings_section_item_horizontal_padding">
+
+                    <EditText
+                        android:id="@+id/profile_edit_username_edittext"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:hint="@string/profile_settings_username_field_hint"
+                        android:inputType="textCapSentences"
+                        android:singleLine="true"
+                        android:textColor="@color/black_text_color"
+                        android:textColorHint="@color/profile_settings_hint_text_color"
+                        android:textSize="@dimen/profile_settings_section_item_text_size" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--Name of User-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_settings_section_item_height"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/profile_settings_section_item_horizontal_padding">
+
+                <ImageView
+                    android:layout_width="@dimen/profile_settings_section_item_height"
+                    android:layout_height="@dimen/profile_settings_section_item_height"
+                    android:padding="@dimen/profile_settings_section_item_icon_padding"
+                    android:src="@drawable/profile_user_icon_blue" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/profile_settings_distance_between_icon_and_text_in_section_item"
+                    android:background="@drawable/bottom_border_1_px"
+                    android:orientation="horizontal"
+                    android:paddingRight="@dimen/profile_settings_section_item_horizontal_padding">
+
+                    <EditText
+                        android:id="@+id/profile_edit_first_last_names_edittext"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:hint="@string/profile_settings_first_last_name_field_hint"
+                        android:inputType="textCapWords"
+                        android:singleLine="true"
+                        android:textColor="@color/black_text_color"
+                        android:textColorHint="@color/profile_settings_hint_text_color"
+                        android:textSize="@dimen/profile_settings_section_item_text_size" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--Gender-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_settings_section_item_height"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/profile_settings_section_item_horizontal_padding">
+
+                <ImageView
+                    android:layout_width="@dimen/profile_settings_section_item_height"
+                    android:layout_height="@dimen/profile_settings_section_item_height"
+                    android:padding="@dimen/profile_settings_section_item_icon_padding"
+                    android:src="@drawable/profile_gender_icon_blue" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/profile_settings_distance_between_icon_and_text_in_section_item"
+                    android:background="@drawable/bottom_border_1_px"
+                    android:orientation="horizontal"
+                    android:paddingRight="@dimen/profile_settings_section_item_horizontal_padding">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.0"
+                        android:background="@android:color/transparent"
+                        android:gravity="center_vertical"
+                        android:text="@string/profile_settings_gender_item_default_text"
+                        android:textColor="@color/black_text_color"
+                        android:textSize="@dimen/profile_settings_section_item_text_size" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="7dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/profile_settings_gender_item_helper_text"
+                            android:textColor="@color/profile_settings_hint_text_color"
+                            android:textSize="@dimen/profile_settings_section_item_text_size" />
+
+                        <ImageView
+                            android:layout_width="@dimen/profile_settings_expand_button_width"
+                            android:layout_height="match_parent"
+                            android:layout_marginRight="2dp"
+                            android:src="@drawable/profile_expand_icon" />
+                    </LinearLayout>
 
 
-    <!--User Info Bar-->
-    <LinearLayout
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!--Bio-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_settings_section_item_height"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/profile_settings_section_item_horizontal_padding">
+
+                <ImageView
+                    android:layout_width="@dimen/profile_settings_section_item_height"
+                    android:layout_height="@dimen/profile_settings_section_item_height"
+                    android:padding="@dimen/profile_settings_section_item_icon_padding"
+                    android:src="@drawable/profile_bio_icon_blue" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/profile_settings_distance_between_icon_and_text_in_section_item"
+                    android:orientation="horizontal"
+                    android:paddingRight="@dimen/profile_settings_section_item_horizontal_padding">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:hint="@string/profile_settings_bio_field_hint"
+                        android:inputType="textCapSentences"
+                        android:singleLine="true"
+                        android:textColor="@color/black_text_color"
+                        android:textColorHint="@color/profile_settings_hint_text_color"
+                        android:textSize="@dimen/profile_settings_section_item_text_size" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_settings_distance_between_sections"
+            android:background="@drawable/bottom_border_1_px"
+            android:paddingLeft="@dimen/profile_settings_section_item_horizontal_padding">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="@dimen/profile_settings_private_information_textview_margin_bottom"
+                android:layout_marginLeft="6dp"
+                android:text="@string/profile_settings_private_information_subtitle"
+                android:textColor="@color/profile_settings_hint_text_color"
+                android:textSize="@dimen/profile_settings_text_in_between_sections_size"
+
+                />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/profile_settings_private_information_bar_height"
+            android:background="@drawable/bottom_border_1_px_white_background"
+            android:orientation="vertical">
+
+            <!--E-mail-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_settings_section_item_height"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/profile_settings_section_item_horizontal_padding">
+
+                <ImageView
+                    android:layout_width="@dimen/profile_settings_section_item_height"
+                    android:layout_height="@dimen/profile_settings_section_item_height"
+                    android:padding="@dimen/profile_settings_section_item_icon_padding"
+                    android:src="@drawable/profile_email_icon_blue" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/profile_settings_distance_between_icon_and_text_in_section_item"
+                    android:background="@drawable/bottom_border_1_px"
+                    android:orientation="horizontal"
+                    android:paddingRight="@dimen/profile_settings_section_item_horizontal_padding">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:gravity="center_vertical"
+                        android:hint="@string/profile_settings_email_field_hint"
+                        android:inputType="textEmailAddress"
+                        android:singleLine="true"
+                        android:textColor="@color/black_text_color"
+                        android:textColorHint="@color/profile_settings_hint_text_color"
+                        android:textSize="@dimen/profile_settings_section_item_text_size" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <!--Phone-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_settings_section_item_height"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/profile_settings_section_item_horizontal_padding">
+
+                <ImageView
+                    android:layout_width="@dimen/profile_settings_section_item_height"
+                    android:layout_height="@dimen/profile_settings_section_item_height"
+                    android:padding="@dimen/profile_settings_section_item_icon_padding"
+                    android:src="@drawable/profile_phone_icon_blue" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/profile_settings_distance_between_icon_and_text_in_section_item"
+                    android:orientation="horizontal"
+                    android:paddingRight="@dimen/profile_settings_section_item_horizontal_padding">
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@android:color/transparent"
+                        android:hint="@string/profile_settings_phone_field_hint"
+                        android:inputType="phone"
+                        android:singleLine="true"
+                        android:textColor="@color/black_text_color"
+                        android:textColorHint="@color/profile_settings_hint_text_color"
+                        android:textSize="@dimen/profile_settings_section_item_text_size" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/profile_settings_activity_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/context_options_overlay_color"
+        android:visibility="gone"
+        >
+    </View>
+
+    <include layout="@layout/context_options"
+        android:id="@+id/profile_settings_activity_context_options_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@drawable/bottom_border_1_px_white_background"
-        >
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        />
 
-        <!--Username-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/profile_settings_section_item_height"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/profile_settings_section_item_horizontal"
-            >
-
-            <ImageView
-                android:layout_width="@dimen/profile_settings_section_item_height"
-                android:layout_height="@dimen/profile_settings_section_item_height"
-                android:src="@drawable/comments_send_button_icon"
-                android:padding="@dimen/profile_settings_section_item_icon_padding"
-                />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginLeft="@dimen/profile_settings_distance_between_icon_and_text_in_section_item"
-                android:background="@drawable/bottom_border_1_px"
-                android:paddingRight="@dimen/profile_settings_section_item_horizontal"
-                >
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="@string/profile_settings_username_field_hint"
-                    android:textSize="@dimen/profile_settings_section_item_text_size"
-                    android:background="@android:color/transparent"
-                    />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <!--Name of User-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/profile_settings_section_item_height"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/profile_settings_section_item_horizontal"
-            >
-
-            <ImageView
-                android:layout_width="@dimen/profile_settings_section_item_height"
-                android:layout_height="@dimen/profile_settings_section_item_height"
-                android:src="@drawable/comments_send_button_icon"
-                android:padding="@dimen/profile_settings_section_item_icon_padding"
-                />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginLeft="@dimen/profile_settings_distance_between_icon_and_text_in_section_item"
-                android:background="@drawable/bottom_border_1_px"
-                android:paddingRight="@dimen/profile_settings_section_item_horizontal"
-                >
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="@string/profile_settings_username_field_hint"
-                    android:textSize="@dimen/profile_settings_section_item_text_size"
-                    android:background="@android:color/transparent"
-                    />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <!--Gender-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/profile_settings_section_item_height"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/profile_settings_section_item_horizontal"
-            >
-
-            <ImageView
-                android:layout_width="@dimen/profile_settings_section_item_height"
-                android:layout_height="@dimen/profile_settings_section_item_height"
-                android:src="@drawable/comments_send_button_icon"
-                android:padding="@dimen/profile_settings_section_item_icon_padding"
-                />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginLeft="@dimen/profile_settings_distance_between_icon_and_text_in_section_item"
-                android:background="@drawable/bottom_border_1_px"
-                android:paddingRight="@dimen/profile_settings_section_item_horizontal"
-                >
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:text="@string/profile_settings_gender_item_default_text"
-                    android:textSize="@dimen/profile_settings_section_item_text_size"
-                    android:background="@android:color/transparent"
-                    android:gravity="center_vertical"
-                    />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <!--Bio-->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/profile_settings_section_item_height"
-            android:orientation="horizontal"
-            android:paddingLeft="@dimen/profile_settings_section_item_horizontal"
-            >
-
-            <ImageView
-                android:layout_width="@dimen/profile_settings_section_item_height"
-                android:layout_height="@dimen/profile_settings_section_item_height"
-                android:src="@drawable/comments_send_button_icon"
-                android:padding="@dimen/profile_settings_section_item_icon_padding"
-                />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:layout_marginLeft="@dimen/profile_settings_distance_between_icon_and_text_in_section_item"
-                android:paddingRight="@dimen/profile_settings_section_item_horizontal"
-                >
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:hint="@string/profile_settings_username_field_hint"
-                    android:textSize="@dimen/profile_settings_section_item_text_size"
-                    android:background="@android:color/transparent"
-                    />
-            </LinearLayout>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/profile_settings_distance_between_sections"
-        android:background="@drawable/bottom_border_1_px"
-        >
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/profile_settings_private_information_subtitle"
-            />
-
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/profile_settings_private_information_bar_height"
-        android:orientation="vertical"
-        android:background="@drawable/bottom_border_1_px_white_background"
-        >
-        <!--android:background="@color/white"-->
-
-
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

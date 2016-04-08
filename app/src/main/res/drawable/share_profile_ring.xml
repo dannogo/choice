@@ -8,7 +8,8 @@
 
     <solid android:color="@color/report_post_cause_question_color"/>
     <size
-        android:width="@dimen/share_profile_avatar_ring_size"
-        android:height="@dimen/share_profile_avatar_ring_size"/>
+        android:width="@dimen/profile_settings_avatar_outer_circle_diameter"
+        android:height="@dimen/profile_settings_avatar_outer_circle_diameter"/>
+        <!--android:width="@dimen/share_profile_avatar_ring_size"-->
 
 </shape>

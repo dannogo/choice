@@ -7,15 +7,24 @@
         android:id="@+id/main_app_bar"
         layout="@layout/main_app_bar" />
 
-    <RelativeLayout
+    <!--<RelativeLayout-->
+        <!--android:id="@+id/fragment_container"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_above="@+id/lower_tab"-->
+        <!--android:layout_below="@+id/main_app_bar"-->
+        <!-->-->
+
+    <!--</RelativeLayout>-->
+
+    <com.desarrollodroide.libraryfragmenttransactionextended.SlidingRelativeLayout
         android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_above="@+id/lower_tab"
         android:layout_below="@+id/main_app_bar"
         >
-
-    </RelativeLayout>
+    </com.desarrollodroide.libraryfragmenttransactionextended.SlidingRelativeLayout>
 
     <include
         android:id="@+id/lower_tab"

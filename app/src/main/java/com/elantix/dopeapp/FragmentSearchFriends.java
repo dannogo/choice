@@ -24,7 +24,7 @@ public class FragmentSearchFriends extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        AdapterSearchFriends adapter = new AdapterSearchFriends(getActivity(), Utilites.FollowingListType.FriendsSearch);
+        AdapterSearchFriends adapter = new AdapterSearchFriends(getActivity(), Utilities.FollowingListType.FriendsSearch);
         recyclerView.setAdapter(adapter);
 
         return mFragmentView;

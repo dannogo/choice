@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -20,6 +21,9 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.util.Util;
+import com.desarrollodroide.libraryfragmenttransactionextended.FragmentTransactionExtended;
 
 /**
  * Created by oleh on 3/14/16.
@@ -61,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RelativeLayout mContextOptionsViewProfile;
     private RelativeLayout mContextOptionsReportPost;
     private RelativeLayout mContextOptionsCancel;
+
+    private Fragment mCurrentFragment;
 
     final private static int REPORT_POST_REQUEST_CODE = 2777;
 
@@ -121,112 +127,93 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void launchFragment(Page page){
-        Fragment frag;
+//        Fragment frag;
         String fragmentTAG;
         Bundle bundle;
         switch (page){
             case Daily:
-                frag = new FragmentDailyDope();
+                mCurrentFragment = new FragmentDailyDope();
                 bundle = new Bundle();
                 bundle.putInt("num", 1);
-                frag.setArguments(bundle);
+                mCurrentFragment.setArguments(bundle);
                 fragmentTAG = "FragmentDailyDope";
                 break;
             case Tranding:
-                frag = new FragmentDailyDope();
+                mCurrentFragment = new FragmentDailyDope();
 //                frag = new FragmentNoMessage();
                 bundle = new Bundle();
                 bundle.putInt("num", 2);
-                frag.setArguments(bundle);
+                mCurrentFragment.setArguments(bundle);
 //                fragmentTAG = "FragmentNoMessage";
                 fragmentTAG = "FragmentTranding";
                 break;
             case Friends:
-                frag = new FragmentFriendsFirstScreen();
+                mCurrentFragment = new FragmentFriendsFirstScreen();
                 fragmentTAG = "FragmentFriendsFirstScreen";
                 break;
             case FriendsSearch:
-                frag = new FragmentSearchFriends();
+                mCurrentFragment = new FragmentSearchFriends();
                 fragmentTAG = "FragmentSearchFriends";
                 break;
             case FriendsDope:
-                frag = new FragmentDailyDope();
+                mCurrentFragment = new FragmentDailyDope();
                 bundle = new Bundle();
                 bundle.putInt("num", 3);
-                frag.setArguments(bundle);
+                mCurrentFragment.setArguments(bundle);
                 fragmentTAG = "FragmentFriendsDope";
                 break;
             case Profile:
-                frag = new FragmentFriendsNotRegistered();
+                if (Utilities.isLogedIn){
+                    mCurrentFragment = new FragmentProfileOverview();
+                    bundle = new Bundle();
+                    bundle.putBoolean("own", true);
+                    mCurrentFragment.setArguments(bundle);
+                }else {
+                    mCurrentFragment = new FragmentFriendsNotRegistered();
+                }
                 fragmentTAG = "FragmentFriendsNotRegistered";
                 break;
             case ProfileOverview:
-                frag = new FragmentProfileOverview();
+                mCurrentFragment = new FragmentProfileOverview();
+                bundle = new Bundle();
+                bundle.putBoolean("own", false);
+                mCurrentFragment.setArguments(bundle);
                 fragmentTAG = "FragmentProfileOverview";
                 break;
             case ProfileFollowers:
-                frag = new FragmentProfileFollowers();
+                mCurrentFragment = new FragmentProfileFollowers();
                 bundle = new Bundle();
                 bundle.putBoolean("followers", true);
-                frag.setArguments(bundle);
+                mCurrentFragment.setArguments(bundle);
                 fragmentTAG = "FragmentProfileFollowers";
                 break;
             case ProfileFollowings:
-                frag = new FragmentProfileFollowers();
+                mCurrentFragment = new FragmentProfileFollowers();
                 bundle = new Bundle();
                 bundle.putBoolean("followers", false);
-                frag.setArguments(bundle);
+                mCurrentFragment.setArguments(bundle);
                 fragmentTAG = "FragmentProfileFollowings";
                 break;
+            case ProfileSettings:
+                mCurrentFragment = new FragmentProfileSettings();
+                fragmentTAG = "FragmentProfileSettings";
+                break;
             default:
-                frag = new FragmentDailyDope();
+                mCurrentFragment = new FragmentDailyDope();
                 fragmentTAG = "FragmentDailyDope";
         }
         transaction = manager.beginTransaction();
-        transaction.add(R.id.fragment_container, frag, fragmentTAG);
+        transaction.add(R.id.fragment_container, mCurrentFragment, fragmentTAG);
         transaction.commit();
     }
 
     private void removeFragment(Page page){
 
-        String fragmentTAG;
-        switch (page){
-            case Daily:
-                fragmentTAG = "FragmentDailyDope";
-                break;
-            case Tranding:
-                fragmentTAG = "FragmentTranding";
-//                fragmentTAG = "FragmentNoMessage";
-                break;
-            case Friends:
-                fragmentTAG = "FragmentFriendsFirstScreen";
-                break;
-            case FriendsSearch:
-                fragmentTAG = "FragmentSearchFriends";
-                break;
-            case FriendsDope:
-                fragmentTAG = "FragmentFriendsDope";
-                break;
-            case Profile:
-                fragmentTAG = "FragmentFriendsNotRegistered";
-                break;
-            case ProfileOverview:
-                fragmentTAG = "FragmentProfileOverview";
-                break;
-            case ProfileFollowers:
-                fragmentTAG = "FragmentProfileFollowers";
-                break;
-            case ProfileFollowings:
-                fragmentTAG = "FragmentProfileFollowings";
-                break;
-            default:
-                fragmentTAG = "FragmentDailyDope";
-        }
-        Fragment fragment = getFragmentManager().findFragmentByTag(fragmentTAG);
-        if(fragment != null) {
+        if(mCurrentFragment != null) {
             transaction = manager.beginTransaction();
-            transaction.remove(fragment);
+            transaction.remove(mCurrentFragment);
             transaction.commit();
+
         }
     }
 
@@ -244,6 +231,95 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         toolbarTitleAndButtonChangesHandler(page);
         launchFragment(page);
     }
+
+    protected void switchPageAnimatedHandler(Page newPage){
+        uncheckLowertabItem(page);
+        animatedLaunchFragment(newPage);
+        page = newPage;
+        checkLowertabItem(page);
+        toolbarTitleAndButtonChangesHandler(page);
+    }
+
+    private void animatedLaunchFragment(Page newPage){
+
+        Fragment fragmentTo;
+        Bundle bundle;
+
+        switch (newPage){
+            case Daily:
+                fragmentTo = new FragmentDailyDope();
+                bundle = new Bundle();
+                bundle.putInt("num", 1);
+                fragmentTo.setArguments(bundle);
+                break;
+            case Tranding:
+                fragmentTo = new FragmentDailyDope();
+//                frag = new FragmentNoMessage();
+                bundle = new Bundle();
+                bundle.putInt("num", 2);
+                fragmentTo.setArguments(bundle);
+                break;
+            case Friends:
+                fragmentTo = new FragmentFriendsFirstScreen();
+                break;
+            case FriendsSearch:
+                fragmentTo = new FragmentSearchFriends();
+                break;
+            case FriendsDope:
+                fragmentTo = new FragmentDailyDope();
+                bundle = new Bundle();
+                bundle.putInt("num", 3);
+                fragmentTo.setArguments(bundle);
+                break;
+            case Profile:
+                if (Utilities.isLogedIn){
+                    fragmentTo = new FragmentProfileOverview();
+                    bundle = new Bundle();
+                    bundle.putBoolean("own", true);
+                    fragmentTo.setArguments(bundle);
+                }else {
+                    fragmentTo = new FragmentFriendsNotRegistered();
+                }
+                break;
+            case ProfileOverview:
+                fragmentTo = new FragmentProfileOverview();
+                bundle = new Bundle();
+                bundle.putBoolean("own", false);
+                fragmentTo.setArguments(bundle);
+                break;
+            case ProfileFollowers:
+                fragmentTo = new FragmentProfileFollowers();
+                bundle = new Bundle();
+                bundle.putBoolean("followers", true);
+                fragmentTo.setArguments(bundle);
+                break;
+            case ProfileFollowings:
+                fragmentTo = new FragmentProfileFollowers();
+                bundle = new Bundle();
+                bundle.putBoolean("followers", false);
+                fragmentTo.setArguments(bundle);
+                break;
+            default:
+                fragmentTo = new FragmentDailyDope();
+        }
+
+        //        FragmentManager fm = getFragmentManager();
+//        FragmentTransaction fragmentTransaction = manager.beginTransaction();
+
+        // Just for demonstration
+//        int animationType = Utilites.ANIMATION_TYPES[Utilites.sAnimationNumber];
+//        int animationType = FragmentTransactionExtended.ZOOM_SLIDE_VERTICAL;
+        int animationType = FragmentTransactionExtended.SLIDE_VERTICAL;
+
+        transaction = manager.beginTransaction();
+        FragmentTransactionExtended fragmentTransactionExtended = new FragmentTransactionExtended(this,
+                transaction, mCurrentFragment, fragmentTo, R.id.fragment_container);
+        fragmentTransactionExtended.addTransition(animationType);
+        fragmentTransactionExtended.commit();
+        mCurrentFragment = fragmentTo;
+    }
+
+
 
     protected void toolbarTitleAndButtonChangesHandler(Page page){
         switch (page){
@@ -305,12 +381,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case Profile:
                 toolbarTitle.setText(R.string.lower_tab_profile);
                 mLeftToolbarButton.setVisibility(View.VISIBLE);
-                mRightToolbarButton.setVisibility(View.GONE);
+                if(Utilities.isLogedIn) {
+                    mRightToolbarButton.setVisibility(View.VISIBLE);
+                }else {
+                    mRightToolbarButton.setVisibility(View.GONE);
+                }
                 mLeftToolbarButton.setImageResource(R.drawable.toolbar_settings_icon);
                 mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        if (Utilities.isLogedIn){
+                            switchPageHandler(Page.ProfileSettings);
+                        }
                     }
                 });
                 break;
@@ -353,6 +435,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
                 break;
 
+            case ProfileSettings:
+                toolbarTitle.setText(R.string.profile_settings_toolbar_title);
+                mLeftToolbarButton.setVisibility(View.VISIBLE);
+                mRightToolbarButton.setVisibility(View.GONE);
+                mLeftToolbarButton.setImageResource(R.drawable.toolbar_left_arrow);
+                mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        switchPageHandler(Page.Profile);
+                    }
+                });
+                break;
+
             default:
 
         }
@@ -364,10 +459,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (id == dailyDopeLL.getId()){
             if (page != Page.Daily){
                 switchPageHandler(Page.Daily);
+//                switchPageAnimatedHandler(Page.Daily);
             }
         }else if(id == trandingLL.getId()){
             if (page != Page.Tranding){
                 switchPageHandler(Page.Tranding);
+//                switchPageAnimatedHandler(Page.Tranding);
             }
         }else if (id == plusLL.getId()){
             Intent intent = new Intent(MainActivity.this, TabPlusActivity.class);
@@ -375,10 +472,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else if (id == friendsLL.getId()){
             if (page != Page.Friends){
                 switchPageHandler(Page.Friends);
+//                switchPageAnimatedHandler(Page.Friends);
             }
         }else if(id == profileLL.getId()){
             if (page != Page.Profile){
                 switchPageHandler(Page.Profile);
+//                switchPageAnimatedHandler(Page.Profile);
             }
         }else if (id == mContextOptionsSharePost.getId()){
             showContextOptions(false, null);
@@ -440,6 +539,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 friendsIcon.setImageResource(R.drawable.lower_tab_active_friends);
                 friendsText.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.lower_bar_active_color));
                 break;
+            case ProfileSettings:
             case ProfileFollowings:
             case ProfileFollowers:
             case ProfileOverview:
@@ -474,6 +574,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 friendsIcon.setImageResource(R.drawable.lower_tab_friends);
                 friendsText.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.lower_tab_text_color));
                 break;
+            case ProfileSettings:
             case ProfileFollowings:
             case ProfileFollowers:
             case ProfileOverview:
@@ -484,7 +585,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public enum Page{
-        Daily, Tranding, Friends, FriendsSearch, FriendsDope, Profile, ProfileOverview, ProfileFollowers, ProfileFollowings
+        Daily,
+        Tranding,
+        Friends,
+        FriendsSearch,
+        FriendsDope,
+        Profile,
+        ProfileOverview,
+        ProfileFollowers,
+        ProfileFollowings,
+        ProfileSettings
     }
 
 
@@ -526,7 +636,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (show){
             WindowManager.LayoutParams mLP = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.MATCH_PARENT,
-                    Utilites.getStatusBarHeight(MainActivity.this),
+                    Utilities.getStatusBarHeight(MainActivity.this),
                     // Allows the view to be on top of the StatusBar
                     WindowManager.LayoutParams.TYPE_SYSTEM_ERROR,
                     // Keeps the button presses from going to the background window

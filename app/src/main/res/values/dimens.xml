@@ -159,6 +159,8 @@
     <dimen name="single_comment_comment_time_text_size">12sp</dimen>
 
     <dimen name="share_profile_avatar_ring_inner_radius">59dp</dimen>
+    <dimen name="share_profile_avatar_inner_ring_inner_radius">53dp</dimen>
+    <dimen name="share_profile_avatar_inner_ring_diameter">110dp</dimen>
     <dimen name="share_profile_avatar_ring_thickness">1px</dimen>
     <dimen name="share_profile_avatar_ring_size">120dp</dimen>
     <dimen name="share_profile_avatar_size">110dp</dimen>
@@ -174,13 +176,37 @@
     <dimen name="dope_statistics_lower_bar_descriptions_size">13sp</dimen>
 
     <dimen name="profile_settings_top_linear_layout_height">172dp</dimen>
-    <dimen name="profile_settings_distance_between_sections">40dp</dimen>
+    <dimen name="profile_settings_distance_between_sections">47dp</dimen>
     <dimen name="profile_settings_private_information_bar_height">80dp</dimen>
-    <dimen name="profile_settings_section_item_height">38dp</dimen>
+    <dimen name="profile_settings_section_item_height">39dp</dimen>
+    <dimen name="profile_settings_empty_view_between_sections_height">33dp</dimen>
 
-    <dimen name="profile_settings_section_item_text_size">13sp</dimen>
-    <dimen name="profile_settings_section_item_horizontal">10dp</dimen>
-    <dimen name="profile_settings_section_item_icon_padding">8dp</dimen>
+    <dimen name="profile_settings_section_item_text_size">15sp</dimen>
+    <dimen name="profile_settings_section_item_horizontal_padding">10dp</dimen>
+    <!--<dimen name="profile_settings_section_item_right_padding">12dp</dimen>-->
+    <dimen name="profile_settings_section_item_icon_padding">9dp</dimen>
+    <dimen name="profile_settings_only_text_item_left_padding">20dp</dimen>
+
     <dimen name="profile_settings_distance_between_icon_and_text_in_section_item">5dp</dimen>
+    <dimen name="profile_settings_private_information_textview_margin_bottom">7dp</dimen>
+    <dimen name="profile_settings_expand_button_width">7dp</dimen>
+    <dimen name="profile_settings_text_in_between_sections_size">14sp</dimen>
+    <dimen name="profile_settings_avatar_outer_circle_diameter">116dp</dimen>
+    <dimen name="profile_settings_avatar_inner_circle_diameter">106dp</dimen>
+    <dimen name="profile_settings_avatar_camera_icon_size">42dp</dimen>
+    <dimen name="profile_settings_avatar_user_icon_size">60dp</dimen>
+
+    <dimen name="profile_overview_created_dopes_panel_height">200dp</dimen>
+    <dimen name="profile_overview_there_are_no_dopes_button_width">280dp</dimen>
+    <dimen name="profile_overview_there_are_no_dopes_button_margin_top">20dp</dimen>
+
+    <dimen name="about_dope_top_layout_height">48dp</dimen>
+    <dimen name="about_dope_diamond_icon_padding">14dp</dimen>
+    <dimen name="about_dope_margin_1">19dp</dimen>
+    <dimen name="about_dope_margin_2">5dp</dimen>
+    <dimen name="about_dope_horizontal_padding">13dp</dimen>
+    <dimen name="about_dope_non_toolbar_title_font_size">15sp</dimen>
+    <dimen name="about_dope_question_font_size">15sp</dimen>
+    <dimen name="about_dope_answer_font_size">13sp</dimen>
 
 </resources>

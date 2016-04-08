@@ -59,7 +59,9 @@
     <color name="context_options_overlay_color">#90000000</color>
     <color name="share_dope_badget_color">#90000000</color>
 
-    <color name="profile_settings_background_color">#ECF3F3</color>
+    <!--<color name="profile_settings_background_color">#ECF3F3</color>-->
+    <color name="profile_settings_background_color">#EBF4F4</color>
+
     <!--<color name="profile_overview_recycler_view_item_text_color">#9FA8A9</color>-->
     <color name="profile_overview_recycler_view_item_text_color">#798081</color>
     <color name="report_post_red_ring_color">#E14A42</color>
@@ -73,5 +75,8 @@
     <color name="profile_settings_background_color_2">#EBF4F4</color>
 
 
-
+    <color name="profile_settings_hint_text_color">#969c9c</color>
+    <color name="profile_settings_avatar_inner_circle_background">#DEE5E5</color>
+    #EBF4F4
+    #DEE5E5
 </resources>
