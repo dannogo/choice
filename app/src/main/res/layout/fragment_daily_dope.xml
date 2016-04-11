@@ -82,6 +82,113 @@
 
             </LinearLayout>
 
+            <!--Rate bar-->
+            <LinearLayout
+                android:id="@+id/rate_bar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:id="@+id/dope_left_colored_cover"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5">
+
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_centerInParent="true"-->
+                        <!--android:gravity="center_horizontal"-->
+                        <!--android:orientation="vertical">-->
+
+                        <RelativeLayout
+                            android:id="@+id/dope_left_rate_circle_container"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            >
+
+                            <ImageView
+                                android:id="@+id/dope_left_diamond"
+                                android:layout_width="@dimen/dope_rate_diamond_icon_size"
+                                android:layout_height="@dimen/dope_rate_diamond_icon_size"
+                                android:layout_centerInParent="true"
+                                android:src="@drawable/diamond_for_choice"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                android:id="@+id/dope_left_percentage_circle"
+                                android:layout_width="@dimen/dope_rate_circle_size"
+                                android:layout_height="@dimen/dope_rate_circle_size"
+                                android:layout_centerInParent="true" />
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/left_rate_text_view"
+                            android:layout_marginTop="@dimen/dope_rate_distance_between_circle_and_percentage_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/dope_left_rate_circle_container"
+                            android:layout_centerHorizontal="true"
+                            android:textColor="@color/white_text_color"
+                            android:textSize="@dimen/dope_rate_percentage_size"
+                            />
+                    <!--</LinearLayout>-->
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/dope_right_colored_cover"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5">
+
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="wrap_content"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_centerInParent="true"-->
+                        <!--android:gravity="center_horizontal"-->
+                        <!--android:orientation="vertical">-->
+
+                        <RelativeLayout
+                            android:id="@+id/dope_right_rate_circle_container"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:gravity="center">
+
+                            <ImageView
+                                android:id="@+id/dope_right_diamond"
+                                android:layout_width="@dimen/dope_rate_diamond_icon_size"
+                                android:layout_height="@dimen/dope_rate_diamond_icon_size"
+                                android:layout_centerInParent="true"
+                                android:src="@drawable/diamond_for_choice"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                android:id="@+id/dope_right_percentage_circle"
+                                android:layout_width="@dimen/dope_rate_circle_size"
+                                android:layout_height="@dimen/dope_rate_circle_size"
+                                android:layout_centerInParent="true" />
+                        </RelativeLayout>
+
+                        <TextView
+                            android:id="@+id/right_rate_text_view"
+                            android:layout_marginTop="@dimen/dope_rate_distance_between_circle_and_percentage_text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/dope_right_rate_circle_container"
+                            android:layout_centerHorizontal="true"
+                            android:textColor="@color/white_text_color"
+                            android:textSize="@dimen/dope_rate_percentage_size"
+                            />
+                    <!--</LinearLayout>-->
+
+                </RelativeLayout>
+            </LinearLayout>
+
         </RelativeLayout>
 
         <RelativeLayout

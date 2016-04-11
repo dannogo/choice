@@ -13,7 +13,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.commit451.nativestackblur.NativeStackBlur;
+//import com.commit451.nativestackblur.NativeStackBlur;
+
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
  * Created by oleh on 4/3/16.
@@ -56,13 +58,22 @@ public class DopeStatisticsActivity extends AppCompatActivity implements View.On
         Glide.with(this).load(image1).into(optionPicture1);
         Glide.with(this).load(image2).into(optionPicture2);
 
-        Bitmap pic1 = BitmapFactory.decodeResource(getResources(), image1);
-        Bitmap bm1 = NativeStackBlur.process(pic1, 100);
-        blurredPicture1.setImageBitmap(bm1);
+        // DEPRECATED
+//        Bitmap pic1 = BitmapFactory.decodeResource(getResources(), image1);
+//        Bitmap bm1 = NativeStackBlur.process(pic1, 100);
+//        blurredPicture1.setImageBitmap(bm1);
+//
+//        Bitmap pic2 = BitmapFactory.decodeResource(getResources(), image2);
+//        Bitmap bm2 = NativeStackBlur.process(pic2, 100);
+//        blurredPicture2.setImageBitmap(bm2);
 
-        Bitmap pic2 = BitmapFactory.decodeResource(getResources(), image2);
-        Bitmap bm2 = NativeStackBlur.process(pic2, 100);
-        blurredPicture2.setImageBitmap(bm2);
+        Glide.with(this).load(image1)
+                .bitmapTransform(new BlurTransformation(this))
+                .into(blurredPicture1);
+
+        Glide.with(this).load(image2)
+                .bitmapTransform(new BlurTransformation(this))
+                .into(blurredPicture2);
     }
 
     @Override

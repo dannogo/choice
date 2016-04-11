@@ -28,7 +28,7 @@ import com.desarrollodroide.libraryfragmenttransactionextended.FragmentTransacti
 /**
  * Created by oleh on 3/14/16.
  */
-public class MainActivity extends AppCompatActivity implements View.OnClickListener{
+public class MainActivity extends AppCompatActivity implements View.OnClickListener, FragmentViewPager.CommunicatorOne{
 
     private Toolbar toolbar;
     private ImageView mLeftToolbarButton;
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView profileIcon;
     private TextView profileText;
 
-    private TextView toolbarTitle;
+    public TextView toolbarTitle;
     private android.app.FragmentManager manager = getFragmentManager();
     private FragmentTransaction transaction;
 
@@ -132,19 +132,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Bundle bundle;
         switch (page){
             case Daily:
-                mCurrentFragment = new FragmentDailyDope();
+                mCurrentFragment = new FragmentViewPager();
+//                mCurrentFragment = new FragmentDailyDope();
                 bundle = new Bundle();
                 bundle.putInt("num", 1);
                 mCurrentFragment.setArguments(bundle);
                 fragmentTAG = "FragmentDailyDope";
                 break;
             case Tranding:
-                mCurrentFragment = new FragmentDailyDope();
-//                frag = new FragmentNoMessage();
+                mCurrentFragment = new FragmentViewPager();
+//                mCurrentFragment = new FragmentDailyDope();
                 bundle = new Bundle();
                 bundle.putInt("num", 2);
                 mCurrentFragment.setArguments(bundle);
-//                fragmentTAG = "FragmentNoMessage";
                 fragmentTAG = "FragmentTranding";
                 break;
             case Friends:
@@ -156,7 +156,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 fragmentTAG = "FragmentSearchFriends";
                 break;
             case FriendsDope:
-                mCurrentFragment = new FragmentDailyDope();
+                mCurrentFragment = new FragmentViewPager();
+//                mCurrentFragment = new FragmentDailyDope();
                 bundle = new Bundle();
                 bundle.putInt("num", 3);
                 mCurrentFragment.setArguments(bundle);
@@ -443,7 +444,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        switchPageHandler(Page.Profile);
+                        switchPageHandler(Page.ProfileOverview);
                     }
                 });
                 break;
@@ -581,6 +582,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case Profile:
                 profileIcon.setImageResource(R.drawable.lower_tab_profile);
                 profileText.setTextColor(ContextCompat.getColor(MainActivity.this, R.color.lower_tab_text_color));
+        }
+    }
+
+    @Override
+    public void respond() {
+        if (mCurrentFragment instanceof FragmentViewPager){
+            ((FragmentViewPager)mCurrentFragment).showNextPage();
         }
     }
 

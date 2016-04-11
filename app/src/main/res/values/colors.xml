@@ -77,6 +77,18 @@
 
     <color name="profile_settings_hint_text_color">#969c9c</color>
     <color name="profile_settings_avatar_inner_circle_background">#DEE5E5</color>
+
+    <!--Currently not in use-->
+    <color name="dope_rate_wining_progress_line_color">#1FB078</color>
+    <color name="dope_rate_losing_progress_line_color">#E24942</color>
+    <!--/Currently not in use-->
+    <color name="dope_rate_equal_progress_line_color">#2979FF</color>
+    <color name="dope_rate_wining_semi_transparent_background">#c8013035</color>
+    <color name="dope_rate_losing_semi_transparent_background">#b3280609</color>
+    <color name="dope_rate_equal_semi_transparent_background">#b70a2e58</color>
+    <!--<color name="dope_rate_wining_semi_transparent_background">#068481</color>-->
+
+
     #EBF4F4
     #DEE5E5
 </resources>

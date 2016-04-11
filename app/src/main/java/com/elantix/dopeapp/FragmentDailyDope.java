@@ -2,12 +2,8 @@ package com.elantix.dopeapp;
 
 import android.app.Fragment;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,11 +12,10 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.commit451.nativestackblur.NativeStackBlur;
+
+import java.util.Random;
 
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
@@ -33,18 +28,46 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
     private LinearLayout mInfoBar;
     ImageView mOptionPicture1;
     ImageView mOptionPicture2;
+    String someTitle;
+    ChoiceAnimationHelper mAnimHelper = null;
+    int mDopeNum;
+    private FragmentViewPager.CommunicatorOne mCommOne;
+
+    // newInstance constructor for creating fragment with arguments
+    public static FragmentDailyDope newInstance(int page, String title) {
+        FragmentDailyDope fragmentDailyDope = new FragmentDailyDope();
+        Bundle args = new Bundle();
+        args.putInt("dopeNum", page);
+        args.putString("someString", title);
+        fragmentDailyDope.setArguments(args);
+        return fragmentDailyDope;
+    }
+
+
+
+    // Store instance variables based on arguments passed
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle = this.getArguments();
+        mDopeNum = bundle.getInt("dopeNum", 0);
+        someTitle = bundle.getString("someTitle");
+
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         fragmentView = inflater.inflate(R.layout.fragment_daily_dope, container, false);
+        mCommOne = (FragmentViewPager.CommunicatorOne) getActivity();
+
         ImageButton moreButton = (ImageButton) fragmentView.findViewById(R.id.more_button);
         final Bundle bundle = this.getArguments();
         moreButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).showContextOptions(true, bundle.getInt("num"));
+                ((MainActivity) getActivity()).showContextOptions(true, bundle.getInt("num"));
             }
         });
 
@@ -56,6 +79,10 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
                 startActivity(intent);
             }
         });
+
+        if (Utilities.sRateStateBackups[mDopeNum] != null){
+            applyRestoredRateData();
+        }
 
         return fragmentView;
     }
@@ -71,77 +98,56 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
         mOptionPicture2 = (ImageView) fragmentView.findViewById(R.id.option_picture_2);
         mOptionPicture1.setOnClickListener(this);
         mOptionPicture2.setOnClickListener(this);
-        Bundle bundle = this.getArguments();
 
         int image1;
         int image2;
 
-//        if (bundle.getInt("num") == 1) {
-//            image1 = R.drawable.girl3;
-//            image2 = R.drawable.girl4;
-//        }else if(bundle.getInt("num") == 2){
-//            image1 = R.drawable.donald;
-//            image2 = R.drawable.ted;
-//        }else{
-//            image1 = R.drawable.bernie;
-//            image2 = R.drawable.hillary;
-//        }
-
-        switch (Utilities.sDopeNumber){
+        switch (mDopeNum){
             case 0:
                 image1 = R.drawable.girl3;
                 image2 = R.drawable.girl4;
-                Utilities.sDopeNumber++;
                 break;
             case 1:
                 image1 = R.drawable.donald;
                 image2 = R.drawable.ted;
-                Utilities.sDopeNumber++;
                 break;
             case 2:
                 image1 = R.drawable.bernie;
                 image2 = R.drawable.hillary;
-                Utilities.sDopeNumber++;
                 break;
             case 3:
                 image1 = R.drawable.earth;
                 image2 = R.drawable.mars;
-                Utilities.sDopeNumber++;
                 break;
             case 4:
                 image1 = R.drawable.fork;
                 image2 = R.drawable.spoon;
-                Utilities.sDopeNumber++;
                 break;
             case 5:
                 image1 = R.drawable.hell;
                 image2 = R.drawable.heaven;
-                Utilities.sDopeNumber++;
                 break;
             case 6:
                 image1 = R.drawable.cat1;
                 image2 = R.drawable.cat2;
-                Utilities.sDopeNumber++;
                 break;
             case 7:
                 image1 = R.drawable.cat3;
                 image2 = R.drawable.cat4;
-                Utilities.sDopeNumber++;
                 break;
             case 8:
                 image1 = R.drawable.dog1;
                 image2 = R.drawable.dog2;
-                Utilities.sDopeNumber++;
                 break;
             case 9:
                 image1 = R.drawable.dog3;
                 image2 = R.drawable.dog4;
-                Utilities.sDopeNumber = 0;
                 break;
             default:
                 image1 = R.drawable.girl3;
                 image2 = R.drawable.girl4;
         }
+
 
         Glide.with(this).load(image1).into(mOptionPicture1);
         Glide.with(this).load(image2).into(mOptionPicture2);
@@ -154,35 +160,58 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
                 .bitmapTransform(new BlurTransformation(getActivity()))
                 .into(blurredPicture2);
 
-        // DEPRECATED
-//        Bitmap pic1 = BitmapFactory.decodeResource(getResources(), image1);
-//        Bitmap bm1 = NativeStackBlur.process(pic1, 100);
-//        blurredPicture1.setImageBitmap(bm1);
-
-//        Bitmap pic2 = BitmapFactory.decodeResource(getResources(), image2);
-//        Bitmap bm2 = NativeStackBlur.process(pic2, 100)
-//        blurredPicture2.setImageBitmap(bm2);
-
-
     }
+
+    private void launchRateAnimation(ChoiceAnimationHelper.ChoiceSide side){
+
+        Random rand = new Random();
+        int min = 15;
+        int max = 85;
+        int randomNum = rand.nextInt((max - min) + 1) + min;
+
+        mAnimHelper = new ChoiceAnimationHelper(getActivity(), fragmentView);
+        mAnimHelper.setParameters(side, randomNum, Utilities.sRateAnimationDirection);
+        mAnimHelper.draw(true);
+        Utilities.sRateStateBackups[mDopeNum] = new RateStateBackup(side, randomNum, Utilities.sRateAnimationDirection);
+        Utilities.sRateAnimationDirection = !Utilities.sRateAnimationDirection;
+    }
+
+    private void applyRestoredRateData(){
+        ChoiceAnimationHelper.ChoiceSide side = Utilities.sRateStateBackups[mDopeNum].chosenSide;
+        int leftRate = Utilities.sRateStateBackups[mDopeNum].leftRate;
+        Boolean directionInside = Utilities.sRateStateBackups[mDopeNum].directionInside;
+
+        mAnimHelper = new ChoiceAnimationHelper(getActivity(), fragmentView);
+        mAnimHelper.setParameters(side, leftRate, directionInside);
+        mAnimHelper.draw(false);
+    }
+
+    private void showNextPage(){
+        Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                mCommOne.respond();
+            }
+        }, 1200);
+    }
+
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
         if (id == mOptionPicture1.getId()){
-            if (Utilities.ANIMATION_TYPES.length == Utilities.sAnimationNumber) {
-                Utilities.sAnimationNumber = 0;
+            if (mAnimHelper == null){
+                launchRateAnimation(ChoiceAnimationHelper.ChoiceSide.Left);
+                showNextPage();
             }
-//            Utilites.showExtremelyShortToast(getActivity(), String.valueOf(Utilites.ANIMATION_TYPES[Utilites.sAnimationNumber]));
-            ((MainActivity) getActivity()).switchPageAnimatedHandler((((MainActivity) getActivity()).page));
-            Utilities.sAnimationNumber++;
         }else if (id == mOptionPicture2.getId()){
-            if (Utilities.ANIMATION_TYPES.length == Utilities.sAnimationNumber) {
-                Utilities.sAnimationNumber = 0;
+
+            if (mAnimHelper == null){
+                launchRateAnimation(ChoiceAnimationHelper.ChoiceSide.Right);
+                showNextPage();
             }
-//            Utilites.showExtremelyShortToast(getActivity(), String.valueOf(Utilites.ANIMATION_TYPES[Utilites.sAnimationNumber]));
-            ((MainActivity)getActivity()).switchPageAnimatedHandler((((MainActivity) getActivity()).page));
-            Utilities.sAnimationNumber++;
         }
+
     }
 }

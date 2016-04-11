@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.desarrollodroide.libraryfragmenttransactionextended.FragmentTransactionExtended;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -34,6 +35,9 @@ public class Utilities {
 
     public static int sAnimationNumber = 0;
     public static int sDopeNumber = 0;
+
+    public static Boolean sRateAnimationDirection = true;
+    public static RateStateBackup sRateStateBackups[] = new RateStateBackup[10];
 
     final public static int[] ANIMATION_TYPES = {
             FragmentTransactionExtended.SCALEX,

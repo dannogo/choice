@@ -209,4 +209,14 @@
     <dimen name="about_dope_question_font_size">15sp</dimen>
     <dimen name="about_dope_answer_font_size">13sp</dimen>
 
+    <dimen name="dope_rate_chosen_progress_line_width">5dp</dimen>
+    <dimen name="dope_rate_not_chosen_progress_line_width">4dp</dimen>
+
+    <dimen name="dope_rate_circle_size">125dp</dimen>
+    <dimen name="dope_rate_small_circle_size">93dp</dimen>
+    <dimen name="dope_rate_diamond_icon_size">53dp</dimen>
+    <dimen name="dope_rate_distance_between_circle_and_percentage_text">2dp</dimen>
+    <dimen name="dope_rate_percentage_size">26sp</dimen>
+    <dimen name="dope_rate_small_percentage_size">22sp</dimen>
+
 </resources>
