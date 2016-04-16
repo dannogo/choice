@@ -1,19 +1,73 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/bg_signin"
     android:orientation="vertical">
 
-    <include
-        android:id="@+id/login_bar"
-        layout="@layout/login_bar" />
+    <RelativeLayout
+        android:id="@+id/start_login_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/start_log_in_toolbar_height"
+        android:gravity="center_vertical"
+        android:background="@drawable/bottom_border_start_login"
+        >
 
-    <TextView
-        android:layout_below="@+id/login_bar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        />
+        <ImageButton
+            android:id="@+id/start_login_toolbar_left_button"
+            android:layout_width="@dimen/start_log_in_toolbar_height"
+            android:layout_height="@dimen/start_log_in_toolbar_height"
+            android:background="@android:color/transparent"
+            android:layout_gravity="left"
+            android:src="@drawable/toolbar_left_arrow_light"
+            android:adjustViewBounds="true"
+            android:padding="17dp"
+            android:cropToPadding="false"
+            android:scaleType="centerInside"
+            android:layout_marginRight="@dimen/toolbar_button_left_margin"
+            />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/start_login_toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/start_log_in_toolbar_title_font_size"
+            android:layout_gravity="center"
+            android:layout_centerInParent="true"
+            android:textColor="@color/white_text_color"
+            android:text="@string/start_log_in_toolbar_login"
+            />
+
+        <TextView
+            android:id="@+id/start_login_toolbar_right_button"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/toolbar_button_right_margin"
+            android:background="@android:color/transparent"
+            android:gravity="center_vertical"
+            android:textColor="@color/start_login_toolbar_skip_color"
+            android:text="Skip" />
+
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/start_login_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        ></RelativeLayout>
+
+
+    <!--<com.desarrollodroide.libraryfragmenttransactionextended.SlidingRelativeLayout-->
+        <!--android:id="@+id/start_login_fragment_container"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!-->-->
+    <!--</com.desarrollodroide.libraryfragmenttransactionextended.SlidingRelativeLayout>-->
+
+
+
+</LinearLayout>

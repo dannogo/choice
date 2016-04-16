@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/splash_4_background"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/splash_4_toolbar_height"
+        android:background="@drawable/bottom_border_splash_4"
+        android:gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/splash_4_fragment_title"
+            android:textColor="@color/white_text_color"
+            android:textSize="@dimen/splash_4_frag_title_size" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="13dp"
+        android:paddingRight="13dp"
+        android:paddingTop="23dp"
+        android:orientation="vertical"
+        >
+
+        <!--Comment 1-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="@dimen/splash_tiny_avatar_size"
+                android:layout_height="@dimen/splash_tiny_avatar_size"
+                android:src="@drawable/splash_tiny_avatar_1"
+                android:layout_marginTop="@dimen/splash_4_avatar_top_margin_4"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/splash_4_margin_between_avatar_and_text"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/splash_4_user_name_text_color"
+                    android:textSize="@dimen/splash_4_user_name_text_size"
+                    android:text="@string/splash_4_dummy_user_name_1"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white_text_color"
+                    android:textSize="@dimen/splash_4_comment_size"
+                    android:text="@string/splash_4_dummy_comment_1"
+                    android:layout_marginTop="@dimen/splash_4_margin_between_user_name_and_comment_text"
+                    android:lineSpacingMultiplier="1.2"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--Comment 2-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/splash_4_margin_between_comments"
+            >
+
+            <ImageView
+                android:layout_width="@dimen/splash_tiny_avatar_size"
+                android:layout_height="@dimen/splash_tiny_avatar_size"
+                android:src="@drawable/splash_tiny_avatar_2"
+                android:layout_marginTop="@dimen/splash_4_avatar_top_margin_4"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/splash_4_margin_between_avatar_and_text"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/splash_4_user_name_text_color"
+                    android:textSize="@dimen/splash_4_user_name_text_size"
+                    android:text="@string/splash_4_dummy_user_name_2"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white_text_color"
+                    android:textSize="@dimen/splash_4_comment_size"
+                    android:text="@string/splash_4_dummy_comment_2"
+                    android:layout_marginTop="@dimen/splash_4_margin_between_user_name_and_comment_text"
+                    android:lineSpacingMultiplier="1.2"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--Comment 3-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/splash_4_margin_between_comments"
+            >
+
+            <ImageView
+                android:layout_width="@dimen/splash_tiny_avatar_size"
+                android:layout_height="@dimen/splash_tiny_avatar_size"
+                android:src="@drawable/splash_tiny_avatar_3"
+                android:layout_marginTop="@dimen/splash_4_avatar_top_margin_4"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/splash_4_margin_between_avatar_and_text"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/splash_4_user_name_text_color"
+                    android:textSize="@dimen/splash_4_user_name_text_size"
+                    android:text="@string/splash_4_dummy_user_name_3"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white_text_color"
+                    android:textSize="@dimen/splash_4_comment_size"
+                    android:text="@string/splash_4_dummy_comment_3"
+                    android:layout_marginTop="@dimen/splash_4_margin_between_user_name_and_comment_text"
+                    android:lineSpacingMultiplier="1.2"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--Comment 4-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/splash_4_margin_between_comments"
+            >
+
+            <ImageView
+                android:layout_width="@dimen/splash_tiny_avatar_size"
+                android:layout_height="@dimen/splash_tiny_avatar_size"
+                android:src="@drawable/splash_tiny_avatar_2"
+                android:layout_marginTop="@dimen/splash_4_avatar_top_margin_4"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/splash_4_margin_between_avatar_and_text"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/splash_4_user_name_text_color"
+                    android:textSize="@dimen/splash_4_user_name_text_size"
+                    android:text="@string/splash_4_dummy_user_name_2"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white_text_color"
+                    android:textSize="@dimen/splash_4_comment_size"
+                    android:text="@string/splash_4_dummy_comment_4"
+                    android:layout_marginTop="@dimen/splash_4_margin_between_user_name_and_comment_text"
+                    android:lineSpacingMultiplier="1.2"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--Comment 5-->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/splash_4_margin_between_comments"
+            >
+
+            <ImageView
+                android:layout_width="@dimen/splash_tiny_avatar_size"
+                android:layout_height="@dimen/splash_tiny_avatar_size"
+                android:src="@drawable/splash_tiny_avatar_2"
+                android:layout_marginTop="@dimen/splash_4_avatar_top_margin_4"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginLeft="@dimen/splash_4_margin_between_avatar_and_text"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/splash_4_user_name_text_color"
+                    android:textSize="@dimen/splash_4_user_name_text_size"
+                    android:text="@string/splash_4_dummy_user_name_2"
+                    />
+                <TextView
+                    android:id="@+id/splash_4_shaded_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/white_text_color"
+                    android:textSize="@dimen/splash_4_comment_size"
+                    android:text="@string/splash_4_dummy_comment_2"
+                    android:layout_marginTop="@dimen/splash_4_margin_between_user_name_and_comment_text"
+                    android:lineSpacingMultiplier="1.2"
+                    />
+                    <!--android:textColor="@color/white_text_color"-->
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

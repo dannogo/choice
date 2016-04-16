@@ -168,7 +168,66 @@
     <string name="logout_confirmation_dialog_question">Are you sure you want to logout?</string>
     <string name="logout_confirmation_dialog_positive_button_text">Logout</string>
     <string name="logout_confirmation_dialog_negative_button_text">Cancel</string>
+    <string name="start_log_in_toolbar_login">Login</string>
+    <string name="start_log_in_toolbar_password_recovery">Password Recovery</string>
+    <string name="start_login_username_hint">Username</string>
+    <string name="start_login_password_hint">Password</string>
+    <string name="start_login_sign_in_button_text">Sign in</string>
+    <string name="start_login_forgot_password_text">Forgot your Password?</string>
 
+    <string name="start_pass_recovery_text">Enter your DopeApp username or email,\nto get a link to the email associated\nwith your account</string>
+    <string name="start_pass_recovery_hint">Email or Username</string>
+    <string name="start_pass_recovery_submit_button_text">Submit</string>
+
+    <string name="auth_link_with_email_title">Link with Email</string>
+    <string name="auth_link_with_email_text">Link your Email for getting more\ninfo about DopeApp</string>
+    <string name="auth_link_with_email_hint">Email</string>
+    <string name="auth_link_with_email_continue_button_text">Continue</string>
+
+    <string name="auth_set_username_title">Set a Username</string>
+    <string name="auth_set_username_text">This is the name other people will see when\nthey view your profile</string>
+    <string name="auth_set_username_hint"> User name</string>
+    <string name="auth_set_username_continue_button_text">Continue</string>
+
+    <string name="auth_enter_password_title">Enter a Password</string>
+    <string name="auth_enter_password_text">Choose something you will remember\nbut difficult for others to guess</string>
+    <string name="auth_enter_password_hint_1"> Password</string>
+    <string name="auth_enter_password_hint_2"> Confirm Password</string>
+    <string name="auth_enter_password_continue_button_text">Continue</string>
+
+    <string name="auth_connect_account_title">Connect Your Account</string>
+    <string name="auth_connect_account_text">Link one of the accounts to DopeApp for\nfast and easy log in</string>
+    
+    <string name="auth_sign_in_dope_title">Sign in Dope</string>
+    <string name="auth_sign_in_dope_text">Join DopeApp to follow your friends,\nCreate cards and get thousands of voters</string>
+    <string name="auth_sign_in_facebook_button_text">Login with Facebook</string>
+    <string name="auth_sign_in_twitter_button_text">Login with Twitter</string>
+    <string name="auth_sign_in_already_user">Already have a Username</string>
+
+    <string name="splash_lower_button_text">Next</string>
+    <string name="splash_lower_button_text_2">Start</string>
+
+    <string name="splash_lower_1_title">Make your choice!</string>
+    <string name="splash_lower_1_text">Tap what you like\n&#160;</string>
+    <string name="splash_lower_2_title">Discover</string>
+    <string name="splash_lower_2_text">Which side was chosen\nby others</string>
+    <string name="splash_lower_3_title">Ask your friend`s</string>
+    <string name="splash_lower_3_text">Opinion about poll or write a message by\nusing the option "Direct messages"</string>
+    <string name="splash_lower_4_title">Add your own comment</string>
+    <string name="splash_lower_4_text">About the poll or find out what other\npeople think about it</string>
+
+    <string name="splash_3_dummy_question">Friends, some of the pets more beautiful?</string>
+    <string name="splash_3_dummy_comment_1">I have a cat at home, cause I love them</string>
+    <string name="splash_3_dummy_comment_2">Both pets are very cute</string>
+
+    <string name="splash_4_fragment_title">Comments</string>
+    <string name="splash_4_dummy_user_name_1">Julia Roberts</string>
+    <string name="splash_4_dummy_user_name_2">Nicole Anistone</string>
+    <string name="splash_4_dummy_user_name_3">Katy Perry</string>
+    <string name="splash_4_dummy_comment_1">Beautiful dog!</string>
+    <string name="splash_4_dummy_comment_2">Both pets are very cute</string>
+    <string name="splash_4_dummy_comment_3">I believe that the cat still dearer</string>
+    <string name="splash_4_dummy_comment_4">I like this picture because it`s more realistic\nthan other one :)</string>
 
 </resources>
 

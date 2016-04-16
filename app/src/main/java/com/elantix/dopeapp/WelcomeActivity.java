@@ -11,6 +11,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -36,17 +37,17 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
-public class WelcomeActivity extends AppCompatActivity {
+public class WelcomeActivity extends AppCompatActivity implements View.OnClickListener{
 
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
     private static final String TWITTER_KEY = "0O7XQmGoUBfxKlIDKX16vCwYP";
     private static final String TWITTER_SECRET = "kh6y9zIDTqBfWZ6bNSwiLqC2pE9Rm8Ci9rYa4dqDuPZuOBxCsx";
 
     CallbackManager callbackManager;
-//    private TwitterLoginButton loginButton;
     private FancyButton facebookButton;
     FancyButton twitterButton;
     TwitterAuthClient twitterAuthClient;
+    private TextView mSkipLogin;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,13 +55,13 @@ public class WelcomeActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         super.onCreate(savedInstanceState);
-
         TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
         Fabric.with(this, new TwitterCore(authConfig));
-
         FacebookSdk.sdkInitialize(getApplicationContext());
-
         setContentView(R.layout.activity_welcome);
+
+        mSkipLogin = (TextView) findViewById(R.id.skipLogin);
+        mSkipLogin.setOnClickListener(this);
 //        getSupportActionBar().hide();
 
         Button signInNowButton = (Button) findViewById(R.id.signInNowButton);
@@ -106,28 +107,25 @@ public class WelcomeActivity extends AppCompatActivity {
 
             }
         });
-//        buttonsAppearenceHandling();
+        buttonsAppearanceHandling();
 
 
     }
 
-    private void buttonsAppearenceHandling(){
-        android.view.ViewGroup.LayoutParams params = facebookButton.getLayoutParams();
-        int height = params.height;
+    private void buttonsAppearanceHandling(){
 
-        facebookButton.getIconImageObject().setLayoutParams(new LinearLayout.LayoutParams(80, 80));
-        LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
-        float n = getResources().getDimension(R.dimen.friends_profile_message_margin_4);
-        lp1.setMargins(0, (int)n, 0, 0);
-        facebookButton.setLayoutParams(lp1);
+        int iconRightMargin = (int) getResources().getDimension(R.dimen.fancy_button_icon_margin_right);
+        int iconRegularSize = (int) getResources().getDimension(R.dimen.fancy_button_regular_icon_size);
+        int iconRegularSize2 = (int) getResources().getDimension(R.dimen.fancy_button_regular_icon_size_2);
 
-        twitterButton.getIconImageObject().setLayoutParams(new LinearLayout.LayoutParams(80, 80));
-        LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, height);
-        n = getResources().getDimension(R.dimen.friends_profile_message_margin_5);
-        lp2.setMargins(0, (int) n, 0, 0);
-        twitterButton.setLayoutParams(lp2);
+        LinearLayout.LayoutParams lp1 = new LinearLayout.LayoutParams(iconRegularSize2, iconRegularSize2);
+        lp1.setMargins(0, 0, iconRightMargin, 0);
 
+        LinearLayout.LayoutParams lp2 = new LinearLayout.LayoutParams(iconRegularSize, iconRegularSize);
+        lp2.setMargins(0, 0, iconRightMargin, 0);
 
+        facebookButton.getIconImageObject().setLayoutParams(lp1);
+        twitterButton.getIconImageObject().setLayoutParams(lp2);
     }
 
     // Private method to handle Facebook login and callback
@@ -207,5 +205,14 @@ public class WelcomeActivity extends AppCompatActivity {
 
         // Logs 'app deactivate' App Event.
         AppEventsLogger.deactivateApp(this);
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        if (id == mSkipLogin.getId()){
+            Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 }

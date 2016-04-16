@@ -5,11 +5,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.graphics.Point;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.desarrollodroide.libraryfragmenttransactionextended.FragmentTransactionExtended;
@@ -231,5 +241,98 @@ public class Utilities {
             phrase += c;
         }
         return phrase;
+    }
+
+    /**
+     * Returns bitmap with rounded left or right corners depending on isLeftSide parameter
+     * @param bm bitmap to transform
+     * @param imageView imageView to which result bitmap should fit
+     * @param isLeftSide put true if you want left corners to be rounded
+     * @param corner value in px that determines corner size
+     * @return
+     */
+    public static Bitmap getOneSideRoundedBitmap(Bitmap bm, ImageView imageView, Boolean isLeftSide, int corner) {
+
+        float w = imageView.getWidth();
+        float h = imageView.getHeight();
+        Bitmap newBitmap = scaleCenterCrop(bm, (int) h, (int) w);
+
+        Point pointTop;
+        Point pointBottom;
+        Path path = new Path();
+
+        if (isLeftSide) {
+            pointTop = new Point(0, 0);
+            pointBottom = new Point(0, (int)h);
+
+            path.moveTo(corner, 0);
+            path.lineTo(w, 0);
+            path.lineTo(w, h);
+            path.lineTo(corner, h);
+            path.quadTo(pointBottom.x, pointBottom.y, 0, h - corner);
+            path.lineTo(0, corner);
+            path.quadTo(pointTop.x, pointTop.y, corner, 0);
+
+        }else{
+            pointTop = new Point((int)w, 0);
+            pointBottom = new Point((int)w, (int)h);
+
+            path.lineTo(w - corner, 0);
+            path.quadTo(pointTop.x, pointTop.y, w, corner);
+            path.lineTo(w, h-corner);
+            path.quadTo(pointBottom.x, pointBottom.y, w - corner, h);
+            path.lineTo(0, h);
+            path.lineTo(0,0);
+
+        }
+        Bitmap bmOut = Bitmap.createBitmap((int)w, (int)h, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bmOut);
+
+        Paint paint = new Paint();
+        paint.setAntiAlias(false);
+        paint.setColor(0xff424242);
+
+        Rect rect = new Rect(0, 0, (int)w, (int)h);
+        RectF rectF = new RectF(rect);
+        canvas.drawARGB(0, 0, 0, 0);
+        canvas.drawPath(path, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(newBitmap, rect, rect, paint);
+
+        return bmOut;
+    }
+
+    public static Bitmap scaleCenterCrop(Bitmap source, int newHeight, int newWidth) {
+        int sourceWidth = source.getWidth();
+        int sourceHeight = source.getHeight();
+
+        // Compute the scaling factors to fit the new height and width, respectively.
+        // To cover the final image, the final scaling will be the bigger
+        // of these two.
+        float xScale = (float) newWidth / sourceWidth;
+        float yScale = (float) newHeight / sourceHeight;
+        float scale = Math.max(xScale, yScale);
+
+        // Now get the size of the source bitmap when scaled
+        float scaledWidth = scale * sourceWidth;
+        float scaledHeight = scale * sourceHeight;
+
+        // Let's find out the upper left coordinates if the scaled bitmap
+        // should be centered in the new size give by the parameters
+        float left = (newWidth - scaledWidth) / 2;
+        float top = (newHeight - scaledHeight) / 2;
+
+        // The target rectangle for the new, scaled version of the source bitmap will now
+        // be
+        RectF targetRect = new RectF(left, top, left + scaledWidth, top + scaledHeight);
+
+        // Finally, we create a new bitmap of the specified size and draw our new,
+        // scaled bitmap onto it.
+        Bitmap dest = Bitmap.createBitmap(newWidth, newHeight, source.getConfig());
+        Canvas canvas = new Canvas(dest);
+        canvas.drawBitmap(source, null, targetRect, null);
+
+        return dest;
     }
 }

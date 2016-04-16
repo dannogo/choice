@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/profile_overview_there_are_no_dopes_button_width"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_centerHorizontal="true"
+    >
+
+    <TextView
+        android:layout_marginTop="@dimen/auth_enter_password_margin_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/auth_sign_in_dope_title"
+        android:textColor="@color/white_text_color"
+        android:layout_gravity="center_horizontal"
+        android:textSize="@dimen/auth_title_size"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/auth_link_with_email_margin_2"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/auth_sign_in_dope_text"
+        android:textColor="@color/auth_text_color"
+        android:lineSpacingMultiplier="1.2"
+        android:gravity="center"
+        android:textSize="@dimen/auth_text_size"
+        />
+
+    <mehdi.sakout.fancybuttons.FancyButton
+        android:id="@+id/auth_sign_in_dope_facebook_button"
+        android:layout_width="@dimen/profile_overview_there_are_no_dopes_button_width"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginTop="@dimen/auth_connect_account_margin_1"
+        fancy:fb_defaultColor="@color/welcome_facebook_button_primary_color"
+        fancy:fb_focusColor="@color/welcome_facebook_button_focus_color"
+        fancy:fb_iconResource="@drawable/fb"
+        fancy:fb_iconPosition="left"
+        fancy:fb_radius="@dimen/buttons_corner_radius"
+        fancy:fb_text="Login with Facebook"
+        fancy:fb_textSize="@dimen/button_text_size"
+        fancy:fb_textColor="@color/white_text_color" />
+
+    <mehdi.sakout.fancybuttons.FancyButton
+        android:id="@+id/auth_sign_in_dope_twitter_button"
+        android:layout_width="@dimen/profile_overview_there_are_no_dopes_button_width"
+        android:layout_height="@dimen/button_height"
+        android:layout_marginTop="@dimen/auth_connect_account_margin_2"
+        fancy:fb_defaultColor="@color/welcome_twitter_button_primary_color"
+        fancy:fb_focusColor="@color/welcome_twitter_button_focus_color"
+        fancy:fb_iconResource="@drawable/twitter"
+        fancy:fb_iconPosition="left"
+        fancy:fb_radius="@dimen/buttons_corner_radius"
+        fancy:fb_text="Login with Twitter     "
+        fancy:fb_textSize="@dimen/button_text_size"
+        fancy:fb_textColor="@color/white_text_color" />
+
+    <TextView
+        android:layout_marginTop="@dimen/auth_sign_in_dope_margin_last"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/auth_sign_in_already_user"
+        android:textColor="@color/white_text_color"
+        android:layout_gravity="center_horizontal"
+        android:textSize="@dimen/auth_sign_in_dope_already_user_size"
+        />
+
+
+</LinearLayout>

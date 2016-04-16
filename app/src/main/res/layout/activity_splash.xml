@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg3_2"
+    >
+    <RelativeLayout
+        android:id="@+id/splash_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#000"
+        android:layout_above="@+id/splash_lower_panel"
+        >
+
+    </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/splash_lower_panel"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/splash_lower_panel_height"
+        android:orientation="vertical"
+        android:gravity="center_horizontal"
+        >
+
+        <TextView
+            android:id="@+id/splash_title"
+            android:layout_marginTop="@dimen/splash_margin_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/splash_lower_1_title"
+            android:textColor="@color/white_text_color"
+            android:layout_gravity="center_horizontal"
+            android:textSize="@dimen/splash_title_size"
+            />
+
+        <TextView
+            android:id="@+id/splash_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/splash_margin_2"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/splash_lower_1_text"
+            android:textColor="@color/auth_text_color"
+            android:lineSpacingMultiplier="1.2"
+            android:gravity="center"
+            android:textSize="@dimen/auth_text_size"
+            />
+
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/splash_next_button"
+            android:layout_marginTop="@dimen/splash_margin_3"
+            android:layout_width="@dimen/profile_overview_there_are_no_dopes_button_width"
+            android:layout_height="@dimen/button_height"
+            fancy:fb_defaultColor="@color/friends_search_button_primary_color"
+            fancy:fb_focusColor="@color/friends_search_button_focus_color"
+            fancy:fb_borderWidth="@dimen/button_border_width"
+            fancy:fb_borderColor="@color/friends_search_button_primary_color"
+            fancy:fb_iconPosition="left"
+            fancy:fb_radius="@dimen/buttons_corner_radius"
+            fancy:fb_text="@string/splash_lower_button_text"
+            fancy:fb_textSize="@dimen/button_text_size"
+            fancy:fb_textColor="@color/white_text_color"
+            fancy:fb_ghost="true"
+            />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="@dimen/splash_margin_4"
+            >
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/splash_between_dots_distance"
+                >
+
+                <ImageView
+                    android:layout_width="@dimen/splash_empty_dot_size"
+                    android:layout_height="@dimen/splash_empty_dot_size"
+                    android:src="@drawable/splash_empty_dot"
+                    android:layout_centerInParent="true"
+                    />
+                <ImageView
+                    android:id="@+id/splash_dot_1"
+                    android:layout_width="@dimen/splash_full_dot_size"
+                    android:layout_height="@dimen/splash_full_dot_size"
+                    android:src="@drawable/splash_full_dot"
+                    android:layout_centerInParent="true"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/splash_between_dots_distance"
+                >
+
+                <ImageView
+                    android:layout_width="@dimen/splash_empty_dot_size"
+                    android:layout_height="@dimen/splash_empty_dot_size"
+                    android:src="@drawable/splash_empty_dot"
+                    android:layout_centerInParent="true"
+                    />
+                <ImageView
+                    android:id="@+id/splash_dot_2"
+                    android:layout_width="@dimen/splash_full_dot_size"
+                    android:layout_height="@dimen/splash_full_dot_size"
+                    android:src="@drawable/splash_full_dot"
+                    android:visibility="gone"
+                    android:layout_centerInParent="true"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="@dimen/splash_between_dots_distance"
+                >
+
+                <ImageView
+                    android:layout_width="@dimen/splash_empty_dot_size"
+                    android:layout_height="@dimen/splash_empty_dot_size"
+                    android:src="@drawable/splash_empty_dot"
+                    android:layout_centerInParent="true"
+                    />
+                <ImageView
+                    android:id="@+id/splash_dot_3"
+                    android:layout_width="@dimen/splash_full_dot_size"
+                    android:layout_height="@dimen/splash_full_dot_size"
+                    android:src="@drawable/splash_full_dot"
+                    android:visibility="gone"
+                    android:layout_centerInParent="true"
+                    />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:layout_width="@dimen/splash_empty_dot_size"
+                    android:layout_height="@dimen/splash_empty_dot_size"
+                    android:src="@drawable/splash_empty_dot"
+                    android:layout_centerInParent="true"
+                    />
+                <ImageView
+                    android:id="@+id/splash_dot_4"
+                    android:layout_width="@dimen/splash_full_dot_size"
+                    android:layout_height="@dimen/splash_full_dot_size"
+                    android:src="@drawable/splash_full_dot"
+                    android:visibility="gone"
+                    android:layout_centerInParent="true"
+                    />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

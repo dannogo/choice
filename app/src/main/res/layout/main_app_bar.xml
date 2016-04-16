@@ -28,8 +28,8 @@
         android:layout_height="wrap_content"
         android:text="3 of 10"
         android:layout_gravity="center"
-        android:textSize="@dimen/toolbar_title_font_size"
         android:textColor="@color/white_text_color"
+        android:textSize="@dimen/toolbar_title_font_size"
         />
 
     <ImageButton

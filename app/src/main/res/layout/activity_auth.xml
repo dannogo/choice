@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg3_2"
+    >
+
+    <LinearLayout
+        android:id="@+id/start_login_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/start_log_in_toolbar_height"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/auth_margin_1"
+        >
+
+        <ImageButton
+            android:id="@+id/auth_arrow"
+            android:layout_width="@dimen/start_log_in_toolbar_height"
+            android:layout_height="@dimen/start_log_in_toolbar_height"
+            android:background="@android:color/transparent"
+            android:layout_gravity="left"
+            android:src="@drawable/toolbar_left_arrow_light"
+            android:adjustViewBounds="true"
+            android:padding="16dp"
+            android:cropToPadding="false"
+            android:scaleType="centerInside"
+            android:layout_marginLeft="5dp"
+
+            />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/auth_fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></RelativeLayout>
+
+
+
+</LinearLayout>

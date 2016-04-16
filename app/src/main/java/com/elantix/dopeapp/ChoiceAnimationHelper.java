@@ -48,7 +48,7 @@ public class ChoiceAnimationHelper {
     private int mLosingLineColor;
     private int mEqualLineColor;
     private int mWayRingColor;
-    private int mAnimationDuration = 500;
+    private int mAnimationDuration = 700;
     private int mSmallCircleSize;
     private float mSmallTextSize;
 
@@ -84,6 +84,7 @@ public class ChoiceAnimationHelper {
         mWayRingColor = ContextCompat.getColor(mActivity, android.R.color.darker_gray);
         mSmallCircleSize = mActivity.getResources().getDimensionPixelSize(R.dimen.dope_rate_small_circle_size);
         mSmallTextSize = mActivity.getResources().getDimension(R.dimen.dope_rate_small_percentage_size);
+
     }
 
     public void setParameters(ChoiceSide chosenSide, int leftRate, Boolean directionInside){
@@ -197,6 +198,9 @@ public class ChoiceAnimationHelper {
 
             Animation diamondAnimation = AnimationUtils.loadAnimation(mActivity, R.anim.bounce);
             mDiamond.startAnimation(diamondAnimation);
+            Animation textAnimation = AnimationUtils.loadAnimation(mActivity, R.anim.bounce_text);
+            mLeftText.startAnimation(textAnimation);
+            mRightText.startAnimation(textAnimation);
             animation.start();
         }else{
             leftRingDrawable.setProgress(leftConvertedToFloatValue);

@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="13dp"
+    android:paddingRight="13dp"
+    android:paddingTop="19dp"
+    android:id="@+id/splash_third_fragment_container"
+    android:background="@drawable/splash_3_background"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <ImageView
+            android:layout_width="@dimen/splash_tiny_avatar_size"
+            android:layout_height="@dimen/splash_tiny_avatar_size"
+            android:src="@drawable/splash_tiny_avatar_1"
+            android:layout_marginTop="4dp"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="10dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white_text_color"
+                android:text="@string/splash_3_dummy_question"
+                android:textSize="@dimen/splash_comment_text_size"
+                android:layout_marginLeft="3dp"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/splash_3_photo_height"
+                android:layout_marginTop="10dp"
+                android:paddingRight="15dp"
+                >
+
+                <ImageView
+                    android:id="@+id/splash_3_puppy"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/splash_3_comment_puppy_cut"
+                    />
+
+                <ImageView
+                    android:id="@+id/splash_3_cat"
+                    android:layout_width="0dp"
+                    android:layout_weight="0.5"
+                    android:layout_height="wrap_content"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/splash_3_comment_cat_cut"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="17dp"
+        >
+
+        <ImageView
+            android:layout_width="@dimen/splash_tiny_avatar_size"
+            android:layout_height="@dimen/splash_tiny_avatar_size"
+            android:src="@drawable/splash_tiny_avatar_2"
+            android:layout_marginTop="3dp"
+            />
+
+        <com.elantix.dopeapp.LeftBasedMessage
+            android:id="@+id/splash_3_comment_field_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/splash_3_comment_padding_left"
+            android:paddingRight="@dimen/splash_3_comment_padding"
+            android:paddingTop="@dimen/splash_3_comment_padding"
+            android:paddingBottom="@dimen/splash_3_comment_padding"
+            android:layout_marginLeft="-6dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black_text_color"
+                android:text="@string/splash_3_dummy_comment_1"
+                />
+
+        </com.elantix.dopeapp.LeftBasedMessage>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="15dp"
+        >
+
+        <ImageView
+            android:layout_width="@dimen/splash_tiny_avatar_size"
+            android:layout_height="@dimen/splash_tiny_avatar_size"
+            android:src="@drawable/splash_tiny_avatar_3"
+            android:layout_marginTop="3dp"
+            />
+
+        <com.elantix.dopeapp.LeftBasedMessage
+            android:id="@+id/splash_3_comment_field_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/splash_3_comment_padding_left"
+            android:paddingRight="@dimen/splash_3_comment_padding"
+            android:paddingTop="@dimen/splash_3_comment_padding"
+            android:paddingBottom="@dimen/splash_3_comment_padding"
+            android:layout_marginLeft="-6dp"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black_text_color"
+                android:text="@string/splash_3_dummy_comment_2"
+                />
+
+        </com.elantix.dopeapp.LeftBasedMessage>
+
+    </LinearLayout>
+
+
+</LinearLayout>
