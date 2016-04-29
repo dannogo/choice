@@ -7,6 +7,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.Point;
@@ -24,8 +25,10 @@ import android.widget.Toast;
 
 import com.desarrollodroide.libraryfragmenttransactionextended.FragmentTransactionExtended;
 
-import java.util.ArrayList;
+import java.io.File;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by oleh on 3/25/16.
@@ -36,48 +39,110 @@ public class Utilities {
     public static final int PICK_IMAGE_FROM_GALLERY = 1887;
     public static final int PICK_IMAGE_FROM_WEB = 1886;
     public static final int EDIT_PROFILE = 1885;
+    public static final int SIGN_IN_UP = 1884;
+    public static final int SIGN_IN = 1883;
+
+    public static final String MY_PREFS_NAME = "DopePrefs";
+    public static String sToken = null;
+    public static String sUid = null;
 
     //temp
     public static Uri avatarUri = null;
-    public static Boolean isLogedIn = true;
+//    public static Boolean isLogedIn = true;
     public static String profileUsername = "";
     public static String profileFirstLastNames = "";
+
+    public static DopeInfo[] sDopes10;
+    public static DopeInfo[] sDopes100;
+    public static ProfileInfo sCurProfile;
 
     public static int sAnimationNumber = 0;
     public static int sDopeNumber = 0;
 
-    public static Boolean sRateAnimationDirection = true;
+//    public static Boolean sRateAnimationDirection = true;
     public static RateStateBackup sRateStateBackups[] = new RateStateBackup[10];
+    public static DopeListType sDopeListType;
 
-    final public static int[] ANIMATION_TYPES = {
-            FragmentTransactionExtended.SCALEX,
-            FragmentTransactionExtended.SCALEY,
-            FragmentTransactionExtended.SCALEXY,
-            FragmentTransactionExtended.FADE,
-            FragmentTransactionExtended.FLIP_HORIZONTAL,
-            FragmentTransactionExtended.FLIP_VERTICAL,
-            FragmentTransactionExtended.SLIDE_HORIZONTAL,
-            FragmentTransactionExtended.SLIDE_HORIZONTAL_PUSH_TOP,
-            FragmentTransactionExtended.SLIDE_VERTICAL,
-            FragmentTransactionExtended.SLIDE_HORIZONTAL_PUSH_TOP,
-            FragmentTransactionExtended.SLIDE_VERTICAL_PUSH_LEFT,
-            FragmentTransactionExtended.GLIDE,
-            FragmentTransactionExtended.STACK,
-            FragmentTransactionExtended.CUBE,
-            FragmentTransactionExtended.ROTATE_DOWN,
-            FragmentTransactionExtended.ROTATE_UP,
-            FragmentTransactionExtended.ACCORDION,
-            FragmentTransactionExtended.TABLE_HORIZONTAL,
-            FragmentTransactionExtended.TABLE_VERTICAL,
-            FragmentTransactionExtended.ZOOM_FROM_LEFT_CORNER,
-            FragmentTransactionExtended.ZOOM_FROM_RIGHT_CORNER,
-            FragmentTransactionExtended.ZOOM_SLIDE_HORIZONTAL,
-            FragmentTransactionExtended.ZOOM_SLIDE_VERTICAL
-    };
+    public enum DopeListType{
+        Ten, Hundred
+    }
+
+    public static Bitmap createTrimmedBitmap(Bitmap bmp) {
+
+        int imgHeight = bmp.getHeight();
+        int imgWidth  = bmp.getWidth();
+        int smallX=0,largeX=imgWidth,smallY=0,largeY=imgHeight;
+        int left=imgWidth,right=imgWidth,top=imgHeight,bottom=imgHeight;
+        for(int i=0;i<imgWidth;i++)
+        {
+            for(int j=0;j<imgHeight;j++)
+            {
+                if(bmp.getPixel(i, j) != Color.TRANSPARENT){
+                    if((i-smallX)<left){
+                        left=(i-smallX);
+                    }
+                    if((largeX-i)<right)
+                    {
+                        right=(largeX-i);
+                    }
+                    if((j-smallY)<top)
+                    {
+                        top=(j-smallY);
+                    }
+                    if((largeY-j)<bottom)
+                    {
+                        bottom=(largeY-j);
+                    }
+                }
+            }
+        }
+        Log.d("Utilities createTrimmed", "left:" + left + " right:" + right + " top:" + top + " bottom:" + bottom);
+        bmp=Bitmap.createBitmap(bmp,left,top,imgWidth-left-right, imgHeight-top-bottom);
+
+        return bmp;
+    }
+
+    public static boolean deleteDirectory(File path) {
+        if( path.exists() ) {
+            File[] files = path.listFiles();
+            if (files == null) {
+                return true;
+            }
+            for(int i=0; i<files.length; i++) {
+                if(files[i].isDirectory()) {
+                    deleteDirectory(files[i]);
+                }
+                else {
+                    files[i].delete();
+                }
+            }
+        }
+        return( path.delete() );
+    }
+
+    /**
+     * method is used for checking valid email id format.
+     *
+     * @param email
+     * @return boolean true for valid false for invalid
+     */
+    public static boolean isEmailValid(String email) {
+        boolean isValid = false;
+
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        CharSequence inputStr = email;
+
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(inputStr);
+        if (matcher.matches()) {
+            isValid = true;
+        }
+        return isValid;
+    }
 
     public static void logOutWithConfirmation(Context context){
         FragmentLogOutConfirmation dialog = new FragmentLogOutConfirmation();
-        dialog.show(((Activity)context).getFragmentManager(), "ConfirmationLogout");
+        dialog.show(((Activity) context).getFragmentManager(), "ConfirmationLogout");
     }
 
     /**
@@ -119,8 +184,9 @@ public class Utilities {
      * Shows extremelly short Toast
      * @param context
      * @param message
+     * @param duration in miliseconds
      */
-    protected static void showExtremelyShortToast(Context context, String message){
+    protected static void showExtremelyShortToast(Context context, String message, int duration){
         final Toast toast = Toast.makeText(context, message, Toast.LENGTH_SHORT);
         toast.show();
 
@@ -130,7 +196,7 @@ public class Utilities {
             public void run() {
                 toast.cancel();
             }
-        }, 200);
+        }, duration);
     }
 
     /**
@@ -243,6 +309,7 @@ public class Utilities {
         return phrase;
     }
 
+    // DEPRECATED
     /**
      * Returns bitmap with rounded left or right corners depending on isLeftSide parameter
      * @param bm bitmap to transform
@@ -302,6 +369,62 @@ public class Utilities {
 
         return bmOut;
     }
+
+
+    public static Bitmap getOneSideRoundedBitmap(Context context, Bitmap bm, Boolean isLeftSide, int corner) {
+
+        float w = context.getResources().getDimension(R.dimen.chat_pic_and_rate_container_width) / 2;
+        float h = context.getResources().getDimension(R.dimen.chat_pic_and_rate_container_height);
+
+        Bitmap newBitmap = scaleCenterCrop(bm, (int) h, (int) w);
+
+        Point pointTop;
+        Point pointBottom;
+        Path path = new Path();
+
+        if (isLeftSide) {
+            pointTop = new Point(0, 0);
+            pointBottom = new Point(0, (int)h);
+
+            path.moveTo(corner, 0);
+            path.lineTo(w, 0);
+            path.lineTo(w, h);
+            path.lineTo(corner, h);
+            path.quadTo(pointBottom.x, pointBottom.y, 0, h - corner);
+            path.lineTo(0, corner);
+            path.quadTo(pointTop.x, pointTop.y, corner, 0);
+
+        }else{
+            pointTop = new Point((int)w, 0);
+            pointBottom = new Point((int)w, (int)h);
+
+            path.lineTo(w - corner, 0);
+            path.quadTo(pointTop.x, pointTop.y, w, corner);
+            path.lineTo(w, h-corner);
+            path.quadTo(pointBottom.x, pointBottom.y, w - corner, h);
+            path.lineTo(0, h);
+            path.lineTo(0,0);
+
+        }
+        Bitmap bmOut = Bitmap.createBitmap((int)w, (int)h, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bmOut);
+
+        Paint paint = new Paint();
+        paint.setAntiAlias(false);
+        paint.setColor(0xff424242);
+
+        Rect rect = new Rect(0, 0, (int)w, (int)h);
+        RectF rectF = new RectF(rect);
+        canvas.drawARGB(0, 0, 0, 0);
+        canvas.drawPath(path, paint);
+
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        canvas.drawBitmap(newBitmap, rect, rect, paint);
+
+        return bmOut;
+    }
+
+
 
     public static Bitmap scaleCenterCrop(Bitmap source, int newHeight, int newWidth) {
         int sourceWidth = source.getWidth();

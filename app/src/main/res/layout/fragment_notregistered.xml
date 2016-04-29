@@ -47,7 +47,7 @@
 
     <mehdi.sakout.fancybuttons.FancyButton
         android:layout_marginTop="@dimen/friends_profile_message_margin_4"
-        android:id="@+id/create_username"
+        android:id="@+id/not_registered_create_username"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
         android:paddingBottom="10dp"
@@ -64,7 +64,7 @@
 
     <mehdi.sakout.fancybuttons.FancyButton
         android:layout_marginTop="@dimen/friends_profile_message_margin_5"
-        android:id="@+id/alreary_a_user"
+        android:id="@+id/not_registered_already_a_user"
         android:layout_width="match_parent"
         android:layout_height="@dimen/button_height"
         android:layout_marginBottom="50dp"

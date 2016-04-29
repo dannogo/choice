@@ -20,11 +20,11 @@
                 android:id="@+id/share_dope_left_toolbar_button"
                 android:layout_width="@dimen/share_dope_left_toolbar_button_size"
                 android:layout_height="@dimen/share_dope_left_toolbar_button_size"
-                android:padding="7dp"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/share_dope_left_toolbar_button_left_margin"
                 android:background="@android:color/transparent"
+                android:padding="7dp"
                 android:scaleType="centerInside"
                 android:src="@drawable/white_cross" />
 
@@ -49,84 +49,92 @@
             android:textSize="@dimen/share_dope_question_text_size" />
 
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/share_dope_max_image_height"
             android:layout_marginTop="@dimen/share_dope_margin_3"
-            android:orientation="horizontal"
             android:paddingLeft="@dimen/share_dope_images_container_horizontal_padding"
             android:paddingRight="@dimen/share_dope_images_container_horizontal_padding">
 
-            <RelativeLayout
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:gravity="right"
-                >
-                    <ImageView
-                        android:id="@+id/share_dope_picture_1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:src="@drawable/girl3" />
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+
+                <com.elantix.dopeapp.ProportionalImageView
+                    android:id="@+id/share_dope_picture_1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5" />
+
+                <com.elantix.dopeapp.ProportionalImageView
+                    android:id="@+id/share_dope_picture_2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
 
                 <RelativeLayout
-                    android:layout_width="@dimen/share_dope_badge_size"
-                    android:layout_height="@dimen/share_dope_badge_size"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/share_dope_badge_margin_bottom"
-                    android:background="@drawable/semi_transperant_circle"
-                    android:gravity="center">
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="A"
-                        android:textColor="@color/white_text_color"
-                        android:textSize="@dimen/share_dope_badge_text_size" />
+                    <RelativeLayout
+                        android:layout_width="@dimen/share_dope_badge_size"
+                        android:layout_height="@dimen/share_dope_badge_size"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="@dimen/share_dope_badge_margin_bottom"
+                        android:background="@drawable/semi_transperant_circle"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="A"
+                            android:textColor="@color/white_text_color"
+                            android:textSize="@dimen/share_dope_badge_text_size" />
+
+                    </RelativeLayout>
+
 
                 </RelativeLayout>
 
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.5"
-                android:gravity="left"
-                >
-
-                    <ImageView
-                        android:id="@+id/share_dope_picture_2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentLeft="true"
-                        android:src="@drawable/girl4" />
-
-
                 <RelativeLayout
-                    android:layout_width="@dimen/share_dope_badge_size"
-                    android:layout_height="@dimen/share_dope_badge_size"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/share_dope_badge_margin_bottom"
-                    android:background="@drawable/semi_transperant_circle"
-                    android:gravity="center">
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.5">
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="B"
-                        android:textColor="@color/white_text_color"
-                        android:textSize="@dimen/share_dope_badge_text_size" />
+                    <RelativeLayout
+                        android:layout_width="@dimen/share_dope_badge_size"
+                        android:layout_height="@dimen/share_dope_badge_size"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="@dimen/share_dope_badge_margin_bottom"
+                        android:background="@drawable/semi_transperant_circle"
+                        android:gravity="center">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="B"
+                            android:textColor="@color/white_text_color"
+                            android:textSize="@dimen/share_dope_badge_text_size" />
+
+                    </RelativeLayout>
 
                 </RelativeLayout>
 
-            </RelativeLayout>
-
-        </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/share_dope_link_text"
@@ -134,9 +142,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/share_dope_margin_5"
             android:layout_marginTop="@dimen/share_dope_margin_4"
-            android:text="@string/share_dope_dummy_link_text"
             android:textColor="@color/dope_created_description_color"
             android:textSize="@dimen/friends_description_font_size" />
+            <!--android:text="@string/share_dope_dummy_link_text"-->
 
         <mehdi.sakout.fancybuttons.FancyButton
             android:id="@+id/share_dope_copy_link_button"

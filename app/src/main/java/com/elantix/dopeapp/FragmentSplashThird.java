@@ -29,6 +29,7 @@ public class FragmentSplashThird extends Fragment {
     private ImageView mKitty;
     private LeftBasedMessage msg1;
     private LeftBasedMessage msg2;
+    private ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
 
     @Nullable
     @Override
@@ -45,7 +46,7 @@ public class FragmentSplashThird extends Fragment {
 
 
         ViewTreeObserver vto = mKitty.getViewTreeObserver();
-        vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+        mGlobalLayoutListener = new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 Bitmap resultPuppy = Utilities.getOneSideRoundedBitmap(bitmapPuppy, mPuppy, true, 30);
@@ -56,10 +57,20 @@ public class FragmentSplashThird extends Fragment {
                 msg1.setMessageBackground(R.color.splash_comment_fields_color);
                 msg2.setMessageBackground(R.color.splash_comment_fields_color);
             }
-        });
+        };
+        vto.addOnGlobalLayoutListener(mGlobalLayoutListener);
 
 
         return mFragmentView;
     }
 
+    @Override
+    public void onDestroy() {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+            mKitty.getViewTreeObserver().removeGlobalOnLayoutListener(mGlobalLayoutListener);
+        } else {
+            mKitty.getViewTreeObserver().removeOnGlobalLayoutListener(mGlobalLayoutListener);
+        }
+        super.onDestroy();
+    }
 }

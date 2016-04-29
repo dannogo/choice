@@ -1,15 +1,22 @@
 package com.elantix.dopeapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -25,13 +32,16 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.util.Util;
 import com.elantix.dopeapp.utils.DecodeUtils;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 import it.sephiroth.android.library.imagezoom.ImageViewTouch;
@@ -45,6 +55,8 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
 
     View fragmentView;
     private FancyButton sendNewMessageButton;
+    private String mDir;
+
 
     private ImageView leftPlusButton;
     private ImageView rightPlusButton;
@@ -83,6 +95,7 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
         TextView title = (TextView) fragmentView.findViewById(R.id.toolbar_title);
         title.setText(getActivity().getResources().getString(R.string.tab_plus_button_text));
         leftToolbarButton.setImageResource(R.drawable.toolbar_left_arrow);
+        mDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/DopeAppPics/";
 
         return fragmentView;
     }
@@ -100,11 +113,11 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
      * @param side
      */
     private void takePicture(Side side){
-        final String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/DopeAppPics/";
-        File newdir = new File(dir);
+//        mDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/DopeAppPics/";
+        File newdir = new File(mDir);
         newdir.mkdirs();
         String randomString = Utilities.createRandomFileName();
-        String file = dir+randomString+".jpg";
+        String file = mDir+randomString+".jpg";
         File newfile = new File(file);
         currentSide = side;
 
@@ -140,13 +153,6 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
             Uri selectedImage = data.getData();
             setImageIntoImageViewTouch(currentSide, ImageSource.Gallery, selectedImage);
         }
-
-        // Moved to TabPlusActivity
-//        else if (requestCode == PICK_IMAGE_FROM_WEB && resultCode == Activity.RESULT_OK){
-//            Log.w("On Activity Result", "My case Occurs");
-//            int imagePosition = data.getIntExtra("result", 999);
-//            Toast.makeText(getActivity(), "Image: "+imagePosition, Toast.LENGTH_SHORT).show();
-//        }
     }
 
 
@@ -207,6 +213,10 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
             Toast.makeText(getActivity(), "Failed to load the image", Toast.LENGTH_LONG).show();
         }
 
+//        if (currentUri != null) {
+//            getActivity().getContentResolver().delete(currentUri, null, null);
+//        }
+
     }
 
     /**
@@ -231,8 +241,10 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
         leftToolbarButton.setOnClickListener(this);
         imageLeft = (ImageViewTouch) fragmentView.findViewById(R.id.imageLeft);
         imageLeft.setDisplayType(ImageViewTouchBase.DisplayType.FIT_IF_BIGGER);
+        imageLeft.setDrawingCacheEnabled(true);
         imageRight = (ImageViewTouch) fragmentView.findViewById(R.id.imageRight);
         imageRight.setDisplayType(ImageViewTouchBase.DisplayType.FIT_IF_BIGGER);
+        imageRight.setDrawingCacheEnabled(true);
         overlay = fragmentView.findViewById(R.id.overlay);
         overlay.setOnClickListener(this);
 
@@ -303,7 +315,11 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
             contextOptionsPanel.startAnimation(bottomUp);
             contextOptionsPanel.setVisibility(View.VISIBLE);
         }else{
-            mWindowManager.removeView(statusBarOverlay);
+            try {
+                mWindowManager.removeView(statusBarOverlay);
+            }catch (IllegalArgumentException e){
+                Log.e("FragmentTablPlus", "statusBarOverlay not found");
+            }
 
             overlay.setVisibility(View.GONE);
 
@@ -326,7 +342,6 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
 
     }
 
-
     @Override
     public void onClick(View v) {
         if (v.getId() == sendNewMessageButton.getId()){
@@ -335,9 +350,35 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
             boolean hasRightImage = (imageRight.getDrawable() != null);
             boolean hasQuestion = !usersQuestion.getText().toString().isEmpty();
             if(hasLeftImage && hasRightImage && hasQuestion) {
-                ((TabPlusActivity)getActivity()).switchPageHandler(TabPlusActivity.PlusPage.Done);
+
+                ImageResizeSaveTask task = new ImageResizeSaveTask();
+                task.execute();
+
             }else{
-                Toast.makeText(getActivity(), "left: " + hasLeftImage + "\nright: " + hasRightImage + "\nquestion: " + hasQuestion, Toast.LENGTH_SHORT).show();
+
+                String dialogMessage;
+                if (!hasLeftImage && !hasRightImage && !hasQuestion){
+                    dialogMessage = "Provide left and right images and question please";
+                }else if (!hasLeftImage && !hasRightImage && hasQuestion) {
+                    dialogMessage = "Provide left and right images please";
+                }else if (hasLeftImage && hasRightImage && !hasQuestion){
+                    dialogMessage = "Provide a question please";
+                }else if (hasLeftImage && !hasRightImage && hasQuestion){
+                    dialogMessage = "Right image is missing";
+                }else if (!hasLeftImage && hasRightImage && hasQuestion) {
+                    dialogMessage = "Left image is missing";
+                }else{
+                    dialogMessage = "You should provide both left and right images and a question";
+                }
+
+                new AlertDialog.Builder(getActivity())
+                        .setTitle("Lack of content")
+                        .setMessage(dialogMessage)
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }).show();
             }
 
         }else if (v.getId() == leftWorkingPart.getId()){
@@ -382,4 +423,105 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), Utilities.PICK_IMAGE_FROM_GALLERY);
     }
+
+
+    class ImageResizeSaveTask extends AsyncTask<Void, Void, String[]>{
+
+        private Bitmap leftBitmap;
+        private Bitmap rightBitmap;
+        private String TAG = "FragmentTabPlus Task";
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            ((TabPlusActivity)getActivity()).mProgressDialog = ProgressDialog.show(getActivity(), null, "Please wait...", true);
+            imageLeft.destroyDrawingCache();
+            imageRight.destroyDrawingCache();
+            imageLeft.buildDrawingCache();
+            imageRight.buildDrawingCache();
+            leftBitmap = imageLeft.getDrawingCache(true);
+            rightBitmap = imageRight.getDrawingCache(true);
+
+        }
+
+        @Override
+        protected String[] doInBackground(Void... params) {
+
+            File fileList = new File(mDir);
+            if (fileList != null){
+                File[] filenames = fileList.listFiles();
+                for (File tmpf : filenames){
+                    tmpf.delete();
+                }
+            }
+
+            float scaleCoefficient = (float) 320 / (float) leftBitmap.getWidth();
+
+            Bitmap newLeftbmp = Utilities.createTrimmedBitmap(Bitmap.createScaledBitmap(leftBitmap, 320, (int) ((float) leftBitmap.getHeight() * scaleCoefficient), true));
+            Bitmap newRightbmp = Utilities.createTrimmedBitmap(Bitmap.createScaledBitmap(rightBitmap, 320, (int) ((float)rightBitmap.getHeight() * scaleCoefficient), true));
+
+            String randomString1 = Utilities.createRandomFileName();
+            String file1 = mDir+randomString1+".png";
+            File newfile1 = new File(file1);
+
+            String randomString2 = Utilities.createRandomFileName();
+            String file2 = mDir+randomString2+".png";
+            File newfile2 = new File(file2);
+
+            Log.d(TAG, "file1: "+file1+"\nfile2: "+file2);
+
+            FileOutputStream outLeft = null;
+            FileOutputStream outRight = null;
+            try {
+                outLeft = new FileOutputStream(newfile1);
+                outRight = new FileOutputStream(newfile2);
+                newLeftbmp.compress(Bitmap.CompressFormat.PNG, 100, outLeft);
+                newRightbmp.compress(Bitmap.CompressFormat.PNG, 100, outRight);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (outLeft != null) {
+                        outLeft.close();
+                    }
+                    if (outRight != null) {
+                        outRight.close();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            String[] result = {file1, file2};
+            return result;
+        }
+
+        @Override
+        protected void onPostExecute(final String[] result) {
+            super.onPostExecute(result);
+            Log.w(TAG, "left: "+ result[0]+"\nright: "+ result[1]);
+
+            ((TabPlusActivity)getActivity()).uploadedPicture1 = null;
+            ((TabPlusActivity)getActivity()).uploadedPicture2 = null;
+
+//            final HttpKit http = new HttpKit(getActivity());
+//            http.upload(Utilities.sToken, result[0], "left");
+//            http.upload(Utilities.sToken, result[1], "right");
+
+            HttpKit http = new HttpKit(getActivity());
+            http.createDope(Utilities.sToken, usersQuestion.getText().toString(), result[0], result[1]);
+
+
+//            Handler handler = new Handler();
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                }
+//            }, 1000);
+
+
+//            ((TabPlusActivity)getActivity()).mProgressDialog.dismiss();
+        }
+    }
+
 }

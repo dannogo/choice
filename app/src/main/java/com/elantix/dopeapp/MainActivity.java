@@ -3,6 +3,7 @@ package com.elantix.dopeapp;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -22,7 +23,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.util.Util;
 import com.desarrollodroide.libraryfragmenttransactionextended.FragmentTransactionExtended;
 
 /**
@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private TextView trandingText;
 
     private LinearLayout plusLL;
-
     private LinearLayout friendsLL;
     private ImageView friendsIcon;
     private TextView friendsText;
@@ -66,9 +65,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RelativeLayout mContextOptionsReportPost;
     private RelativeLayout mContextOptionsCancel;
 
-    private Fragment mCurrentFragment;
+    public Fragment mCurrentFragment;
 
     final private static int REPORT_POST_REQUEST_CODE = 2777;
+    public ProgressDialog mProgressDialog;
+    private int mContextOptionsDopeNum;
 
     Page page = Page.Daily;
 
@@ -81,12 +82,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
 
+        Utilities.sDopeListType = null;
         findViews();
-        launchFragment(page);
-        toolbarTitleAndButtonChangesHandler(page);
+        switchPageHandler(page);
 
+    }
 
-
+    public void saveDopes(DopeInfo[] dopes){
+        if (page == Page.Daily) {
+//            mDopes10 = dopes;
+            Utilities.sDopes10 = dopes;
+        }else{
+//            mDopes100 = dopes;
+            Utilities.sDopes100 = dopes;
+        }
     }
 
     @Override
@@ -98,6 +107,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, getResources().getString(result) , Toast.LENGTH_SHORT).show();
         }else if (requestCode == REPORT_POST_REQUEST_CODE && resultCode == Activity.RESULT_CANCELED){
             Toast.makeText(this, "Report Canceled" , Toast.LENGTH_SHORT).show();
+        }
+        if (requestCode == Utilities.SIGN_IN_UP){
+            if (resultCode == Activity.RESULT_OK) {
+                Log.w("MainActivity", "onActivityResult OK");
+                switchPageHandler(Page.Profile);
+            }else if (resultCode == Activity.RESULT_CANCELED){
+                Log.w("MainActivity", "onActivityResult CANCEL");
+            }
         }
 
     }
@@ -126,24 +143,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void launchFragment(Page page){
-//        Fragment frag;
+    public void launchFragment(Page page){
         String fragmentTAG;
         Bundle bundle;
         switch (page){
             case Daily:
                 mCurrentFragment = new FragmentViewPager();
-//                mCurrentFragment = new FragmentDailyDope();
                 bundle = new Bundle();
-                bundle.putInt("num", 1);
+//                bundle.putInt("num", mDopes10.length);
+                bundle.putInt("num", Utilities.sDopes10.length);
+//                bundle.putInt("suggestedNum", 10);
                 mCurrentFragment.setArguments(bundle);
                 fragmentTAG = "FragmentDailyDope";
                 break;
             case Tranding:
                 mCurrentFragment = new FragmentViewPager();
-//                mCurrentFragment = new FragmentDailyDope();
                 bundle = new Bundle();
-                bundle.putInt("num", 2);
+//                bundle.putInt("num", mDopes100.length);
+                bundle.putInt("num", Utilities.sDopes100.length);
+//                bundle.putInt("suggestedNum", 100);
                 mCurrentFragment.setArguments(bundle);
                 fragmentTAG = "FragmentTranding";
                 break;
@@ -157,14 +175,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case FriendsDope:
                 mCurrentFragment = new FragmentViewPager();
-//                mCurrentFragment = new FragmentDailyDope();
                 bundle = new Bundle();
                 bundle.putInt("num", 3);
                 mCurrentFragment.setArguments(bundle);
                 fragmentTAG = "FragmentFriendsDope";
                 break;
             case Profile:
-                if (Utilities.isLogedIn){
+                if (Utilities.sToken != null){
                     mCurrentFragment = new FragmentProfileOverview();
                     bundle = new Bundle();
                     bundle.putBoolean("own", true);
@@ -178,6 +195,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mCurrentFragment = new FragmentProfileOverview();
                 bundle = new Bundle();
                 bundle.putBoolean("own", false);
+                DopeInfo curItem;
+                if (Utilities.sDopeListType == Utilities.DopeListType.Ten){
+                    curItem = Utilities.sDopes10[mContextOptionsDopeNum];
+                }else{
+                    curItem = Utilities.sDopes100[mContextOptionsDopeNum];
+                }
+                bundle.putString("uid", curItem.userId);
                 mCurrentFragment.setArguments(bundle);
                 fragmentTAG = "FragmentProfileOverview";
                 break;
@@ -230,7 +254,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         page = newPage;
         checkLowertabItem(page);
         toolbarTitleAndButtonChangesHandler(page);
-        launchFragment(page);
+
+        if (page == Page.Daily){
+            HttpKit http = new HttpKit(this);
+            http.get10Dopes(Utilities.sToken, null);
+        }else if (page == Page.Tranding){
+            HttpKit http = new HttpKit(this);
+            http.get100Dopes(Utilities.sToken, null, null);
+        }
+        else {
+            launchFragment(page);
+        }
     }
 
     protected void switchPageAnimatedHandler(Page newPage){
@@ -273,7 +307,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 fragmentTo.setArguments(bundle);
                 break;
             case Profile:
-                if (Utilities.isLogedIn){
+                if (Utilities.sToken != null){
                     fragmentTo = new FragmentProfileOverview();
                     bundle = new Bundle();
                     bundle.putBoolean("own", true);
@@ -382,7 +416,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case Profile:
                 toolbarTitle.setText(R.string.lower_tab_profile);
                 mLeftToolbarButton.setVisibility(View.VISIBLE);
-                if(Utilities.isLogedIn) {
+                if(Utilities.sToken != null) {
                     mRightToolbarButton.setVisibility(View.VISIBLE);
                 }else {
                     mRightToolbarButton.setVisibility(View.GONE);
@@ -391,7 +425,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (Utilities.isLogedIn){
+                        if (Utilities.sToken != null){
                             switchPageHandler(Page.ProfileSettings);
                         }
                     }
@@ -468,8 +502,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                switchPageAnimatedHandler(Page.Tranding);
             }
         }else if (id == plusLL.getId()){
-            Intent intent = new Intent(MainActivity.this, TabPlusActivity.class);
-            startActivity(intent);
+            if (Utilities.sToken != null) {
+                Intent intent = new Intent(MainActivity.this, TabPlusActivity.class);
+                startActivity(intent);
+            }else{
+                if (page != Page.Profile) {
+                    switchPageHandler(Page.Profile);
+                }
+            }
         }else if (id == friendsLL.getId()){
             if (page != Page.Friends){
                 switchPageHandler(Page.Friends);
@@ -481,22 +521,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                switchPageAnimatedHandler(Page.Profile);
             }
         }else if (id == mContextOptionsSharePost.getId()){
-            showContextOptions(false, null);
             Intent intent = new Intent(MainActivity.this, ShareDopeActivity.class);
-            int num = 1;
-            switch (page){
-                case Daily:
-                    num = 1;
-                    break;
-                case Tranding:
-                    num = 2;
-                    break;
-                case FriendsDope:
-                case Friends:
-                    num = 3;
-                    break;
-            }
-            intent.putExtra("num", num);
+            intent.putExtra("dopeNum", mContextOptionsDopeNum);
+            showContextOptions(false, null);
             startActivity(intent);
         }else if (id == mContextOptionsCancel.getId()){
             showContextOptions(false, null);
@@ -639,7 +666,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * Shows and Hides context options panel
      * @param show
      */
-    protected void showContextOptions(Boolean show, Integer num){
+    protected void showContextOptions(Boolean show, Integer dopeNum){
+
+        if (dopeNum != null) {
+            mContextOptionsDopeNum = dopeNum;
+        }
 
         if (show){
             WindowManager.LayoutParams mLP = new WindowManager.LayoutParams(

@@ -31,6 +31,7 @@
         />
 
     <EditText
+        android:id="@+id/fragment_auth_username_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/auth_link_with_email_margin_3"
@@ -39,7 +40,9 @@
         android:hint="@string/auth_set_username_hint"
         android:textColorHint="@color/auth_text_color"
         android:textColor="@color/white_text_color"
-        android:textSize="@dimen/auth_hint_size" />
+        android:textSize="@dimen/auth_hint_size"
+        android:singleLine="true"
+        />
 
     <View
         android:layout_width="match_parent"
@@ -48,7 +51,7 @@
         android:background="@color/start_login_hint_color" />
 
     <mehdi.sakout.fancybuttons.FancyButton
-        android:id="@+id/start_pass_recovery_submit_button"
+        android:id="@+id/fragment_auth_continue_btn"
         fancy:fb_defaultColor="@color/start_login_toolbar_fancy_button_color"
         fancy:fb_focusColor="#000"
         fancy:fb_iconPosition="left"

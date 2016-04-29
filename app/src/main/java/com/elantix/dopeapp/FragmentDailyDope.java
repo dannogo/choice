@@ -2,6 +2,7 @@ package com.elantix.dopeapp;
 
 import android.app.Fragment;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -12,12 +13,13 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
-import java.util.Random;
-
 import jp.wasabeef.glide.transformations.BlurTransformation;
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 /**
  * Created by oleh on 3/17/16.
@@ -28,17 +30,23 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
     private LinearLayout mInfoBar;
     ImageView mOptionPicture1;
     ImageView mOptionPicture2;
-    String someTitle;
     ChoiceAnimationHelper mAnimHelper = null;
     int mDopeNum;
     private FragmentViewPager.CommunicatorOne mCommOne;
+    private ImageButton moreButton;
+
+    public DopeInfo mCurItem;
+    private TextView mQuestion;
+    private TextView mVotes;
+    private TextView mUserName;
+    private ImageView mAvatar;
+
 
     // newInstance constructor for creating fragment with arguments
-    public static FragmentDailyDope newInstance(int page, String title) {
+    public static FragmentDailyDope newInstance(int page) {
         FragmentDailyDope fragmentDailyDope = new FragmentDailyDope();
         Bundle args = new Bundle();
         args.putInt("dopeNum", page);
-        args.putString("someString", title);
         fragmentDailyDope.setArguments(args);
         return fragmentDailyDope;
     }
@@ -51,8 +59,11 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
         mDopeNum = bundle.getInt("dopeNum", 0);
-        someTitle = bundle.getString("someTitle");
-
+        if (Utilities.sDopeListType == Utilities.DopeListType.Ten){
+            mCurItem = Utilities.sDopes10[mDopeNum];
+        }else{
+            mCurItem = Utilities.sDopes100[mDopeNum];
+        }
     }
 
     @Nullable
@@ -62,23 +73,32 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
         fragmentView = inflater.inflate(R.layout.fragment_daily_dope, container, false);
         mCommOne = (FragmentViewPager.CommunicatorOne) getActivity();
 
-        ImageButton moreButton = (ImageButton) fragmentView.findViewById(R.id.more_button);
-        final Bundle bundle = this.getArguments();
-        moreButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((MainActivity) getActivity()).showContextOptions(true, bundle.getInt("num"));
-            }
-        });
+        mQuestion = (TextView) fragmentView.findViewById(R.id.question);
+        mVotes = (TextView) fragmentView.findViewById(R.id.votes);
+        mUserName = (TextView) fragmentView.findViewById(R.id.contact_name);
+        mAvatar = (ImageView) fragmentView.findViewById(R.id.contact_avatar_icon);
+
+        moreButton = (ImageButton) fragmentView.findViewById(R.id.more_button);
+        moreButton.setOnClickListener(this);
+
 
         mInfoBar = (LinearLayout) fragmentView.findViewById(R.id.daily_dope_info_bar);
-        mInfoBar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), CommentsActivity.class);
-                startActivity(intent);
+        mInfoBar.setOnClickListener(this);
+
+        if (mCurItem.myVote != 0){
+            if (Utilities.sRateStateBackups[mDopeNum] == null){
+                ChoiceAnimationHelper.ChoiceSide side;
+                if (mCurItem.myVote == 1){
+                    side = ChoiceAnimationHelper.ChoiceSide.Left;
+                }else {
+                    side = ChoiceAnimationHelper.ChoiceSide.Right;
+                }
+                boolean direction = ((mDopeNum + 1) % 2 == 0) ? false : true;
+
+                Utilities.sRateStateBackups[mDopeNum] = new RateStateBackup(side, mCurItem.percent1, direction);
+                applyRestoredRateData();
             }
-        });
+        }
 
         if (Utilities.sRateStateBackups[mDopeNum] != null){
             applyRestoredRateData();
@@ -91,6 +111,18 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
     public void onStart() {
         super.onStart();
 
+        mQuestion.setText(mCurItem.question);
+        mVotes.setText(""+mCurItem.votesAll+" Votes");
+        if (!mCurItem.fullname.isEmpty()) {
+            mUserName.setText(mCurItem.fullname);
+        }else{
+            mUserName.setText(mCurItem.username);
+        }
+
+        Glide.with(this).load(mCurItem.avatar)
+                .bitmapTransform(new CropCircleTransformation(getActivity()))
+                .into(mAvatar);
+
         ImageView blurredPicture1 = (ImageView) fragmentView.findViewById(R.id.blurred_picture_1);
         ImageView blurredPicture2 = (ImageView) fragmentView.findViewById(R.id.blurred_picture_2);
 
@@ -99,55 +131,8 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
         mOptionPicture1.setOnClickListener(this);
         mOptionPicture2.setOnClickListener(this);
 
-        int image1;
-        int image2;
-
-        switch (mDopeNum){
-            case 0:
-                image1 = R.drawable.girl3;
-                image2 = R.drawable.girl4;
-                break;
-            case 1:
-                image1 = R.drawable.donald;
-                image2 = R.drawable.ted;
-                break;
-            case 2:
-                image1 = R.drawable.bernie;
-                image2 = R.drawable.hillary;
-                break;
-            case 3:
-                image1 = R.drawable.earth;
-                image2 = R.drawable.mars;
-                break;
-            case 4:
-                image1 = R.drawable.fork;
-                image2 = R.drawable.spoon;
-                break;
-            case 5:
-                image1 = R.drawable.hell;
-                image2 = R.drawable.heaven;
-                break;
-            case 6:
-                image1 = R.drawable.cat1;
-                image2 = R.drawable.cat2;
-                break;
-            case 7:
-                image1 = R.drawable.cat3;
-                image2 = R.drawable.cat4;
-                break;
-            case 8:
-                image1 = R.drawable.dog1;
-                image2 = R.drawable.dog2;
-                break;
-            case 9:
-                image1 = R.drawable.dog3;
-                image2 = R.drawable.dog4;
-                break;
-            default:
-                image1 = R.drawable.girl3;
-                image2 = R.drawable.girl4;
-        }
-
+        Uri image1 = mCurItem.photo1;
+        Uri image2 = mCurItem.photo2;
 
         Glide.with(this).load(image1).into(mOptionPicture1);
         Glide.with(this).load(image2).into(mOptionPicture2);
@@ -164,16 +149,14 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
 
     private void launchRateAnimation(ChoiceAnimationHelper.ChoiceSide side){
 
-        Random rand = new Random();
-        int min = 15;
-        int max = 85;
-        int randomNum = rand.nextInt((max - min) + 1) + min;
+        int leftRate = mCurItem.percent1;
 
+        boolean direction = ((mDopeNum + 1) % 2 == 0) ? false : true;
         mAnimHelper = new ChoiceAnimationHelper(getActivity(), fragmentView);
-        mAnimHelper.setParameters(side, randomNum, Utilities.sRateAnimationDirection);
+        mAnimHelper.setParameters(side, leftRate, direction);
         mAnimHelper.draw(true);
-        Utilities.sRateStateBackups[mDopeNum] = new RateStateBackup(side, randomNum, Utilities.sRateAnimationDirection);
-        Utilities.sRateAnimationDirection = !Utilities.sRateAnimationDirection;
+        Utilities.sRateStateBackups[mDopeNum] = new RateStateBackup(side, leftRate, direction);
+//        Utilities.sRateAnimationDirection = !Utilities.sRateAnimationDirection;
     }
 
     private void applyRestoredRateData(){
@@ -196,22 +179,59 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
         }, 1200);
     }
 
+    private void recalculatePercentage(){
+        mCurItem.votesAll += 1;
+        mCurItem.percent1 = mCurItem.votes1 * 100 / mCurItem.votesAll;
+        mCurItem.percent2 = 100 - mCurItem.percent1;
+    }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
         if (id == mOptionPicture1.getId()){
-            if (mAnimHelper == null){
-                launchRateAnimation(ChoiceAnimationHelper.ChoiceSide.Left);
-                showNextPage();
+            if (mCurItem.myVote == 0) {
+                if (Utilities.sToken != null) {
+                    HttpKit http = new HttpKit(getActivity());
+                    http.vote(Utilities.sToken, mCurItem.id, "1");
+                    mCurItem.votes1 += 1;
+                    mCurItem.myVote = 1;
+                    recalculatePercentage();
+                    mVotes.setText("" + mCurItem.votesAll + " Votes");
+                }
+                if (mAnimHelper == null) {
+                    launchRateAnimation(ChoiceAnimationHelper.ChoiceSide.Left);
+                    showNextPage();
+                }
+            }else{
+//                Toast.makeText(getActivity(), "You have already voted this dope", Toast.LENGTH_SHORT).show();
+                Utilities.showExtremelyShortToast(getActivity(), "You have already voted this dope", 500);
             }
         }else if (id == mOptionPicture2.getId()){
+            if (mCurItem.myVote == 0) {
+                if (Utilities.sToken != null) {
+                    HttpKit http = new HttpKit(getActivity());
+                    http.vote(Utilities.sToken, mCurItem.id, "2");
+                    mCurItem.votes2 += 1;
+                    mCurItem.myVote = 2;
+                    recalculatePercentage();
+                    mVotes.setText("" + mCurItem.votesAll + " Votes");
+                }
 
-            if (mAnimHelper == null){
-                launchRateAnimation(ChoiceAnimationHelper.ChoiceSide.Right);
-                showNextPage();
+                if (mAnimHelper == null) {
+                    launchRateAnimation(ChoiceAnimationHelper.ChoiceSide.Right);
+                    showNextPage();
+                }
+            }else{
+//                Toast.makeText(getActivity(), "You have already voted this dope", Toast.LENGTH_SHORT).show();
+                Utilities.showExtremelyShortToast(getActivity(), "You have already voted this dope", 500);
             }
-        }
+        }else if(id == mInfoBar.getId()){
+            Intent intent = new Intent(getActivity(), CommentsActivity.class);
+            startActivity(intent);
+        }else if (id == moreButton.getId()){
+            Bundle bundle = this.getArguments();
+            ((MainActivity) getActivity()).showContextOptions(true, mDopeNum);
 
+        }
     }
 }

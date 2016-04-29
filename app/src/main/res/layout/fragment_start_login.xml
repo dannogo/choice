@@ -14,6 +14,7 @@
         android:background="@null"
         android:gravity="center_horizontal"
         android:hint="@string/start_login_username_hint"
+        android:singleLine="true"
         android:textColorHint="@color/start_login_hint_color"
         android:textColor="@color/white_text_color"
         android:textSize="@dimen/start_login_font_size" />
@@ -32,6 +33,7 @@
         android:background="@null"
         android:gravity="center_horizontal"
         android:inputType="textPassword"
+        android:singleLine="true"
         android:hint="@string/start_login_password_hint"
         android:textColorHint="@color/start_login_hint_color"
         android:textColor="@color/white_text_color"

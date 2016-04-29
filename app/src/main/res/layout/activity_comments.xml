@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    android:id="@+id/comments_activity_root"
+    >
 
     <include
         android:id="@+id/comments_toolbar"
@@ -18,7 +20,8 @@
         android:layout_below="@+id/comments_toolbar"
         android:background="@drawable/bottom_border"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <TextView
             android:layout_width="wrap_content"
@@ -36,12 +39,14 @@
 
     </LinearLayout>
 
+    <!--DEPRECATED NOT IN USE under-->
     <ScrollView
         android:id="@+id/comments_scroll_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_above="@+id/comments_add_comment_bar"
-        android:layout_below="@+id/comments_info_bar">
+        android:layout_below="@+id/comments_info_bar"
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/comments_comments_container"
@@ -50,7 +55,18 @@
             android:orientation="vertical">
 
         </LinearLayout>
+
     </ScrollView>
+    <!--DEPRECATED NOT IN USE above-->
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/comments_comment_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/comments_add_comment_bar"
+        android:layout_below="@+id/comments_info_bar">
+
+    </android.support.v7.widget.RecyclerView>
 
     <RelativeLayout
         android:id="@+id/comments_add_comment_bar"

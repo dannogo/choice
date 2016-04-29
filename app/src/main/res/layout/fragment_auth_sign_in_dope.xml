@@ -59,6 +59,7 @@
         fancy:fb_textColor="@color/white_text_color" />
 
     <TextView
+        android:id="@+id/auth_sign_in_already_have_username"
         android:layout_marginTop="@dimen/auth_sign_in_dope_margin_last"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

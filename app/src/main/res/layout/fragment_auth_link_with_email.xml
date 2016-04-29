@@ -31,12 +31,14 @@
         />
 
     <EditText
+        android:id="@+id/auth_link_with_email_field"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/auth_link_with_email_margin_3"
         android:background="@null"
         android:gravity="center_horizontal"
         android:hint="@string/auth_link_with_email_hint"
+        android:inputType="textEmailAddress"
         android:textColorHint="@color/auth_text_color"
         android:textColor="@color/white_text_color"
         android:textSize="@dimen/auth_hint_size" />
@@ -48,7 +50,7 @@
         android:background="@color/start_login_hint_color" />
 
     <mehdi.sakout.fancybuttons.FancyButton
-        android:id="@+id/start_pass_recovery_submit_button"
+        android:id="@+id/auth_link_with_email_continue_btn"
         fancy:fb_defaultColor="@color/start_login_toolbar_fancy_button_color"
         fancy:fb_focusColor="#000"
         fancy:fb_iconPosition="left"

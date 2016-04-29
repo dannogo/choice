@@ -3,11 +3,13 @@ package com.elantix.dopeapp;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.style.ParagraphStyle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -58,6 +60,7 @@ public class FragmentProfileOverview extends Fragment implements View.OnClickLis
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mFragmentView = inflater.inflate(R.layout.fragment_profile_overview, container, false);
 
+        Utilities.sCurProfile = null;
         Bundle bundle = this.getArguments();
         mIsOwn = bundle.getBoolean("own");
 
@@ -129,9 +132,30 @@ public class FragmentProfileOverview extends Fragment implements View.OnClickLis
 
             configurateRecyclerView();
         }
+        String uid = (mIsOwn) ? Utilities.sUid : bundle.getString("uid");
+        HttpKit http = new HttpKit(getActivity());
+        http.getProfileInformation(uid, Utilities.sToken);
 
         return mFragmentView;
     }
+
+    public void setInfo(ProfileInfo info){
+
+        Utilities.sCurProfile = info;
+
+        Uri avatar = Uri.parse(info.avatar);
+        Glide.with(getActivity()).load(avatar).into(mAvatar);
+        mUsername.setText(info.username);
+        mFirstLastNames.setText(info.fullname);
+        mNumberOfDopesView.setText(String.valueOf(info.dopes));
+
+        TextView followersNum = (TextView) mFragmentView.findViewById(R.id.profile_overview_number_of_followERS);
+        TextView followingsNum = (TextView) mFragmentView.findViewById(R.id.profile_overview_number_of_followINGS);
+        followersNum.setText(String.valueOf(info.followers));
+        followingsNum.setText(String.valueOf(info.followings));
+    }
+
+
 
     /**
      * Configurates recyclerView
@@ -177,16 +201,21 @@ public class FragmentProfileOverview extends Fragment implements View.OnClickLis
         if (requestCode == Utilities.EDIT_PROFILE) {
             if(resultCode == Activity.RESULT_OK){
                 String result=data.getStringExtra("result");
-                if (Utilities.avatarUri != null) {
-                    Glide.with(this).load(Utilities.avatarUri).into(mAvatar);
+//                if (Utilities.avatarUri != null) {
+                if (Utilities.sCurProfile.avatar != null) {
+                    Glide.with(this).load(Uri.parse(Utilities.sCurProfile.avatar)).into(mAvatar);
                     mAvatarPlaceHolder.setVisibility(View.GONE);
                     mAvatar.setVisibility(View.VISIBLE);
                 }
-                if (Utilities.profileUsername != null && !Utilities.profileUsername.isEmpty()) {
-                    mUsername.setText(Utilities.profileUsername);
+//                if (Utilities.profileUsername != null && !Utilities.profileUsername.isEmpty()) {
+                if (Utilities.sCurProfile.username != null && !Utilities.sCurProfile.username.isEmpty()) {
+//                    mUsername.setText(Utilities.profileUsername);
+                    mUsername.setText(Utilities.sCurProfile.username);
                 }
-                if (Utilities.profileFirstLastNames != null && !Utilities.profileFirstLastNames.isEmpty()) {
-                    mFirstLastNames.setText(Utilities.profileFirstLastNames);
+//                if (Utilities.profileFirstLastNames != null && !Utilities.profileFirstLastNames.isEmpty()) {
+                if (Utilities.sCurProfile.fullname != null && !Utilities.sCurProfile.fullname.isEmpty()) {
+//                    mFirstLastNames.setText(Utilities.profileFirstLastNames);
+                    mFirstLastNames.setText(Utilities.sCurProfile.fullname);
                 }
             }
             if (resultCode == Activity.RESULT_CANCELED) {

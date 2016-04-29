@@ -1,17 +1,19 @@
 package com.elantix.dopeapp;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -22,6 +24,7 @@ import com.facebook.GraphResponse;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
 import com.twitter.sdk.android.core.TwitterAuthConfig;
 import io.fabric.sdk.android.Fabric;
@@ -35,19 +38,27 @@ import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.HttpURLConnection;
 import java.util.Arrays;
 
 public class WelcomeActivity extends AppCompatActivity implements View.OnClickListener{
 
     // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
-    private static final String TWITTER_KEY = "0O7XQmGoUBfxKlIDKX16vCwYP";
-    private static final String TWITTER_SECRET = "kh6y9zIDTqBfWZ6bNSwiLqC2pE9Rm8Ci9rYa4dqDuPZuOBxCsx";
+//    private static final String TWITTER_KEY = "0O7XQmGoUBfxKlIDKX16vCwYP";
+//    private static final String TWITTER_SECRET = "kh6y9zIDTqBfWZ6bNSwiLqC2pE9Rm8Ci9rYa4dqDuPZuOBxCsx";
+
+    private static final String TWITTER_KEY = "iczt8Wb15b2V0IJPq3JdnCQ1p";
+    private static final String TWITTER_SECRET = "5cPrXX8qkZgQGPJr0YGE8KOzkQTwxbpaP6b2mQFDUtMIsoZIDn";
+
+//    private static final String TWITTER_KEY = "709348373665603584-OjrqfRi1m004RsVH5vaG4mA4cu9PVUr";
+//    private static final String TWITTER_SECRET = "KvI8nf97XZFz6UW5nHLiZtVwpTEpzleBnvZPnbdS4Uepy";
 
     CallbackManager callbackManager;
     private FancyButton facebookButton;
     FancyButton twitterButton;
     TwitterAuthClient twitterAuthClient;
     private TextView mSkipLogin;
+    private Button mSignInNowButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,14 +75,8 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         mSkipLogin.setOnClickListener(this);
 //        getSupportActionBar().hide();
 
-        Button signInNowButton = (Button) findViewById(R.id.signInNowButton);
-        signInNowButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(WelcomeActivity.this, SignInActivity.class);
-                WelcomeActivity.this.startActivity(intent);
-            }
-        });
+        mSignInNowButton = (Button) findViewById(R.id.signInNowButton);
+        mSignInNowButton.setOnClickListener(this);
 
         facebookButton = (FancyButton) findViewById(R.id.facebook_login_button);
         facebookButton.setOnClickListener(new View.OnClickListener() {
@@ -91,11 +96,33 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
             public void onClick(View v) {
 
 
+
                 twitterAuthClient.authorize(WelcomeActivity.this, new com.twitter.sdk.android.core.Callback<TwitterSession>() {
 
                     @Override
                     public void success(Result<TwitterSession> twitterSessionResult) {
-                        // Success
+                        TwitterSession sessionData = twitterSessionResult.data;
+                        String uid = String.valueOf(sessionData.getUserId());
+//                        Log.w("WelcomeActivity", "userId: " + uid);
+                        String username = sessionData.getUserName();
+//                        Log.w("WelcomeActivity", "username: " + username);
+                        sessionData.getAuthToken();
+//                        sessionData.getUserId()
+
+                        TwitterAuthClient authClient = new TwitterAuthClient();
+                        authClient.requestEmail(new TwitterSession(sessionData.getAuthToken(), sessionData.getUserId(), username), new Callback<String>() {
+                            @Override
+                            public void success(Result<String> result) {
+                                // Do something with the result, which provides the email address
+                                Log.w("WelcomeActivity", "Email should be here: "+result.data.toString());
+                            }
+
+                            @Override
+                            public void failure(TwitterException exception) {
+                                // Do something on failure
+                                Log.w("WelcomeActivity", "Email failure: "+exception.toString());
+                            }
+                        });
                     }
 
                     @Override
@@ -107,9 +134,17 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
 
             }
         });
+
+
         buttonsAppearanceHandling();
 
 
+    }
+
+    public void afterLoginAction(){
+        Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+        startActivity(intent);
+        finish();
     }
 
     private void buttonsAppearanceHandling(){
@@ -134,7 +169,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         callbackManager = CallbackManager.Factory.create();
 
         // Set permissions
-        LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile"));
+        LoginManager.getInstance().logInWithReadPermissions(WelcomeActivity.this, Arrays.asList("email", "public_profile"));
 
         LoginManager.getInstance().registerCallback(callbackManager,
                 new FacebookCallback<LoginResult>() {
@@ -142,7 +177,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
                     public void onSuccess(LoginResult loginResult) {
 
                         System.out.println("Success");
-                        GraphRequest.newMeRequest(
+                        GraphRequest request = GraphRequest.newMeRequest(
                                 loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                                     @Override
                                     public void onCompleted(JSONObject json, GraphResponse response) {
@@ -156,10 +191,15 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
                                                 String jsonresult = String.valueOf(json);
                                                 System.out.println("JSON Result" + jsonresult);
 
-                                                String str_email = json.getString("email");
                                                 String str_id = json.getString("id");
-                                                String str_firstname = json.getString("first_name");
-                                                String str_lastname = json.getString("last_name");
+                                                String str_email = json.getString("email");
+                                                HttpKit http = new HttpKit(WelcomeActivity.this);
+                                                String[] params = {"facebook", str_id, str_email};
+                                                http.regAndLogin(params);
+
+//                                                String str_firstname = json.getString("first_name");
+//                                                String str_lastname = json.getString("last_name");
+
 
                                             } catch (JSONException e) {
                                                 e.printStackTrace();
@@ -167,7 +207,12 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
                                         }
                                     }
 
-                                }).executeAsync();
+                                });
+//                                .executeAsync();
+                        Bundle parameters = new Bundle();
+                        parameters.putString("fields", "id, first_name, last_name, email,gender, birthday, location");
+                        request.setParameters(parameters);
+                        request.executeAsync();
 
                     }
 
@@ -186,8 +231,12 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-        twitterAuthClient.onActivityResult(requestCode, resultCode, data);
+
+        if (FacebookSdk.isFacebookRequestCode(requestCode)) {
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+        }else {
+            twitterAuthClient.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
 
@@ -211,8 +260,12 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
     public void onClick(View v) {
         int id = v.getId();
         if (id == mSkipLogin.getId()){
-            Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+            Intent intent = new Intent(WelcomeActivity.this, SplashActivity.class);
             startActivity(intent);
+            finish();
+        }else if (id == mSignInNowButton.getId()){
+            Intent intent = new Intent(WelcomeActivity.this, SignInActivity.class);
+            WelcomeActivity.this.startActivity(intent);
         }
     }
 }

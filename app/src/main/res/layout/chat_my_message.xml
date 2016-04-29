@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/chat_message_vertical_padding"
+    android:paddingRight="5dp"
+    android:paddingTop="@dimen/chat_message_vertical_padding">
+
+    <!--<TableLayout-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:shrinkColumns="0">-->
+
+    <!--<TableRow-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content">-->
+
+    <!--<RelativeLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content">-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/chat_message_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center_vertical"
+            android:padding="10dp"
+            android:text="2:46pm"
+            android:layout_toLeftOf="@+id/chat_message_field"
+            android:textSize="@dimen/splash_4_user_name_text_size"
+            android:textColor="@color/chat_secondary_text_color"
+            />
+
+            <!--android:layout_toRightOf="@+id/chat_message_time"-->
+        <com.elantix.dopeapp.RightBasedMessage
+            android:id="@+id/chat_message_field"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/splash_3_comment_padding"
+            android:paddingLeft="@dimen/splash_3_comment_end_padding"
+            android:paddingRight="@dimen/chat_message_field_beginning_padding"
+            android:paddingTop="@dimen/splash_3_comment_padding">
+
+            <TextView
+                android:id="@+id/chat_my_message_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:singleLine="false"
+                android:text="Hi :)"
+                android:textColor="@color/white_text_color" />
+                android:text="Hello! Hello! Hello! Hello! Hello! Hello! Hello! Hello! Hello! Hello! Hello! Hello! Hello! Hello! Hello! Hello! Hello! Hello! Hello! Hello! Hello! "
+
+        </com.elantix.dopeapp.RightBasedMessage>
+
+    <!--</RelativeLayout>-->
+
+    </LinearLayout>
+    <!--</TableRow>-->
+    <!--</TableLayout>-->
+
+</LinearLayout>

@@ -33,6 +33,9 @@ public class FragmentAuthConnectAccount extends Fragment implements View.OnClick
         mFacebookBtn = (FancyButton) mFragmentView.findViewById(R.id.auth_connect_account_facebook_button);
         mTwitterBtn = (FancyButton) mFragmentView.findViewById(R.id.auth_connect_account_twitter_button);
         mEmailBtn = (FancyButton) mFragmentView.findViewById(R.id.auth_connect_account_email_button);
+        mFacebookBtn.setOnClickListener(this);
+        mTwitterBtn.setOnClickListener(this);
+        mEmailBtn.setOnClickListener(this);
 
         buttonsAppearanceHandling();
         return mFragmentView;
@@ -57,6 +60,14 @@ public class FragmentAuthConnectAccount extends Fragment implements View.OnClick
 
     @Override
     public void onClick(View v) {
+        int id = v.getId();
+        if (id == mFacebookBtn.getId()){
+            ((AuthActivity)getActivity()).mIsRegularAuthorization = false;
+            ((AuthActivity)getActivity()).onFblogin();
+        }else if (id == mTwitterBtn.getId()){
 
+        }else if (id == mEmailBtn.getId()){
+            ((AuthActivity)getActivity()).switchPageHandler(AuthActivity.AuthPage.LinkEmail);
+        }
     }
 }

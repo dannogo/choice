@@ -22,7 +22,8 @@ public class LeftBasedMessage extends RelativeLayout {
     private Point pointLeftBottom;
     private float corner;
     private Context context;
-    private int color = R.color.start_login_toolbar_fancy_button_color;
+//    private int color = R.color.splash_comment_fields_color;
+    private int color = R.color.colorPrimary;
 
     public LeftBasedMessage(Context context, AttributeSet attrs) {
         super(context, attrs);

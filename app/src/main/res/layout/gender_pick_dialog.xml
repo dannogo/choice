@@ -1,0 +1,27 @@
+<RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="270dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white"
+    >
+
+    <RadioButton
+        android:id="@+id/male"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Male"
+        android:padding="10dp"
+        android:textSize="20sp"
+        android:background="@drawable/bottom_border_1_px_white_background"
+        />
+
+    <RadioButton
+        android:id="@+id/female"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Female"
+        android:padding="10dp"
+        android:textSize="20sp"
+        />
+
+</RadioGroup>

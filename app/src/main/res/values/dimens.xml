@@ -260,7 +260,7 @@
     <dimen name="auth_sign_in_dope_margin_last">47dp</dimen>
     <dimen name="auth_sign_in_dope_already_user_size">15sp</dimen>
 
-    <dimen name="message_container_corner">12dp</dimen>
+    <dimen name="message_container_corner">10dp</dimen>
 
     <dimen name="splash_lower_panel_height">240dp</dimen>
     <dimen name="splash_margin_1">33dp</dimen>
@@ -277,6 +277,7 @@
     <dimen name="splash_3_photo_height">172dp</dimen>
     <dimen name="splash_3_comment_padding_left">20dp</dimen>
     <dimen name="splash_3_comment_padding">10dp</dimen>
+    <dimen name="splash_3_comment_end_padding">15dp</dimen>
 
     <dimen name="splash_4_frag_title_size">16sp</dimen>
     <dimen name="splash_4_user_name_text_size">11sp</dimen>
@@ -286,5 +287,16 @@
     <dimen name="splash_4_avatar_top_margin_4">4dp</dimen>
     <dimen name="splash_4_toolbar_height">50dp</dimen>
     <dimen name="splash_4_comment_size">15sp</dimen>
+
+    <dimen name="chat_message_field_beginning_padding">23dp</dimen>
+    <dimen name="chat_left_padding">11dp</dimen>
+    <dimen name="chat_message_vertical_padding">10dp</dimen>
+    <dimen name="chat_others_message_margin_between_name_and_message_field">3dp</dimen>
+    <dimen name="chat_others_dope_proposal_right_padding">20dp</dimen>
+    <dimen name="chat_divider_around_text_distance">9dp</dimen>
+    <dimen name="chat_divider_text_size">12sp</dimen>
+
+    <dimen name="chat_pic_and_rate_container_width">280dp</dimen>
+    <dimen name="chat_pic_and_rate_container_height">220dp</dimen>
 
 </resources>

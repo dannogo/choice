@@ -1,6 +1,7 @@
 package com.elantix.dopeapp;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.PixelFormat;
@@ -18,6 +19,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -52,6 +54,9 @@ public class ProfileSettingsActivity extends AppCompatActivity implements View.O
     private Uri mTempImage = null;
     private EditText mUsernameEdittext;
     private EditText mFirstLastNamesEdittext;
+    private LinearLayout mChangeGender;
+    private TextView mGenderTextField;
+    private TextView mGenderAction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,17 +70,39 @@ public class ProfileSettingsActivity extends AppCompatActivity implements View.O
         mCancelToolbarBtn.setOnClickListener(this);
         mDoneToolbarBtn.setOnClickListener(this);
         mUsernameEdittext = (EditText) findViewById(R.id.profile_edit_username_edittext);
+        mChangeGender = (LinearLayout) findViewById(R.id.profile_settings_activity_change_gender);
+        mChangeGender.setOnClickListener(this);
+        mGenderTextField = (TextView) findViewById(R.id.profile_settings_activity_gender_textview);
+        mGenderAction = (TextView) findViewById(R.id.profile_settings_activity_gender_action);
+
         mFirstLastNamesEdittext = (EditText) findViewById(R.id.profile_edit_first_last_names_edittext);
-        if (!Utilities.profileUsername.isEmpty()) {
-            mUsernameEdittext.setText(Utilities.profileUsername);
+
+        if (!Utilities.sCurProfile.username.isEmpty()){
+            mUsernameEdittext.setText(Utilities.sCurProfile.username);
         }
-        if (!Utilities.profileFirstLastNames.isEmpty()){
-            mFirstLastNamesEdittext.setText(Utilities.profileFirstLastNames);
+        if (!Utilities.sCurProfile.fullname.isEmpty()){
+            mFirstLastNamesEdittext.setText(Utilities.sCurProfile.fullname);
         }
+
+
+
+        // Replaced
+//        if (!Utilities.profileFirstLastNames.isEmpty()){
+//            mFirstLastNamesEdittext.setText(Utilities.profileFirstLastNames);
+//        }
+//        if (!Utilities.profileUsername.isEmpty()) {
+//            mUsernameEdittext.setText(Utilities.profileUsername);
+//        }
+        // Replaced
+
 
         prepareContextPanelViews();
 
-        mTempImage = Utilities.avatarUri;
+
+//        mTempImage = Utilities.avatarUri; // replaced
+
+
+        mTempImage = (!Utilities.sCurProfile.avatar.isEmpty()) ? Uri.parse(Utilities.sCurProfile.avatar) : null;
         setProperAvatarState();
 
     }
@@ -94,6 +121,7 @@ public class ProfileSettingsActivity extends AppCompatActivity implements View.O
         mSearchWebButton.setOnClickListener(this);
         mContextCancelButton = (RelativeLayout) mContextOptionsPanel.findViewById(R.id.context_options_cancel);
         mContextCancelButton.setOnClickListener(this);
+
 
         mCameraIcon = (ImageView) findViewById(R.id.profile_settings_camera_icon);
         mAvatar = (CircularImageView) findViewById(R.id.profile_settings_avatar);
@@ -173,14 +201,48 @@ public class ProfileSettingsActivity extends AppCompatActivity implements View.O
             finish();
         }else if (id == mDoneToolbarBtn.getId()){
             if (mTempImage != null) {
-                Utilities.avatarUri = mTempImage;
+//                Utilities.avatarUri = mTempImage;
+                Utilities.sCurProfile.avatar = mTempImage.toString();
             }
-            Utilities.profileUsername = mUsernameEdittext.getText().toString();
-            Utilities.profileFirstLastNames = mFirstLastNamesEdittext.getText().toString();
+//            Utilities.profileUsername = mUsernameEdittext.getText().toString();
+//            Utilities.profileFirstLastNames = mFirstLastNamesEdittext.getText().toString();
+
+            Utilities.sCurProfile.username = mUsernameEdittext.getText().toString();
+            Utilities.sCurProfile.fullname = mFirstLastNamesEdittext.getText().toString();
+
             Intent returnIntent = new Intent();
 //            returnIntent.putExtra("result",result);
             setResult(Activity.RESULT_OK,returnIntent);
             finish();
+        }else if (id == mChangeGender.getId()){
+            final Dialog dialog = new Dialog(ProfileSettingsActivity.this);
+            dialog.setContentView(R.layout.gender_pick_dialog);
+            dialog.setTitle("Pick gender");
+            dialog.setCancelable(true);
+
+            RadioButton rd1 = (RadioButton) dialog.findViewById(R.id.male);
+            RadioButton rd2 = (RadioButton) dialog.findViewById(R.id.female);
+            rd1.setButtonDrawable(android.R.color.transparent);
+            rd2.setButtonDrawable(android.R.color.transparent);
+            rd1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mGenderTextField.setText(R.string.profile_gender_male);
+                    mGenderAction.setText(R.string.profile_gender_action_change_gender);
+                    dialog.dismiss();
+                }
+            });
+            rd2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mGenderTextField.setText(R.string.profile_gender_female);
+                    mGenderAction.setText(R.string.profile_gender_action_change_gender);
+                    dialog.dismiss();
+                }
+            });
+
+            // now that the dialog is set up, it's time to show it
+            dialog.show();
         }
     }
 

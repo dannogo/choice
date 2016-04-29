@@ -66,19 +66,24 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                >
 
-                <ImageView
+
+                <com.elantix.dopeapp.ProportionalImageView
                     android:id="@+id/option_picture_1"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    />
 
-                <ImageView
+                <com.elantix.dopeapp.ProportionalImageView
                     android:id="@+id/option_picture_2"
                     android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="0.5" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    />
 
             </LinearLayout>
 

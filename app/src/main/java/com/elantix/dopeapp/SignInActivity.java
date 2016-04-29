@@ -1,5 +1,6 @@
 package com.elantix.dopeapp;
 
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
@@ -27,6 +28,7 @@ public class SignInActivity extends AppCompatActivity{
     private ImageView mToolbarLeftButton;
     private TextView mToolbarTitle;
     private TextView mToolbarRightButton;
+    private String mPredecessorActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +36,8 @@ public class SignInActivity extends AppCompatActivity{
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_in);
+
+        mPredecessorActivity = getIntent().getStringExtra("activity");
 
         mToolbarLeftButton = (ImageView) findViewById(R.id.start_login_toolbar_left_button);
         mToolbarTitle = (TextView) findViewById(R.id.start_login_toolbar_title);
@@ -78,6 +82,10 @@ public class SignInActivity extends AppCompatActivity{
                 mToolbarLeftButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        if (mPredecessorActivity != null){
+                            Intent returnIntent = new Intent();
+                            setResult(Activity.RESULT_CANCELED, returnIntent);
+                        }
                         finish();
                     }
                 });
@@ -124,5 +132,16 @@ public class SignInActivity extends AppCompatActivity{
             mTransaction.commit();
 
         }
+    }
+
+    public void afterLoginAction(){
+        if (mPredecessorActivity != null){
+            Intent returnIntent = new Intent();
+            setResult(Activity.RESULT_OK, returnIntent);
+        }else {
+            Intent intent = new Intent(SignInActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+        finish();
     }
 }

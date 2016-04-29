@@ -104,7 +104,7 @@
     <color name="splash_4_border_color">#d4688889</color>
     <color name="splash_4_user_name_text_color">#33BBC2</color>
     <color name="transparent_white">#1affffff</color>
+    <color name="chat_my_message_field_color">#31B5BC</color>
+    <color name="chat_secondary_text_color">#969696</color>
 
-    #EBF4F4
-    #DEE5E5
 </resources>

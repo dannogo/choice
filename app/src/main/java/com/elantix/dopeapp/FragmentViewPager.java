@@ -19,6 +19,7 @@ public class FragmentViewPager extends Fragment {
 
     private View mFragmentView;
     ViewPager mViewPager;
+    private static int numItems;
 
     interface CommunicatorOne{
         public void respond();
@@ -37,18 +38,23 @@ public class FragmentViewPager extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mFragmentView = inflater.inflate(R.layout.fragment_view_pager, container, false);
 
-        Arrays.fill(Utilities.sRateStateBackups, null);
+//        Arrays.fill(Utilities.sRateStateBackups, null);
+        Bundle bundle = this.getArguments();
+        numItems = bundle.getInt("num", 10);
+        Utilities.sRateStateBackups = new RateStateBackup[numItems];
 
         FragmentStatePagerAdapter adapter = new MyPagerAdapter(getActivity().getFragmentManager());
         mViewPager = (ViewPager) mFragmentView.findViewById(R.id.view_pager);
         mViewPager.setAdapter(adapter);
+
+
 
         mViewPager.setOffscreenPageLimit(2);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override
             public void onPageSelected(int position) {
-                ((MainActivity) getActivity()).toolbarTitle.setText((position + 1) + "/10");
+                ((MainActivity) getActivity()).toolbarTitle.setText((position + 1) + "/"+numItems);
             }
 
             @Override
@@ -67,7 +73,7 @@ public class FragmentViewPager extends Fragment {
     }
 
     public static class MyPagerAdapter extends FragmentStatePagerAdapter {
-        private static int NUM_ITEMS = 10;
+//        private static int NUM_ITEMS = 10;
 
         public MyPagerAdapter(FragmentManager fragmentManager) {
             super(fragmentManager);
@@ -76,13 +82,13 @@ public class FragmentViewPager extends Fragment {
         // Returns total number of pages
         @Override
         public int getCount() {
-            return NUM_ITEMS;
+            return numItems;
         }
 
         // Returns the fragment to display for that page
         @Override
         public Fragment getItem(int position) {
-            return FragmentDailyDope.newInstance(position, "some");
+            return FragmentDailyDope.newInstance(position);
         }
 
         // Returns the page title for the top indicator
