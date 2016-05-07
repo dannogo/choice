@@ -69,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     final private static int REPORT_POST_REQUEST_CODE = 2777;
     public ProgressDialog mProgressDialog;
+    public ProgressDialog mAnotherProgressDialog;
     private int mContextOptionsDopeNum;
 
     Page page = Page.Daily;
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (requestCode == REPORT_POST_REQUEST_CODE && resultCode == Activity.RESULT_OK){
             int result = data.getIntExtra("result", 0);
-            Toast.makeText(this, getResources().getString(result) , Toast.LENGTH_SHORT).show();
+
         }else if (requestCode == REPORT_POST_REQUEST_CODE && resultCode == Activity.RESULT_CANCELED){
             Toast.makeText(this, "Report Canceled" , Toast.LENGTH_SHORT).show();
         }
@@ -533,7 +534,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else if (id == mContextOptionsReportPost.getId()){
             showContextOptions(false, null);
             Intent intent = new Intent(MainActivity.this, ReportPostActivity.class);
-            intent.putExtra("post_id", 10);
+//            intent.putExtra("post_id", 10);
+            intent.putExtra("dopeNum", mContextOptionsDopeNum);
             startActivityForResult(intent, REPORT_POST_REQUEST_CODE);
         }
 

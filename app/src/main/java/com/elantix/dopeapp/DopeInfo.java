@@ -2,6 +2,8 @@ package com.elantix.dopeapp;
 
 import android.net.Uri;
 
+import java.util.HashMap;
+
 /**
  * Created by oleh on 4/22/16.
  */

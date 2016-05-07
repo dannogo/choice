@@ -1,6 +1,7 @@
 package com.elantix.dopeapp;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,9 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import io.fabric.sdk.android.services.common.SafeToast;
 
 /**
  * Created by oleh on 4/2/16.
@@ -18,6 +22,8 @@ public class ReportPostActivity extends AppCompatActivity implements View.OnClic
     private TextView mOption1;
     private TextView mOption2;
     private TextView mOption3;
+    public ProgressDialog mProgressDialog;
+    DopeInfo curItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +32,9 @@ public class ReportPostActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_post);
 
-        int postId = getIntent().getExtras().getInt("post_id");
+//        int postId = getIntent().getExtras().getInt("post_id");
+        int dopeNum = getIntent().getIntExtra("dopeNum", 0);
+        curItem = (Utilities.sDopeListType == Utilities.DopeListType.Ten) ? Utilities.sDopes10[dopeNum] : Utilities.sDopes100[dopeNum];
 
         mCloseToolbarButton = (ImageView) findViewById(R.id.report_post_left_toolbar_button);
         mOption1 = (TextView) findViewById(R.id.report_post_option_1);
@@ -58,9 +66,15 @@ public class ReportPostActivity extends AppCompatActivity implements View.OnClic
             finish();
         }
 
-        returnIntent.putExtra("result", result);
-        setResult(Activity.RESULT_OK, returnIntent);
+        if (Utilities.sToken == null){
+            Toast.makeText(ReportPostActivity.this, "You are not logged in", Toast.LENGTH_SHORT).show();
+        }else {
+            HttpKit http = new HttpKit(ReportPostActivity.this);
+            http.reportPost(Utilities.sToken, curItem.id, getResources().getString(result));
 
-        finish();
+            returnIntent.putExtra("result", result);
+            setResult(Activity.RESULT_OK, returnIntent);
+        }
+//        finish();
     }
 }

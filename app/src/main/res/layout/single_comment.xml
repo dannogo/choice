@@ -1,51 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:padding="10dp"
-    >
+    android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/single_comment_avatar"
-        android:layout_width="@dimen/message_list_avatar_size"
-        android:layout_height="@dimen/message_list_avatar_size"
-        android:layout_gravity="center_horizontal"
-        android:src="@drawable/fr3"
-        />
-
+    <!--xmlns:android="http://schemas.android.com/apk/res/android"-->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginLeft="@dimen/single_comment_distance_between_avatar_and_text"
-        >
-        <TextView
-            android:id="@+id/single_comment_user_name"
-            android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <ImageView
+            android:id="@+id/single_comment_avatar"
+            android:layout_width="@dimen/message_list_avatar_size"
+            android:layout_height="@dimen/message_list_avatar_size"
+            android:layout_gravity="center_horizontal"
+            android:src="@drawable/fr3" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/lower_bar_active_color"
-            android:text="@string/single_comment_dummy_user_name_2"
-            android:textStyle="bold"
-            android:textSize="@dimen/single_comment_user_name_text_size"
-            />
-        <TextView
-            android:id="@+id/single_comment_comment_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black_text_color"
-            android:text="@string/single_comment_dummy_text_2"
-            android:textSize="@dimen/single_comment_comment_text_size"
-            />
-        <TextView
-            android:id="@+id/single_comment_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/single_comment_user_name_color"
-            android:text="2:46pm"
-            android:textSize="@dimen/single_comment_comment_time_text_size"
-            />
+            android:layout_marginLeft="@dimen/single_comment_distance_between_avatar_and_text"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/single_comment_user_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/single_comment_dummy_user_name_2"
+                android:textColor="@color/lower_bar_active_color"
+                android:textSize="@dimen/single_comment_user_name_text_size"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/single_comment_comment_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/single_comment_dummy_text_2"
+                android:textColor="@color/black_text_color"
+                android:textSize="@dimen/single_comment_comment_text_size" />
+
+            <TextView
+                android:id="@+id/single_comment_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2:46pm"
+                android:textColor="@color/single_comment_user_name_color"
+                android:textSize="@dimen/single_comment_comment_time_text_size" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+    <Button
+        android:id="@+id/undo_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/button_undo"
+        android:textAllCaps="true"
+        android:textColor="@android:color/white"
+        android:layout_gravity="end|center_vertical"
+        style="@style/Base.Widget.AppCompat.Button.Borderless"
+        />
+
+</FrameLayout>

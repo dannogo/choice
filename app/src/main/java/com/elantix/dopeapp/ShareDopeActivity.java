@@ -2,6 +2,7 @@ package com.elantix.dopeapp;
 
 import android.app.ProgressDialog;
 import android.content.ClipboardManager;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -50,9 +51,19 @@ public class ShareDopeActivity extends AppCompatActivity implements View.OnClick
         mCopyLinkButton.setOnClickListener(this);
         buttonsAppearenceHandling();
 
-        int dopeNum = getIntent().getIntExtra("dopeNum", 1);
+        Intent intent = getIntent();
 
-        mCurItem = (Utilities.sDopeListType == Utilities.DopeListType.Ten) ? Utilities.sDopes10[dopeNum] : Utilities.sDopes100[dopeNum];
+        int dopeNum = intent.getIntExtra("dopeNum", 1);
+        if(dopeNum == -1){
+            mCurItem = new DopeInfo();
+            mCurItem.id = intent.getStringExtra("dopeId");
+            mCurItem.photo1 = Uri.parse(intent.getStringExtra("leftPic"));
+            mCurItem.photo2 = Uri.parse(intent.getStringExtra("rightPic"));
+            mCurItem.question = intent.getStringExtra("question");
+        }else{
+            mCurItem = (Utilities.sDopeListType == Utilities.DopeListType.Ten) ? Utilities.sDopes10[dopeNum] : Utilities.sDopes100[dopeNum];
+        }
+
 
         HttpKit http = new HttpKit(ShareDopeActivity.this);
         Log.e("ShareDopeActivity", "token: " + Utilities.sToken);

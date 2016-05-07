@@ -34,6 +34,7 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
     int mDopeNum;
     private FragmentViewPager.CommunicatorOne mCommOne;
     private ImageButton moreButton;
+    private ImageButton mMessageButton;
 
     public DopeInfo mCurItem;
     private TextView mQuestion;
@@ -62,8 +63,11 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
         if (Utilities.sDopeListType == Utilities.DopeListType.Ten){
             mCurItem = Utilities.sDopes10[mDopeNum];
         }else{
-            mCurItem = Utilities.sDopes100[mDopeNum];
+            if (Utilities.sDopes100 != null) {
+                mCurItem = Utilities.sDopes100[mDopeNum];
+            }
         }
+
     }
 
     @Nullable
@@ -80,7 +84,8 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
 
         moreButton = (ImageButton) fragmentView.findViewById(R.id.more_button);
         moreButton.setOnClickListener(this);
-
+        mMessageButton = (ImageButton) fragmentView.findViewById(R.id.message_button);
+        mMessageButton.setOnClickListener(this);
 
         mInfoBar = (LinearLayout) fragmentView.findViewById(R.id.daily_dope_info_bar);
         mInfoBar.setOnClickListener(this);
@@ -232,6 +237,11 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
             Bundle bundle = this.getArguments();
             ((MainActivity) getActivity()).showContextOptions(true, mDopeNum);
 
+        }else if(id == mMessageButton.getId()){
+            Intent intent = new Intent(getActivity(), CommentsActivity.class);
+            intent.putExtra("dopeId", mCurItem.id);
+            intent.putExtra("type", 0);
+            startActivity(intent);
         }
     }
 }

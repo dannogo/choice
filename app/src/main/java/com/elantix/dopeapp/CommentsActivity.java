@@ -1,5 +1,6 @@
 package com.elantix.dopeapp;
 
+import android.app.ProgressDialog;
 import android.app.Service;
 import android.content.res.Configuration;
 import android.os.Bundle;
@@ -38,6 +39,9 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
     private SoftKeyboard softKeyboard;
     private LinearLayout mInfoBar;
     private ChatType mType;
+    public ProgressDialog mProgressDialog;
+    private String mDopeId;
+
 
     private enum ChatType{
         Comments, Chat, GroupChat
@@ -47,6 +51,13 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
+
+        if (Utilities.sMyProfile == null){
+            HttpKit http = new HttpKit(CommentsActivity.this);
+            http.getMyProfileInfo();
+        }
+
+        mDopeId = getIntent().getStringExtra("dopeId");
 
         mInfoBar = (LinearLayout) findViewById(R.id.comments_info_bar);
         int type = getIntent().getIntExtra("type", 0);
@@ -60,9 +71,11 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
 
         switch (mType){
             case Comments:
-                mAdapter = new AdapterComments(this);
-//                mAdapter = new AdapterChat(this);
-                mRecyclerView.setAdapter(mAdapter);
+                HttpKit http = new HttpKit(CommentsActivity.this);
+                http.getComments(mDopeId, Utilities.sToken, null, null);
+
+//                mAdapter = new AdapterComments(this, null);
+//                mRecyclerView.setAdapter(mAdapter);
                 break;
             case Chat:
                 mAdapter = new AdapterChat(this);
@@ -116,7 +129,7 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
         mCommentsContainer = (LinearLayout) findViewById(R.id.comments_comments_container);
         mScrollView = (ScrollView) findViewById(R.id.comments_scroll_view);
         // DEPRECATED
-        mRecyclerView.scrollToPosition(mAdapter.getItemCount()-1);
+
 
         mSendButton = (ImageButton) findViewById(R.id.comments_send_button);
         mSendButton.setOnClickListener(this);
@@ -139,6 +152,11 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
+    public void showComments(CommentInfo[] comments){
+        mAdapter = new AdapterComments(this, mDopeId, comments);
+        mRecyclerView.setAdapter(mAdapter);
+//        mRecyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
+    }
 
     @Override
     public void onDestroy()
@@ -147,75 +165,83 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
         softKeyboard.unRegisterSoftKeyboardCallback();
     }
 
-    // DEPRECATED
-    private void addComments(Boolean dummy){
+//    // DEPRECATED
+//    private void addComments(Boolean dummy){
+//
+//        LayoutInflater inflater = getLayoutInflater();
+//
+//        if (dummy) {
+//            int[] avatarsResources = {R.drawable.fr3, R.drawable.fr4, R.drawable.fr5
+//                    , R.drawable.fr3, R.drawable.fr4, R.drawable.fr5
+//
+//            };
+//            int[] usersNames = {R.string.single_comment_dummy_user_name_1, R.string.single_comment_dummy_user_name_2, R.string.single_comment_dummy_user_name_3
+//                    , R.string.single_comment_dummy_user_name_1, R.string.single_comment_dummy_user_name_2, R.string.single_comment_dummy_user_name_3
+//
+//            };
+//            int[] commentsText = {R.string.single_comment_dummy_text_1, R.string.single_comment_dummy_text_2, R.string.single_comment_dummy_text_3
+//                    , R.string.single_comment_dummy_text_1, R.string.single_comment_dummy_text_2, R.string.single_comment_dummy_text_3
+//            };
+//
+//            for (int i=0; i< avatarsResources.length; i++){
+//                inflateComment(inflater, true, avatarsResources[i], usersNames[i], commentsText[i]);
+//            }
+//        }else{
+//            if (!mNewCommentField.getText().toString().matches("")) {
+//                inflateComment(inflater, false, null, null, null);
+//            }
+//        }
+//
+//
+//        mScrollView.post(new Runnable() {
+//            public void run() {
+//                mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+//            }
+//        });
+//
+//    }
 
-        LayoutInflater inflater = getLayoutInflater();
-
-        if (dummy) {
-            int[] avatarsResources = {R.drawable.fr3, R.drawable.fr4, R.drawable.fr5
-                    , R.drawable.fr3, R.drawable.fr4, R.drawable.fr5
-
-            };
-            int[] usersNames = {R.string.single_comment_dummy_user_name_1, R.string.single_comment_dummy_user_name_2, R.string.single_comment_dummy_user_name_3
-                    , R.string.single_comment_dummy_user_name_1, R.string.single_comment_dummy_user_name_2, R.string.single_comment_dummy_user_name_3
-
-            };
-            int[] commentsText = {R.string.single_comment_dummy_text_1, R.string.single_comment_dummy_text_2, R.string.single_comment_dummy_text_3
-                    , R.string.single_comment_dummy_text_1, R.string.single_comment_dummy_text_2, R.string.single_comment_dummy_text_3
-            };
-
-            for (int i=0; i< avatarsResources.length; i++){
-                inflateComment(inflater, true, avatarsResources[i], usersNames[i], commentsText[i]);
-            }
-        }else{
-            if (!mNewCommentField.getText().toString().matches("")) {
-                inflateComment(inflater, false, null, null, null);
-            }
-        }
-
-
-        mScrollView.post(new Runnable() {
-            public void run() {
-                mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
-            }
-        });
-
-    }
-
-    // DEPRECATED
-    private void inflateComment(LayoutInflater inflater, Boolean dummy, Integer avatarRes, Integer userNameRes, Integer textRes) {
-        View comment = inflater.inflate(R.layout.single_comment, mCommentsContainer, false);
-        ImageView avatar = (ImageView) comment.findViewById(R.id.single_comment_avatar);
-        TextView userName = (TextView) comment.findViewById(R.id.single_comment_user_name);
-        TextView commentText = (TextView) comment.findViewById(R.id.single_comment_comment_text);
-        if(dummy){
-            avatar.setImageResource(avatarRes);
-            userName.setText(userNameRes);
-            commentText.setText(textRes);
-        }else{
-            userName.setTextColor(ContextCompat.getColor(CommentsActivity.this, R.color.single_comment_user_name_color));
-            TextView time = (TextView) comment.findViewById(R.id.single_comment_time);
-            time.setText("Just now");
-            avatar.setImageResource(R.drawable.maletskiy1);
-            userName.setText("Nikolay Maletskiy");
-
-            commentText.setText(mNewCommentField.getText());
-
-        }
-
-        mCommentsContainer.addView(comment);
-    }
+//    // DEPRECATED
+//    private void inflateComment(LayoutInflater inflater, Boolean dummy, Integer avatarRes, Integer userNameRes, Integer textRes) {
+//        View comment = inflater.inflate(R.layout.single_comment, mCommentsContainer, false);
+//        ImageView avatar = (ImageView) comment.findViewById(R.id.single_comment_avatar);
+//        TextView userName = (TextView) comment.findViewById(R.id.single_comment_user_name);
+//        TextView commentText = (TextView) comment.findViewById(R.id.single_comment_comment_text);
+//        if(dummy){
+//            avatar.setImageResource(avatarRes);
+//            userName.setText(userNameRes);
+//            commentText.setText(textRes);
+//        }else{
+//            userName.setTextColor(ContextCompat.getColor(CommentsActivity.this, R.color.single_comment_user_name_color));
+//            TextView time = (TextView) comment.findViewById(R.id.single_comment_time);
+//            time.setText("Just now");
+//            avatar.setImageResource(R.drawable.maletskiy1);
+//            userName.setText("Nikolay Maletskiy");
+//
+//            commentText.setText(mNewCommentField.getText());
+//
+//        }
+//
+//        mCommentsContainer.addView(comment);
+//    }
 
     private void sendComment(){
         //Send to server. If success call adapters addComment method
 
         String msg = mNewCommentField.getText().toString();
         if (!msg.isEmpty()) {
-            ((AdapterComments)mAdapter).addComment(msg);
-            mNewCommentField.setText("");
+            HttpKit http = new HttpKit(CommentsActivity.this);
+            http.sendComment(Utilities.sToken, mDopeId, msg, null);
         }
+
     }
+
+    public void showMyNewComment(String text){
+        ((AdapterComments)mAdapter).addComment(text);
+        mNewCommentField.setText("");
+        DopeStatisticsActivity.sNumOfComments++;
+    }
+
 
     @Override
     public void onClick(View v) {

@@ -18,6 +18,8 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 
 import org.w3c.dom.Text;
 
+import java.io.File;
+
 import mehdi.sakout.fancybuttons.FancyButton;
 
 /**
@@ -50,25 +52,22 @@ public class ShareProfileActivity extends AppCompatActivity implements View.OnCl
         mAvatarPlaceholder = (ImageView) findViewById(R.id.profile_settings_user_icon);
         Boolean isOwn = getIntent().getBooleanExtra("own", false);
         if (isOwn){
-//            if (Utilities.avatarUri != null) {
             if (Utilities.sCurProfile.avatar != null) {
-                Log.w("ShareProfileActivity", "Avatar is NOT NULL");
-//                Glide.with(this).load(Utilities.avatarUri).into(mAvatar);
-                Glide.with(this).load(Uri.parse(Utilities.sCurProfile.avatar)).into(mAvatar);
+                if (Utilities.sCurProfile.avatar.startsWith("http")) {
+                    Glide.with(this).load(Uri.parse(Utilities.sCurProfile.avatar)).into(mAvatar);
+                }else {
+                    Glide.with(this).load(new File(Utilities.sCurProfile.avatar).getPath()).into(mAvatar);
+                }
             }else{
-                Log.w("ShareProfileActivity", "Avatar is NULL");
                 mAvatar.setVisibility(View.GONE);
                 mAvatarPlaceholder.setVisibility(View.VISIBLE);
             }
-//            String username = (Utilities.profileUsername.isEmpty()) ? getResources().getString(R.string.profile_settings_username_placeholder_text) : Utilities.profileUsername;
             String username = (Utilities.sCurProfile.username.isEmpty()) ? getResources().getString(R.string.profile_settings_username_placeholder_text) : Utilities.sCurProfile.username;
             mUsername.setText(username);
-//            String firstLastNames = (Utilities.profileFirstLastNames.isEmpty()) ? getResources().getString(R.string.profile_settings_firstlastnames_placeholder_text) : Utilities.profileFirstLastNames;
             String firstLastNames = (Utilities.sCurProfile.fullname.isEmpty()) ? getResources().getString(R.string.profile_settings_firstlastnames_placeholder_text) : Utilities.sCurProfile.fullname;
             mFirstLastNames.setText(firstLastNames);
         }else {
             Glide.with(this).load(R.drawable.ania2).into(mAvatar);
-            Log.w("ShareProfileActivity", "NOT is own");
         }
 
     }

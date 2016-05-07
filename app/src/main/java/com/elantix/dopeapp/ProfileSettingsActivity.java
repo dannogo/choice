@@ -2,15 +2,20 @@ package com.elantix.dopeapp;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PixelFormat;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -28,6 +33,7 @@ import com.bumptech.glide.Glide;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 
@@ -51,17 +57,26 @@ public class ProfileSettingsActivity extends AppCompatActivity implements View.O
     private Uri mPhotoUri = null;
     private TextView mCancelToolbarBtn;
     private TextView mDoneToolbarBtn;
-    private Uri mTempImage = null;
-    private EditText mUsernameEdittext;
     private EditText mFirstLastNamesEdittext;
     private LinearLayout mChangeGender;
     private TextView mGenderTextField;
     private TextView mGenderAction;
+    private boolean mAvatarWasNotChanged = true;
+
+//    fields
+    private EditText mUsernameEdittext;
+    private EditText mBioField;
+    private EditText mEmailField;
+    private EditText mPhoneField;
+    private ProfileInfo mTempProf;
+
+    public ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_settings);
+        mTempProf = new ProfileInfo(Utilities.sCurProfile);
 
         mAvatarContainer = (RelativeLayout) findViewById(R.id.profile_settings_avatar_container);
         mAvatarContainer.setOnClickListener(this);
@@ -75,34 +90,30 @@ public class ProfileSettingsActivity extends AppCompatActivity implements View.O
         mGenderTextField = (TextView) findViewById(R.id.profile_settings_activity_gender_textview);
         mGenderAction = (TextView) findViewById(R.id.profile_settings_activity_gender_action);
 
+        mBioField = (EditText) findViewById(R.id.profile_edit_bio_field);
+        mEmailField = (EditText) findViewById(R.id.profile_edit_email_field);
+        mPhoneField = (EditText) findViewById(R.id.profile_edit_phone_field);
+
         mFirstLastNamesEdittext = (EditText) findViewById(R.id.profile_edit_first_last_names_edittext);
 
-        if (!Utilities.sCurProfile.username.isEmpty()){
-            mUsernameEdittext.setText(Utilities.sCurProfile.username);
+        if (!mTempProf.username.isEmpty())  mUsernameEdittext.setText(mTempProf.username);
+        if (!mTempProf.fullname.isEmpty())  mFirstLastNamesEdittext.setText(mTempProf.fullname);
+        if (!mTempProf.bio.isEmpty())  mBioField.setText(mTempProf.bio);
+        if (!mTempProf.email.isEmpty())  mEmailField.setText(mTempProf.email);
+        if (!mTempProf.phone.isEmpty())  mPhoneField.setText(mTempProf.phone);
+
+        if (mTempProf.gender.equals("1")){
+            mGenderTextField.setText(R.string.profile_gender_male);
+            mGenderAction.setText(R.string.profile_gender_action_change_gender);
+        }else if (mTempProf.gender.equals("2")){
+            mGenderTextField.setText(R.string.profile_gender_female);
+            mGenderAction.setText(R.string.profile_gender_action_change_gender);
+        }else{
+            mGenderTextField.setText(R.string.profile_gender_undefined);
+            mGenderAction.setText(R.string.profile_gender_action_not_indicated);
         }
-        if (!Utilities.sCurProfile.fullname.isEmpty()){
-            mFirstLastNamesEdittext.setText(Utilities.sCurProfile.fullname);
-        }
-
-
-
-        // Replaced
-//        if (!Utilities.profileFirstLastNames.isEmpty()){
-//            mFirstLastNamesEdittext.setText(Utilities.profileFirstLastNames);
-//        }
-//        if (!Utilities.profileUsername.isEmpty()) {
-//            mUsernameEdittext.setText(Utilities.profileUsername);
-//        }
-        // Replaced
-
 
         prepareContextPanelViews();
-
-
-//        mTempImage = Utilities.avatarUri; // replaced
-
-
-        mTempImage = (!Utilities.sCurProfile.avatar.isEmpty()) ? Uri.parse(Utilities.sCurProfile.avatar) : null;
         setProperAvatarState();
 
     }
@@ -176,6 +187,14 @@ public class ProfileSettingsActivity extends AppCompatActivity implements View.O
         }
     }
 
+    public void doneButtonAction(){
+
+        Utilities.sCurProfile = new ProfileInfo(mTempProf);
+        Intent returnIntent = new Intent();
+        setResult(Activity.RESULT_OK,returnIntent);
+        finish();
+    }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -200,20 +219,24 @@ public class ProfileSettingsActivity extends AppCompatActivity implements View.O
             setResult(Activity.RESULT_CANCELED, returnIntent);
             finish();
         }else if (id == mDoneToolbarBtn.getId()){
-            if (mTempImage != null) {
-//                Utilities.avatarUri = mTempImage;
-                Utilities.sCurProfile.avatar = mTempImage.toString();
+
+            mTempProf.username = mUsernameEdittext.getText().toString();
+            mTempProf.fullname = mFirstLastNamesEdittext.getText().toString();
+            mTempProf.bio = mBioField.getText().toString();
+            mTempProf.email = mEmailField.getText().toString();
+            mTempProf.phone = mPhoneField.getText().toString();
+
+            String avatarParam = null;
+            if (!mAvatarWasNotChanged) {
+                ResizeAvatarTask task = new ResizeAvatarTask();
+                task.execute();
             }
-//            Utilities.profileUsername = mUsernameEdittext.getText().toString();
-//            Utilities.profileFirstLastNames = mFirstLastNamesEdittext.getText().toString();
 
-            Utilities.sCurProfile.username = mUsernameEdittext.getText().toString();
-            Utilities.sCurProfile.fullname = mFirstLastNamesEdittext.getText().toString();
+            HttpKit http = new HttpKit(ProfileSettingsActivity.this);
+            http.saveProfileChanges(Utilities.sUid, Utilities.sToken, mTempProf.email, mTempProf.username,
+                    mTempProf.fullname, avatarParam, mTempProf.phone, mTempProf.gender, mTempProf.bio);
 
-            Intent returnIntent = new Intent();
-//            returnIntent.putExtra("result",result);
-            setResult(Activity.RESULT_OK,returnIntent);
-            finish();
+//            doneButtonAction();
         }else if (id == mChangeGender.getId()){
             final Dialog dialog = new Dialog(ProfileSettingsActivity.this);
             dialog.setContentView(R.layout.gender_pick_dialog);
@@ -229,6 +252,7 @@ public class ProfileSettingsActivity extends AppCompatActivity implements View.O
                 public void onClick(View v) {
                     mGenderTextField.setText(R.string.profile_gender_male);
                     mGenderAction.setText(R.string.profile_gender_action_change_gender);
+                    mTempProf.gender = "1";
                     dialog.dismiss();
                 }
             });
@@ -237,6 +261,7 @@ public class ProfileSettingsActivity extends AppCompatActivity implements View.O
                 public void onClick(View v) {
                     mGenderTextField.setText(R.string.profile_gender_female);
                     mGenderAction.setText(R.string.profile_gender_action_change_gender);
+                    mTempProf.gender = "2";
                     dialog.dismiss();
                 }
             });
@@ -263,22 +288,29 @@ public class ProfileSettingsActivity extends AppCompatActivity implements View.O
 
     private void putSelectedImageAsAvatar(Uri selectedImage){
         if (selectedImage == null) {
-            mTempImage = mPhotoUri;
+            mTempProf.avatar = Utilities.getPath(ProfileSettingsActivity.this, mPhotoUri);
         }else {
-            mTempImage = selectedImage;
+            mTempProf.avatar = Utilities.getPath(ProfileSettingsActivity.this, selectedImage);
         }
+        mAvatarWasNotChanged = false;
+        Log.d("SetAct", "path: "+mTempProf.avatar);
         setProperAvatarState();
     }
 
 
     private void setProperAvatarState(){
-        if (mTempImage == null){
+        if (mTempProf.avatar == null || mTempProf.avatar.isEmpty()) {
             mCameraIcon.setVisibility(View.VISIBLE);
             mAvatar.setVisibility(View.GONE);
         }else{
             mCameraIcon.setVisibility(View.GONE);
             mAvatar.setVisibility(View.VISIBLE);
-            Glide.with(this).load(mTempImage).into(mAvatar);
+
+            if (mTempProf.avatar.startsWith("http")) {
+                Glide.with(this).load(Uri.parse(mTempProf.avatar)).into(mAvatar);
+            }else {
+                Glide.with(this).load(new File(mTempProf.avatar).getPath()).into(mAvatar);
+            }
         }
     }
 
@@ -319,5 +351,64 @@ public class ProfileSettingsActivity extends AppCompatActivity implements View.O
         mOverlay.setVisibility(View.GONE);
         mContextOptionsPanel.setVisibility(View.GONE);
 
+    }
+
+
+    class ResizeAvatarTask extends AsyncTask<String, Void, String>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            mProgressDialog = ProgressDialog.show(ProfileSettingsActivity.this, null, "Preparing avatar picture...", true);
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            String dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES) + "/DopeAppPics/";
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(mTempProf.avatar, options);
+            int imageHeight = options.outHeight;
+            int imageWidth = options.outWidth;
+            Log.e("SetAct", "width: " + imageWidth + "\nheight: " + imageHeight);
+
+
+            Bitmap b= BitmapFactory.decodeFile(mTempProf.avatar);
+            float desiredWidth;
+            float desiredHeight;
+            float coef;
+            String result;
+            if (imageWidth > 320 && imageHeight > 320){
+                desiredWidth = 320;
+                coef = desiredWidth / (float)imageWidth;
+                desiredHeight = imageHeight * coef;
+            }else {
+                desiredWidth = imageWidth;
+                desiredHeight = imageHeight;
+            }
+            Bitmap out = Bitmap.createScaledBitmap(b, (int)desiredWidth, (int)desiredHeight, false);
+
+            File file = new File(dir, Utilities.createRandomFileName()+".png");
+            FileOutputStream fOut;
+            try {
+                fOut = new FileOutputStream(file);
+                out.compress(Bitmap.CompressFormat.PNG, 100, fOut);
+                fOut.flush();
+                fOut.close();
+                b.recycle();
+                out.recycle();
+                result = file.getAbsolutePath();
+                return result;
+            } catch (Exception e) {}
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String resizedAvatarFile) {
+            super.onPostExecute(resizedAvatarFile);
+            HttpKit http = new HttpKit(ProfileSettingsActivity.this);
+            http.saveProfileChanges(Utilities.sUid, Utilities.sToken, mTempProf.email, mTempProf.username,
+                    mTempProf.fullname, resizedAvatarFile, mTempProf.phone, mTempProf.gender, mTempProf.bio);
+        }
     }
 }

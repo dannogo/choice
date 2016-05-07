@@ -28,7 +28,7 @@
             android:id="@+id/dope_statistics_votes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/fish_votes_quantity"
+            android:text="0 Votes"
             android:textColor="@color/main_screen_votes_font_color"
             android:textSize="@dimen/main_screen_votes_font_size" />
 
@@ -148,7 +148,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="3dp"
                     android:textSize="@dimen/dope_statistics_lower_bar_descriptions_size"
-                    android:text="5" />
+                    android:text="0" />
 
                 <TextView
                     android:id="@+id/dope_statistics_comments_text"

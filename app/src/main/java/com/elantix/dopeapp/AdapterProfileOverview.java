@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
@@ -19,11 +21,14 @@ public class AdapterProfileOverview extends RecyclerView.Adapter<AdapterProfileO
 
     private LayoutInflater inflater;
     private Context context;
-    private int mCnt=0;
+    private DopeInfo[] mDopeInfo;
+    private boolean mIsOwn;
 
-    public AdapterProfileOverview(Context context) {
+    public AdapterProfileOverview(Context context, DopeInfo[] dopes, boolean isOwn) {
         this.inflater = LayoutInflater.from(context);
         this.context = context;
+        mDopeInfo = dopes;
+        mIsOwn = isOwn;
     }
 
     @Override
@@ -35,51 +40,64 @@ public class AdapterProfileOverview extends RecyclerView.Adapter<AdapterProfileO
 
     @Override
     public void onBindViewHolder(ProfViewHolder holder, int position) {
-        int recourseForImage1;
-        int recourseForImage2;
-        if (mCnt == 0){
-            recourseForImage1 = R.drawable.donald;
-            recourseForImage2 = R.drawable.ted;
-            mCnt++;
-        }else if (mCnt == 1){
-            recourseForImage1 = R.drawable.girl3;
-            recourseForImage2 = R.drawable.girl4;
-            mCnt++;
+
+        if (mIsOwn){
+            holder.mPercentagePanel.setVisibility(View.VISIBLE);
+            holder.mQuestion.setVisibility(View.GONE);
         }else{
-            recourseForImage1 = R.drawable.bernie;
-            recourseForImage2 = R.drawable.hillary;
-            mCnt = 0;
+            holder.mPercentagePanel.setVisibility(View.GONE);
+            holder.mQuestion.setVisibility(View.VISIBLE);
         }
 
-        Glide.with(context).load(recourseForImage1).thumbnail(0.05f).into(holder.mImage1);
-        Glide.with(context).load(recourseForImage2).thumbnail(0.05f).into(holder.mImage2);
+        Glide.with(context).load(mDopeInfo[position].photo1).thumbnail(0.05f).into(holder.mImage1);
+        Glide.with(context).load(mDopeInfo[position].photo2).thumbnail(0.05f).into(holder.mImage2);
 
+        holder.mPercentLeft.setText(mDopeInfo[position].percent1+"%");
+        int percent2 = (mDopeInfo[position].percent1 != 0) ? 100 - mDopeInfo[position].percent1 : mDopeInfo[position].percent2;
+        holder.mPercentRight.setText(percent2+"%");
 
     }
 
     @Override
     public int getItemCount() {
-        return 15;
+        return mDopeInfo.length;
     }
 
     class ProfViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private ImageView mImage1;
         private ImageView mImage2;
+        private TextView mQuestion;
+        private LinearLayout mPercentagePanel;
+        private TextView mPercentLeft;
+        private TextView mPercentRight;
 
         public ProfViewHolder(View itemView) {
             super(itemView);
             mImage1 = (ImageView) itemView.findViewById(R.id.profile_overview_row_image_1);
             mImage2 = (ImageView) itemView.findViewById(R.id.profile_overview_row_image_2);
+            mQuestion = (TextView) itemView.findViewById(R.id.profile_overview_list_row_question);
+            mPercentagePanel = (LinearLayout) itemView.findViewById(R.id.profile_overview_list_row_percentage_panel);
+            mPercentLeft = (TextView) itemView.findViewById(R.id.profile_overview_row_percent_left);
+            mPercentRight = (TextView) itemView.findViewById(R.id.profile_overview_row_percent_right);
             itemView.setOnClickListener(this);
+
         }
 
         @Override
         public void onClick(View v) {
-                Log.w("Log: OnCLick", "Occur");
-            if (v.getId() == itemView.getId()){
-                Log.w("Log: ItemView", "Occur");
-                Intent intent = new Intent(((MainActivity)context), DopeStatisticsActivity.class);
+            if (v.getId() == itemView.getId()) {
+                Intent intent = new Intent(context, DopeStatisticsActivity.class);
+                intent.putExtra("id", mDopeInfo[getAdapterPosition()].id);
+                intent.putExtra("uid", mDopeInfo[getAdapterPosition()].userId);
+                intent.putExtra("question", mDopeInfo[getAdapterPosition()].question);
+                intent.putExtra("votes", mDopeInfo[getAdapterPosition()].votesAll);
+                intent.putExtra("percent1", mDopeInfo[getAdapterPosition()].percent1);
+                intent.putExtra("percent2", mDopeInfo[getAdapterPosition()].percent2);
+                intent.putExtra("comments", mDopeInfo[getAdapterPosition()].comments);
+                intent.putExtra("photo1", mDopeInfo[getAdapterPosition()].photo1.toString());
+                intent.putExtra("photo2", mDopeInfo[getAdapterPosition()].photo2.toString());
+//
                 context.startActivity(intent);
             }
         }

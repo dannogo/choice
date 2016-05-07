@@ -434,7 +434,7 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            ((TabPlusActivity)getActivity()).mProgressDialog = ProgressDialog.show(getActivity(), null, "Please wait...", true);
+            ((TabPlusActivity)getActivity()).mProgressDialog = ProgressDialog.show(getActivity(), null, "Preparing to upload...", true);
             imageLeft.destroyDrawingCache();
             imageRight.destroyDrawingCache();
             imageLeft.buildDrawingCache();

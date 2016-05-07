@@ -40,6 +40,7 @@ public class TabPlusActivity extends AppCompatActivity {
 
     }
 
+    // Not in use
     public void createDope(){
         HttpKit http = new HttpKit(TabPlusActivity.this);
         http.createDope(Utilities.sToken, dopeQuestion, uploadedPicture1, uploadedPicture2);

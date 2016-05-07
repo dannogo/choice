@@ -234,7 +234,7 @@
     <string name="profile_gender_female">Female</string>
     <string name="profile_gender_action_not_indicated">Not indicated</string>
     <string name="profile_gender_action_change_gender">Change</string>
-
+    <string name="button_undo">undo</string>
 </resources>
 
 

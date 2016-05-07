@@ -29,7 +29,42 @@
 
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/profile_overview_list_row_percentage_panel"
+        android:layout_marginTop="5dp"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.3"
+        >
+
+        <TextView
+            android:id="@+id/profile_overview_row_percent_left"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="0%"
+            android:textColor="@color/black_text_color"
+            android:textSize="12sp"
+            />
+
+        <TextView
+            android:id="@+id/profile_overview_row_percent_right"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:text="0%"
+            android:textColor="@color/black_text_color"
+            android:textSize="12sp"
+            />
+
+    </LinearLayout>
+
     <TextView
+        android:id="@+id/profile_overview_list_row_question"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.3"

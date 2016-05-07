@@ -42,6 +42,16 @@ public class AuthorizationRecognitionHiddenActivity extends AppCompatActivity {
         if (restoredToken != null) {
             Utilities.sToken = restoredToken;
             Utilities.sUid = prefs.getString("uid", null);
+
+            if (Utilities.sMyProfile == null){
+                Utilities.sMyProfile = new ProfileInfo();
+            }
+            Utilities.sMyProfile.id = Utilities.sUid;
+            Utilities.sMyProfile.avatar = prefs.getString("avatar", "");
+            Utilities.sMyProfile.username = prefs.getString("username", "");
+            Utilities.sMyProfile.fullname = prefs.getString("fullname", "");
+            Utilities.sMyProfile.email = prefs.getString("email", "");
+
             Intent intent = new Intent(AuthorizationRecognitionHiddenActivity.this, MainActivity.class);
             startActivity(intent);
             finish();

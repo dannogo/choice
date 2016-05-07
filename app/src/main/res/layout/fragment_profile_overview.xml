@@ -60,7 +60,7 @@
                 android:textSize="@dimen/profile_overview_user_name_text_size"
                 android:textColor="@color/main_screen_question_font_color"
                 android:textStyle="bold"
-                android:text="@string/profile_overview_dummy_user_name" />
+                />
 
             <TextView
                 android:id="@+id/profile_overview_user_description"
@@ -69,7 +69,7 @@
                 android:layout_marginTop="@dimen/profile_overview_margin_3"
                 android:textSize="@dimen/profile_overview_user_name_description_text_size"
                 android:textColor="@color/friends_desription_text_color"
-                android:text="@string/profile_overview_dummy_user_description" />
+                />
 
             <LinearLayout
                 android:layout_width="match_parent"

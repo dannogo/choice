@@ -23,6 +23,31 @@ public class ProfileInfo {
     int followings;
     int follow;
 
+    public ProfileInfo() {
+
+    }
+
+    public ProfileInfo(ProfileInfo another){
+        this.id = another.id;
+        this.fb_id = another.fb_id;
+        this.tw_id = another.tw_id;
+        this.email = another.email;
+        this.username = another.username;
+        this.fullname = another.fullname;
+        this.bio = another.bio;
+        this.avatar = another.avatar;
+        this.cover = another.cover;
+        this.gender = another.gender;
+        this.phone = another.phone;
+        this.birthday = another.birthday;
+        this.date_reg = another.date_reg;
+        this.ban = another.ban;
+        this.dopes = another.dopes;
+        this.followers = another.followers;
+        this.followings = another.followings;
+        this.follow = another.follow;
+    }
+
     @Override
     public String toString() {
         String stringRepresentation = "id: "+id+"\nfb_id: "+fb_id+"\ntw_id: "+tw_id+"\nemail: "+email+
