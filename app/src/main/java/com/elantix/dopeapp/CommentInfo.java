@@ -16,6 +16,32 @@ public class CommentInfo {
     public String comment;
     public String date_create;
 
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (!CommentInfo.class.isAssignableFrom(obj.getClass())) {
+            return false;
+        }
+        final CommentInfo other = (CommentInfo) obj;
+        if ((this.id == null) ? (other.id != null) : !this.id.equals(other.id)) {
+            return false;
+        }
+        if (this.id != other.id) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 3;
+        hash = 53 * hash + (this.id != null ? this.id.hashCode() : 0);
+        return hash;
+    }
+
     @Override
     public String toString() {
         String result = "---------------\nusername: " +username+"\nfullname: "+ fullname+"\nemail: "+email+"\navatar: "+avatar+"\nid: "+id+

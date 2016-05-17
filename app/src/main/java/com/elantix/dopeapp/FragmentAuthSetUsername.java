@@ -53,7 +53,10 @@ public class FragmentAuthSetUsername extends Fragment {
             public void onClick(View v) {
                 if (mUsernameField.length() != 0){
                     ((AuthActivity)getActivity()).mUsername = mUsernameField.getText().toString();
-                    ((AuthActivity)getActivity()).switchPageHandler(AuthActivity.AuthPage.EnterPassword);
+                    HttpKit http = new HttpKit(getActivity());
+                    http.checkUsername(((AuthActivity)getActivity()).mUsername, "simple", null);
+
+//                    ((AuthActivity) getActivity()).switchPageHandler(AuthActivity.AuthPage.EnterPassword);
                 }else {
                     Toast.makeText(getActivity(), "Enter username", Toast.LENGTH_SHORT).show();
                 }
@@ -61,5 +64,10 @@ public class FragmentAuthSetUsername extends Fragment {
         });
 
         return mFragmentView;
+    }
+
+    public void goToNextPage(){
+        ((AuthActivity) getActivity()).switchPageHandler(AuthActivity.AuthPage.EnterPassword);
+
     }
 }

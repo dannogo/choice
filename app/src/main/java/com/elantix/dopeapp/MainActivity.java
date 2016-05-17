@@ -1,10 +1,12 @@
 package com.elantix.dopeapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
@@ -24,6 +26,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.desarrollodroide.libraryfragmenttransactionextended.FragmentTransactionExtended;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by oleh on 3/14/16.
@@ -66,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RelativeLayout mContextOptionsCancel;
 
     public Fragment mCurrentFragment;
+    public Fragment mPreviousFragment;
 
     final private static int REPORT_POST_REQUEST_CODE = 2777;
     public ProgressDialog mProgressDialog;
@@ -73,6 +80,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private int mContextOptionsDopeNum;
 
     Page page = Page.Daily;
+    private boolean isContextOptionsPanelShown = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -145,24 +153,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void launchFragment(Page page){
+        launchFragment(page, false);
+    }
+
+    public void launchFragment(Page page, boolean isRecovery){
         String fragmentTAG;
         Bundle bundle;
         switch (page){
             case Daily:
                 mCurrentFragment = new FragmentViewPager();
                 bundle = new Bundle();
-//                bundle.putInt("num", mDopes10.length);
+
+                if (!isRecovery) {
+                    ChainLink chainLinkDaily = new ChainLink(Page.Daily);
+                    chainLinkDaily.bundleData.put("num", Utilities.sDopes10.length);
+                    Utilities.sFragmentHistory.add(chainLinkDaily);
+                    Log.e("MainActivity daily", "Utilities.sFragmentHistory.size(): " + Utilities.sFragmentHistory.size());
+                }else{
+                    int position = (int) Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size()-1).bundleData.get("position");
+                    bundle.putInt("position", position);
+                    Log.w("MainActivity daily", "bundle position: " + position);
+                }
+
                 bundle.putInt("num", Utilities.sDopes10.length);
-//                bundle.putInt("suggestedNum", 10);
                 mCurrentFragment.setArguments(bundle);
                 fragmentTAG = "FragmentDailyDope";
                 break;
             case Tranding:
                 mCurrentFragment = new FragmentViewPager();
                 bundle = new Bundle();
-//                bundle.putInt("num", mDopes100.length);
+
+                if (!isRecovery) {
+                    ChainLink chainLinkTranding = new ChainLink(Page.Tranding);
+                    chainLinkTranding.bundleData.put("num", Utilities.sDopes100.length);
+                    Utilities.sFragmentHistory.add(chainLinkTranding);
+                    Log.e("MainActivity tranding", "Utilities.sFragmentHistory.size(): " + Utilities.sFragmentHistory.size());
+                }else {
+                    int position = (int) Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size()-1).bundleData.get("position");
+                    bundle.putInt("position", position);
+                    Log.w("MainActivity daily", "bundle position: " + position);
+                }
+
                 bundle.putInt("num", Utilities.sDopes100.length);
-//                bundle.putInt("suggestedNum", 100);
                 mCurrentFragment.setArguments(bundle);
                 fragmentTAG = "FragmentTranding";
                 break;
@@ -182,27 +214,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 fragmentTAG = "FragmentFriendsDope";
                 break;
             case Profile:
+
+                ChainLink chainLinkProfile = new ChainLink(Page.Profile);
                 if (Utilities.sToken != null){
                     mCurrentFragment = new FragmentProfileOverview();
                     bundle = new Bundle();
                     bundle.putBoolean("own", true);
+                    chainLinkProfile.bundleData.put("own", true);
                     mCurrentFragment.setArguments(bundle);
                 }else {
                     mCurrentFragment = new FragmentFriendsNotRegistered();
                 }
+                if (!isRecovery) {
+                    Utilities.sFragmentHistory.add(chainLinkProfile);
+                    Log.e("MainActivity", "history size: " + Utilities.sFragmentHistory.size());
+                    Log.e("MinActivity", "isRecovery: "+isRecovery);
+                }
                 fragmentTAG = "FragmentFriendsNotRegistered";
                 break;
             case ProfileOverview:
+                ChainLink chainLinkProfileOverview = new ChainLink(Page.ProfileOverview);
                 mCurrentFragment = new FragmentProfileOverview();
                 bundle = new Bundle();
-                bundle.putBoolean("own", false);
-                DopeInfo curItem;
-                if (Utilities.sDopeListType == Utilities.DopeListType.Ten){
-                    curItem = Utilities.sDopes10[mContextOptionsDopeNum];
-                }else{
-                    curItem = Utilities.sDopes100[mContextOptionsDopeNum];
+                if (isRecovery){
+                    HashMap<String, Object> bundleData = Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size()-1).bundleData;
+                    bundle.putString("uid", (String) bundleData.get("uid"));
+                    bundle.putBoolean("own", (Boolean) bundleData.get("own"));
+                    bundle.putBoolean("isRecovery", true);
+
+                }else {
+
+                    DopeInfo curItem;
+                    if (Utilities.sDopeListType == Utilities.DopeListType.Ten) {
+                        curItem = Utilities.sDopes10[mContextOptionsDopeNum];
+                    } else {
+                        curItem = Utilities.sDopes100[mContextOptionsDopeNum];
+                    }
+                    boolean isOwn = (curItem.userId.equals(Utilities.sUid)) ? true : false;
+                    bundle.putBoolean("own", isOwn);
+                    bundle.putString("uid", curItem.userId);
+                    chainLinkProfileOverview.bundleData.put("own", isOwn);
+                    chainLinkProfileOverview.bundleData.put("uid", curItem.userId);
+                    Utilities.sFragmentHistory.add(chainLinkProfileOverview);
                 }
-                bundle.putString("uid", curItem.userId);
                 mCurrentFragment.setArguments(bundle);
                 fragmentTAG = "FragmentProfileOverview";
                 break;
@@ -249,23 +303,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
      * changes appearance of toolbar buttons and their behaviour
      * @param newPage
      */
-    protected void switchPageHandler(Page newPage){
+    protected void switchPageHandler(Page newPage, boolean isRecovery){
         uncheckLowertabItem(page);
         removeFragment(page);
         page = newPage;
         checkLowertabItem(page);
         toolbarTitleAndButtonChangesHandler(page);
 
-        if (page == Page.Daily){
-            HttpKit http = new HttpKit(this);
-            http.get10Dopes(Utilities.sToken, null);
-        }else if (page == Page.Tranding){
-            HttpKit http = new HttpKit(this);
-            http.get100Dopes(Utilities.sToken, null, null);
+        Log.e("MainActivity launch", "isRecovery: "+isRecovery);
+        if (!isRecovery) {
+            if (page == Page.Daily) {
+                HttpKit http = new HttpKit(this);
+                http.get10Dopes(Utilities.sToken, null);
+            } else if (page == Page.Tranding) {
+                HttpKit http = new HttpKit(this);
+                http.get100Dopes(Utilities.sToken, null, null);
+            }else{
+                launchFragment(page, isRecovery);
+            }
         }
         else {
-            launchFragment(page);
+            launchFragment(page, isRecovery);
         }
+    }
+
+    protected  void switchPageHandler(Page newPage){
+        switchPageHandler(newPage, false);
     }
 
     protected void switchPageAnimatedHandler(Page newPage){
@@ -426,6 +489,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Log.e("MainActivity", "Profile back arrow");
                         if (Utilities.sToken != null){
                             switchPageHandler(Page.ProfileSettings);
                         }
@@ -433,14 +497,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 });
                 break;
             case ProfileOverview:
-                toolbarTitle.setText(R.string.profile_overview_dummy_user_name);
                 mLeftToolbarButton.setVisibility(View.VISIBLE);
                 mRightToolbarButton.setVisibility(View.GONE);
                 mLeftToolbarButton.setImageResource(R.drawable.toolbar_left_arrow);
                 mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        Log.e("MainActivity", "ProfileOverview back arrow");
+                        for(int i=0; i<Utilities.sFragmentHistory.size(); i++){
+                            Log.w("MainActivity", "record "+i+": "+Utilities.sFragmentHistory.get(i).fragment);
+                        }
+                        Utilities.sFragmentHistory.remove(Utilities.sFragmentHistory.size() - 1);
+                        switchPageHandler(Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size()-1).fragment, true);
                     }
                 });
                 break;
@@ -452,7 +520,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        switchPageHandler(Page.ProfileOverview);
+                        for(int i=0; i<Utilities.sFragmentHistory.size(); i++){
+                            Log.w("MainActivity", "record "+i+": "+Utilities.sFragmentHistory.get(i).fragment);
+                        }
+                        Utilities.sFragmentHistory.remove(Utilities.sFragmentHistory.size() - 1);
+                        switchPageHandler(Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size()-1).fragment, true);
                     }
                 });
                 break;
@@ -466,7 +538,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        switchPageHandler(Page.ProfileOverview);
+                        Utilities.sFragmentHistory.remove(Utilities.sFragmentHistory.size()-1);
+                        switchPageHandler(Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size()-1).fragment, true);
                     }
                 });
                 break;
@@ -479,7 +552,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        switchPageHandler(Page.ProfileOverview);
+                        switchPageHandler(Page.ProfileOverview, true);
                     }
                 });
                 break;
@@ -494,13 +567,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         int id = v.getId();
         if (id == dailyDopeLL.getId()){
             if (page != Page.Daily){
+                Utilities.sFragmentHistory.clear();
                 switchPageHandler(Page.Daily);
-//                switchPageAnimatedHandler(Page.Daily);
             }
         }else if(id == trandingLL.getId()){
             if (page != Page.Tranding){
+                Utilities.sFragmentHistory.clear();
                 switchPageHandler(Page.Tranding);
-//                switchPageAnimatedHandler(Page.Tranding);
             }
         }else if (id == plusLL.getId()){
             if (Utilities.sToken != null) {
@@ -513,13 +586,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }else if (id == friendsLL.getId()){
             if (page != Page.Friends){
+                Utilities.sFragmentHistory.clear();
                 switchPageHandler(Page.Friends);
-//                switchPageAnimatedHandler(Page.Friends);
             }
         }else if(id == profileLL.getId()){
             if (page != Page.Profile){
+//                Utilities.sFragmentHistory.clear();
                 switchPageHandler(Page.Profile);
-//                switchPageAnimatedHandler(Page.Profile);
             }
         }else if (id == mContextOptionsSharePost.getId()){
             Intent intent = new Intent(MainActivity.this, ShareDopeActivity.class);
@@ -621,6 +694,37 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Utilities.sFragmentHistory.clear();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (isContextOptionsPanelShown) {
+            showContextOptions(false, null);
+        }else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setMessage("Are you sure you want to exit?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    android.os.Process.killProcess(android.os.Process.myPid());
+                    System.exit(1);
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            AlertDialog alertDialog = builder.create();
+            alertDialog.show();
+        }
+    }
+
     public enum Page{
         Daily,
         Tranding,
@@ -675,6 +779,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         if (show){
+            isContextOptionsPanelShown = true;
             WindowManager.LayoutParams mLP = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.MATCH_PARENT,
                     Utilities.getStatusBarHeight(MainActivity.this),
@@ -706,6 +811,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mContextOptionsPanel.startAnimation(bottomUp);
             mContextOptionsPanel.setVisibility(View.VISIBLE);
         }else{
+            isContextOptionsPanelShown = false;
             mWindowManager.removeView(mStatusBarOverlay);
 
             mOverlay.setVisibility(View.GONE);

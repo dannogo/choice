@@ -20,6 +20,10 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,6 +42,7 @@ public class FragmentAuthSignInDope extends Fragment implements View.OnClickList
     private FancyButton mFacebookBtn;
     private FancyButton mTwitterBtn;
     private TextView mAlreadyHaveUsername;
+    private TwitterAuthClient twitterAuthClient;
 
     @Nullable
     @Override
@@ -48,13 +53,68 @@ public class FragmentAuthSignInDope extends Fragment implements View.OnClickList
         mFacebookBtn = (FancyButton) mFragmentView.findViewById(R.id.auth_sign_in_dope_facebook_button);
         mFacebookBtn.setOnClickListener(this);
         mTwitterBtn = (FancyButton) mFragmentView.findViewById(R.id.auth_sign_in_dope_twitter_button);
-        mTwitterBtn.setOnClickListener(this);
+//        mTwitterBtn.setOnClickListener(this);
         mAlreadyHaveUsername = (TextView) mFragmentView.findViewById(R.id.auth_sign_in_already_have_username);
         mAlreadyHaveUsername.setOnClickListener(this);
 
         buttonsAppearanceHandling();
 
         return mFragmentView;
+    }
+
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        twitterAuthClient= new TwitterAuthClient();
+
+        mTwitterBtn.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                ((AuthActivity)getActivity()).onTwitterLogin();
+//                twitterAuthClient.authorize(getActivity(), new com.twitter.sdk.android.core.Callback<TwitterSession>() {
+//
+//                    @Override
+//                    public void success(Result<TwitterSession> twitterSessionResult) {
+//                        TwitterSession sessionData = twitterSessionResult.data;
+//                        String uid = String.valueOf(sessionData.getUserId());
+//                        Log.w("WelcomeActivity", "userId: " + uid);
+//                        String username = sessionData.getUserName();
+////                        Log.w("WelcomeActivity", "username: " + username);
+//                        sessionData.getAuthToken();
+////                        sessionData.getUserId()
+//
+//                        HttpKit http = new HttpKit(getActivity());
+//                        String[] params = {"twitter", uid, null};
+//                        http.checkUsername("tw_" + uid, "twitter", params);
+//
+////                        TwitterAuthClient authClient = new TwitterAuthClient();
+////                        authClient.requestEmail(new TwitterSession(sessionData.getAuthToken(), sessionData.getUserId(), username), new Callback<String>() {
+////                            @Override
+////                            public void success(Result<String> result) {
+////                                // Do something with the result, which provides the email address
+////                                Log.w("WelcomeActivity", "Email should be here: "+result.data.toString());
+////                            }
+////
+////                            @Override
+////                            public void failure(TwitterException exception) {
+////                                // Do something on failure
+////                                Log.w("WelcomeActivity", "Email failure: "+exception.toString());
+////                            }
+////                        });
+//                    }
+//
+//                    @Override
+//                    public void failure(TwitterException e) {
+//                        e.printStackTrace();
+//                    }
+//                });
+
+
+            }
+        });
     }
 
     private void buttonsAppearanceHandling(){

@@ -298,5 +298,6 @@
 
     <dimen name="chat_pic_and_rate_container_width">280dp</dimen>
     <dimen name="chat_pic_and_rate_container_height">220dp</dimen>
+    <dimen name="ic_clear_margin">16dp</dimen>
 
 </resources>

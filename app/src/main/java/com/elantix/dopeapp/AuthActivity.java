@@ -3,6 +3,7 @@ package com.elantix.dopeapp;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -20,18 +21,26 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
+import com.twitter.sdk.android.core.TwitterCore;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import io.fabric.sdk.android.Fabric;
+
 /**
  * Created by oleh on 4/12/16.
  */
 public class AuthActivity extends AppCompatActivity {
 
-    private Fragment mCurrentFragment;
+    public Fragment mCurrentFragment;
     private AuthPage mPage = AuthPage.LinkEmail;
 
     private android.app.FragmentManager mManager = getFragmentManager();
@@ -42,6 +51,10 @@ public class AuthActivity extends AppCompatActivity {
     public String mPassword;
     public String mEmail;
     public boolean mIsRegularAuthorization = true;
+    public ProgressDialog mProgressDialog;
+    private static final String TWITTER_KEY = "iczt8Wb15b2V0IJPq3JdnCQ1p";
+    private static final String TWITTER_SECRET = "5cPrXX8qkZgQGPJr0YGE8KOzkQTwxbpaP6b2mQFDUtMIsoZIDn";
+    private TwitterAuthClient twitterAuthClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +62,10 @@ public class AuthActivity extends AppCompatActivity {
         this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         super.onCreate(savedInstanceState);
         FacebookSdk.sdkInitialize(getApplicationContext());
+
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new TwitterCore(authConfig));
+
         setContentView(R.layout.activity_auth);
 
         String fragmentToLaunch = getIntent().getStringExtra("fragment");
@@ -194,9 +211,51 @@ public class AuthActivity extends AppCompatActivity {
         finish();
     }
 
+    protected void onTwitterLogin(){
+        twitterAuthClient= new TwitterAuthClient();
+
+        twitterAuthClient.authorize(AuthActivity.this, new com.twitter.sdk.android.core.Callback<TwitterSession>() {
+
+            @Override
+            public void success(Result<TwitterSession> twitterSessionResult) {
+                TwitterSession sessionData = twitterSessionResult.data;
+                String uid = String.valueOf(sessionData.getUserId());
+                Log.w("WelcomeActivity", "userId: " + uid);
+                String username = sessionData.getUserName();
+//                Log.w("WelcomeActivity", "username: " + username);
+                sessionData.getAuthToken();
+//                sessionData.getUserId()
+
+                HttpKit http = new HttpKit(AuthActivity.this);
+                String[] params = {"twitter", uid, null};
+                http.checkUsername("tw_" + uid, "twitter", params);
+
+//                        TwitterAuthClient authClient = new TwitterAuthClient();
+//                        authClient.requestEmail(new TwitterSession(sessionData.getAuthToken(), sessionData.getUserId(), username), new Callback<String>() {
+//                            @Override
+//                            public void success(Result<String> result) {
+//                                // Do something with the result, which provides the email address
+//                                Log.w("WelcomeActivity", "Email should be here: "+result.data.toString());
+//                            }
+//
+//                            @Override
+//                            public void failure(TwitterException exception) {
+//                                // Do something on failure
+//                                Log.w("WelcomeActivity", "Email failure: "+exception.toString());
+//                            }
+//                        });
+            }
+
+            @Override
+            public void failure(TwitterException e) {
+                e.printStackTrace();
+            }
+        });
+
+    }
+
     // Private method to handle Facebook login and callback
-    protected void onFblogin()
-    {
+    protected void onFblogin() {
         callbackManager = CallbackManager.Factory.create();
 
         // Set permissions
@@ -228,14 +287,12 @@ public class AuthActivity extends AppCompatActivity {
 
                                                 if (mIsRegularAuthorization) {
                                                     String[] params = {"facebook", str_id, str_email};
-                                                    http.regAndLogin(params);
+                                                    http.checkUsername("fb_" + str_id, "facebook", params);
                                                 }else{
                                                     String[] params = {"connected_facebook", str_id, str_email, mUsername, mPassword};
                                                     mIsRegularAuthorization = true;
                                                     http.regAndLogin(params);
                                                 }
-
-
 //                                                String str_firstname = json.getString("first_name");
 //                                                String str_lastname = json.getString("last_name");
 

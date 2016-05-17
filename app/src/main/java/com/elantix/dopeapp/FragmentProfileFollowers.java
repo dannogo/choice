@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,9 @@ import android.widget.RelativeLayout;
 public class FragmentProfileFollowers extends Fragment {
 
     private View mFragmentView;
+    Utilities.FollowingListType type;
+    RecyclerView recyclerView;
+    String[] mFollowings;
 
     @Nullable
     @Override
@@ -25,22 +29,38 @@ public class FragmentProfileFollowers extends Fragment {
         RelativeLayout searchContainer = (RelativeLayout) mFragmentView.findViewById(R.id.search_friends_search_field_container);
         searchContainer.setVisibility(View.GONE);
 
-        RecyclerView recyclerView = (RecyclerView) mFragmentView.findViewById(R.id.search_friends_friends_list);
+        recyclerView = (RecyclerView) mFragmentView.findViewById(R.id.search_friends_friends_list);
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
 
         Bundle bundle = this.getArguments();
-        Utilities.FollowingListType type;
-        if (bundle.getBoolean("followers")){
+
+        Boolean isFollowers = bundle.getBoolean("followers", true);
+        String param6;
+        if (isFollowers){
             type = Utilities.FollowingListType.ProfileFollowers;
+            param6 = "followers";
         }else{
             type = Utilities.FollowingListType.ProfileFollowing;
+            param6 = "followings";
         }
+        HttpKit http = new HttpKit(getActivity());
+        http.getFollowers(Utilities.sCurProfile.id, Utilities.sToken, null, null, null, null, param6);
 
-        AdapterSearchFriends adapter = new AdapterSearchFriends(getActivity(), type);
-        recyclerView.setAdapter(adapter);
+        ChainLink chainLink = new ChainLink(MainActivity.Page.ProfileFollowers);
+        chainLink.bundleData.put("followers", isFollowers);
+        ProfileInfo profToChain = new ProfileInfo(Utilities.sCurProfile);
+        chainLink.data.add(profToChain);
+
+        Utilities.sFragmentHistory.add(chainLink);
+        Log.w("FragmentProfileFollower", "HISTORYCHAIN LENGTH: " + Utilities.sFragmentHistory.size());
 
         return mFragmentView;
+    }
+
+    public void setFollowersInfo(ProfileInfo[] followers, String[] followersIds, String[] followingsIds){
+        AdapterSearchFriends adapter = new AdapterSearchFriends(getActivity(), type, followers, followersIds, followingsIds);
+        recyclerView.setAdapter(adapter);
     }
 }

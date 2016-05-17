@@ -29,6 +29,7 @@ public class AdapterProfileOverview extends RecyclerView.Adapter<AdapterProfileO
         this.context = context;
         mDopeInfo = dopes;
         mIsOwn = isOwn;
+
     }
 
     @Override
@@ -55,7 +56,7 @@ public class AdapterProfileOverview extends RecyclerView.Adapter<AdapterProfileO
         holder.mPercentLeft.setText(mDopeInfo[position].percent1+"%");
         int percent2 = (mDopeInfo[position].percent1 != 0) ? 100 - mDopeInfo[position].percent1 : mDopeInfo[position].percent2;
         holder.mPercentRight.setText(percent2+"%");
-
+        holder.mQuestion.setText(mDopeInfo[position].question);
     }
 
     @Override
@@ -97,7 +98,7 @@ public class AdapterProfileOverview extends RecyclerView.Adapter<AdapterProfileO
                 intent.putExtra("comments", mDopeInfo[getAdapterPosition()].comments);
                 intent.putExtra("photo1", mDopeInfo[getAdapterPosition()].photo1.toString());
                 intent.putExtra("photo2", mDopeInfo[getAdapterPosition()].photo2.toString());
-//
+
                 context.startActivity(intent);
             }
         }

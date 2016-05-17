@@ -35,9 +35,6 @@ public class ShareDopeActivity extends AppCompatActivity implements View.OnClick
     public ProgressDialog mProgressDialog;
     public String mLink;
 
-    // TODO:
-    // Increase close toolbar button clickable area size
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 //        requestWindowFeature(Window.FEATURE_NO_TITLE);// hide statusbar of Android
@@ -65,9 +62,11 @@ public class ShareDopeActivity extends AppCompatActivity implements View.OnClick
         }
 
 
-        HttpKit http = new HttpKit(ShareDopeActivity.this);
-        Log.e("ShareDopeActivity", "token: " + Utilities.sToken);
-        http.shareDope(mCurItem.id, Utilities.sToken);
+//        HttpKit http = new HttpKit(ShareDopeActivity.this);
+//        http.shareDope(mCurItem.id, Utilities.sToken);
+
+        mLink = "http://dopeapi.elantix.net/dope/"+mCurItem.id;
+        mLinkField.setText(mLink);
 
         Uri image1 = mCurItem.photo1;
         Uri image2 = mCurItem.photo2;

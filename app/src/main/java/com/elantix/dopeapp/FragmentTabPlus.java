@@ -461,11 +461,13 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
             Bitmap newRightbmp = Utilities.createTrimmedBitmap(Bitmap.createScaledBitmap(rightBitmap, 320, (int) ((float)rightBitmap.getHeight() * scaleCoefficient), true));
 
             String randomString1 = Utilities.createRandomFileName();
-            String file1 = mDir+randomString1+".png";
+//            String file1 = mDir+randomString1+".png";
+            String file1 = mDir+randomString1+".jpeg";
             File newfile1 = new File(file1);
 
             String randomString2 = Utilities.createRandomFileName();
-            String file2 = mDir+randomString2+".png";
+//            String file2 = mDir+randomString2+".png";
+            String file2 = mDir+randomString2+".jpeg";
             File newfile2 = new File(file2);
 
             Log.d(TAG, "file1: "+file1+"\nfile2: "+file2);
@@ -475,8 +477,10 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
             try {
                 outLeft = new FileOutputStream(newfile1);
                 outRight = new FileOutputStream(newfile2);
-                newLeftbmp.compress(Bitmap.CompressFormat.PNG, 100, outLeft);
-                newRightbmp.compress(Bitmap.CompressFormat.PNG, 100, outRight);
+//                newLeftbmp.compress(Bitmap.CompressFormat.PNG, 100, outLeft);
+//                newRightbmp.compress(Bitmap.CompressFormat.PNG, 100, outRight);
+                newLeftbmp.compress(Bitmap.CompressFormat.JPEG, 100, outLeft);
+                newRightbmp.compress(Bitmap.CompressFormat.JPEG, 100, outRight);
 
             } catch (Exception e) {
                 e.printStackTrace();

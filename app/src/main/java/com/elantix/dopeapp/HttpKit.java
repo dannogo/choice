@@ -35,9 +35,15 @@ public class HttpKit {
     }
 
     public void regAndLogin(String[] params) {
+
+//        String[] params = {"facebook", str_id, str_email};
+//        String[] params = {"connected_facebook", str_id, str_email, mUsername, mPassword};
+
+
         RegRequestTask task = new RegRequestTask();
         task.execute(params);
     }
+
 
     public void login(String[] params) {
         LoginRequestTask task = new LoginRequestTask();
@@ -49,8 +55,20 @@ public class HttpKit {
         task.execute(email);
     }
 
+    /**
+     *
+     * @param username - Username to check
+     * @param purpose - facebook, twitter or simple
+     */
+    public void checkUsername(String username, String purpose, String[] authParams){
+        String[] checkParams = {username};
+        Object[] params = {checkParams, purpose, authParams};
+        CheckUsernameTask task = new CheckUsernameTask();
+        task.execute(params);
+    }
+
     private enum POSTRequestPurpose {
-        Registration, Login, ChangePassword
+        Registration, Login, ChangePassword, CheckUsername
     }
 
     public void getMyProfileInfo(){
@@ -67,6 +85,13 @@ public class HttpKit {
     public void changePassword(String token, String oldPass, String newPass, String confirmPass) {
         String[] params = {token, oldPass, newPass, confirmPass};
         ChangePasswordTask task = new ChangePasswordTask();
+        task.execute(params);
+    }
+
+    public void followUnfollow(boolean isFollow, String uid, String token){
+        String param1 = (isFollow) ? "follow" : "unfollow";
+        String[] params = {param1, uid, token};
+        FollowUnfollowTask task = new FollowUnfollowTask();
         task.execute(params);
     }
 
@@ -105,6 +130,12 @@ public class HttpKit {
         task.execute(params);
     }
 
+    public void deleteComment(String token, String commentId, String flagId, String positionInAdapter){
+        String[] params = {token, commentId, flagId, positionInAdapter};
+        DeleteCommentTask task = new DeleteCommentTask();
+        task.execute(params);
+    }
+
     public void vote(String token, String dopeId, String numberOfPicture) {
         String[] params = {token, dopeId, numberOfPicture};
         VoteTask task = new VoteTask();
@@ -117,16 +148,16 @@ public class HttpKit {
         task.execute(params);
     }
 
-    // not in use
-    public void upload(String token, String path, String position) {
-        String[] params = {token, path, position};
-        UploadTask task = new UploadTask();
-        task.execute(params);
-    }
-
+    // Not in use currently
     public void logOut(String token) {
         LogOutTask task = new LogOutTask();
         task.execute(token);
+    }
+
+    public void getFollowers(String uid, String token, String query, String page, String count, String sort, String purpose){
+        String[] params = {uid, token, query, page, count, sort, purpose};
+        GetFollowersTask task = new GetFollowersTask();
+        task.execute(params);
     }
 
     public void createDope(String token, String question, String photo1, String photo2) {
@@ -195,13 +226,59 @@ public class HttpKit {
         return response.toString();
     }
 
+    public static String requestToServerPOST(String urlStr, String paramsStr){
+
+        Log.w("HttpKit POST", "url: "+urlStr);
+        Log.w("HttpKit POST", "params: "+paramsStr);
+        URL url;
+        HttpURLConnection connection = null;
+        try {
+            url = new URL(urlStr);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setUseCaches(false);
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+
+            DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+            wr.writeBytes(paramsStr);
+            wr.flush();
+            wr.close();
+
+            InputStream is = connection.getInputStream();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+            String line;
+            StringBuffer response = new StringBuffer();
+            while ((line = rd.readLine()) != null) {
+                response.append(line);
+                response.append("\n");
+            }
+            rd.close();
+            String responseStr = response.toString();
+            Log.w("HttpKit POST", responseStr);
+            return responseStr;
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+        return null;
+    }
+
     public static String requestToServerPOST(String urlStr, String[] params, POSTRequestPurpose purpose) {
         String paramsStr = "";
         if (purpose == POSTRequestPurpose.Registration) {
             if (params[0].equals("facebook")) {
-                paramsStr += "fb_id=" + params[1] + "&email=" + params[2];
+//                paramsStr += "fb_id=" + params[1] + "&email=" + params[2];
+//                paramsStr += "fb_id=" + params[1] + "&email=" + params[2];
+                paramsStr += "fb_id=" + params[1] + "&email=" + params[2]+"&username=fb_"+params[1];
             } else if (params[0].equals("twitter")) {
-                paramsStr += "tw_id=" + params[1] + "&email=" + params[2];
+                paramsStr += "tw_id=" + params[1] + "&email=" + params[2]+"&username=tw_"+params[1];
             } else if (params[0].equals("connected_facebook")) {
                 paramsStr += "fb_id=" + params[1] + "&email=" + params[2] + "&username=" + params[3] + "&password=" + params[4];
             } else if (params[0].equals("connected_twitter")) {
@@ -211,7 +288,8 @@ public class HttpKit {
             }
         } else if (purpose == POSTRequestPurpose.Login) {
             if (params[0].equals("facebook")) {
-                paramsStr += "fb_id=" + params[1] + "&email=" + params[2];
+                paramsStr += "fb_id=" + params[1] + "&email=" + params[2]+"&username=fb_"+params[1];
+//                paramsStr += "fb_id=" + params[1] + "&email=" + params[2]+"&username=fb_"+params[1];
             } else if (params[0].equals("twitter")) {
                 paramsStr += "tw_id=" + params[1] + "&email=" + params[2];
             } else if (params[0].equals("username")) {
@@ -222,10 +300,13 @@ public class HttpKit {
             } else if (params[0].equals("connected_email")) {
                 paramsStr += "username=" + params[2] + "&password=" + params[3];
             }
-        } else {
+        } else if (purpose == POSTRequestPurpose.ChangePassword){
             paramsStr += "token=" + params[0] + "&oldpass=" + params[1] + "&password=" + params[2] + "&confirm=" + params[3];
+        }else{
+            paramsStr += "username=" + params[0];
         }
-
+        Log.w("HttpKit POST", "url: "+urlStr);
+        Log.w("HttpKit POST", "params: "+paramsStr);
         URL url;
         HttpURLConnection connection = null;
         try {
@@ -295,7 +376,7 @@ public class HttpKit {
              */
 
             String charset = "UTF-8";
-            String requestURL = "http://api.svcontact.ru/users.editprofile";
+            String requestURL = "http://dopeapi.elantix.net/users.editprofile";
             try {
                 MultipartUtility multipart = new MultipartUtility(requestURL, charset);
                 multipart.addFormField("uid", params[0]);
@@ -359,7 +440,8 @@ public class HttpKit {
         @Override
         protected String[] doInBackground(String... params) {
             String charset = "UTF-8";
-            String requestURL = "http://api.svcontact.ru/dopes.create";
+//            String requestURL = "http://api.svcontact.ru/dopes.create";
+            String requestURL = "http://dopeapi.elantix.net/dopes.create";
             try {
                 MultipartUtility multipart = new MultipartUtility(requestURL, charset);
                 multipart.addFormField("token", params[0]);
@@ -408,80 +490,6 @@ public class HttpKit {
         }
     }
 
-    // DEPRECATED
-    public class UploadTask extends AsyncTask<String, Void, String[]> {
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected String[] doInBackground(String... params) {
-            String charset = "UTF-8";
-            String requestURL = "http://api.svcontact.ru/files.dopes";
-
-
-            try {
-                MultipartUtility multipart = new MultipartUtility(requestURL, charset);
-                multipart.addFormField("token", params[0]);
-                multipart.addFilePart("file", new File(params[1]));
-                List<String> response = multipart.finish();
-                Log.e("HttpKit UploadTask", "" + response.get(0));
-                try {
-                    JSONObject json = new JSONObject(response.get(0));
-                    Boolean success = json.getBoolean("success");
-                    String responseState = (success) ? "success" : "error";
-
-                    String responseText;
-                    if (success) {
-                        responseText = json.getString("response");
-                    } else {
-                        responseText = json.getString("response_text");
-                    }
-                    String[] result = {params[2], responseState, responseText};
-                    return result;
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            String[] result = {params[2]};
-            return result;
-        }
-
-        @Override
-        protected void onPostExecute(String[] result) {
-            super.onPostExecute(result);
-            TabPlusActivity activity = ((TabPlusActivity) mContext);
-            if (result.length == 1) {
-                Toast.makeText(mContext, "Something went wrong while uploading " + result[0] + " image to server", Toast.LENGTH_LONG).show();
-            } else if (result[1].equals("error")) {
-                Toast.makeText(mContext, "Image " + result[0] + " error: " + result[2], Toast.LENGTH_SHORT).show();
-            } else {
-                if (result[0].equals("left")) {
-                    activity.uploadedPicture1 = result[2];
-                    Log.d("HttpKit upload task one", "left: " + result[2]);
-                } else {
-                    Log.d("HttpKit upload task one", "right: " + result[2]);
-                    activity.uploadedPicture2 = result[2];
-                }
-            }
-
-            Log.w("HttpKit upload task", "uploadedPicture1: " + activity.uploadedPicture1 + "\nuploadedPicture2: " + activity.uploadedPicture2);
-            if (activity.uploadedPicture1 != null && activity.uploadedPicture2 != null) {
-                activity.createDope();
-            } else if (activity.uploadedPicture1 == null && activity.uploadedPicture2 == null) {
-                activity.mProgressDialog.dismiss();
-            }
-
-//            activity.uploadedPicture1 =
-        }
-    }
-
     public class ChangePasswordTask extends AsyncTask<String, Void, String[]> {
         @Override
         protected void onPreExecute() {
@@ -491,7 +499,7 @@ public class HttpKit {
 
         @Override
         protected String[] doInBackground(String... params) {
-            String urlStr = "http://api.svcontact.ru/users.changepass";
+            String urlStr = "http://dopeapi.elantix.net/users.changepass";
             String response = requestToServerPOST(urlStr, params, POSTRequestPurpose.ChangePassword);
 
             try {
@@ -522,13 +530,73 @@ public class HttpKit {
         }
     }
 
+    public class CheckUsernameTask extends AsyncTask<Object, Void, Object[]>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if (mContext instanceof AuthActivity){
+                ((AuthActivity)mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+            }
+        }
+
+        @Override
+        protected Object[] doInBackground(Object... params) {
+            String urlStr = "http://dopeapi.elantix.net/users.checkname";
+            String response = requestToServerPOST(urlStr, (String[])params[0], POSTRequestPurpose.CheckUsername);
+
+            try{
+                JSONObject json = new JSONObject(response);
+                Boolean available = json.getBoolean("available");
+                String responseText = json.getString("response_text");
+                if(available){
+
+                }else{
+
+                }
+
+                String availableParam = (available) ? "available" : "unavailable";
+                Object[] result = {availableParam, responseText, params[1], params[2]};
+                return result;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object[] result) {
+            super.onPostExecute(result);
+
+            if (result != null) {
+                if (result[0].equals("available")){
+                    if (result[2].equals("facebook") || result[2].equals("twitter")) {
+                        regAndLogin((String[]) result[3]);
+                    }else if (result[2].equals("simple")){
+                        ((FragmentAuthSetUsername)((AuthActivity)mContext).mCurrentFragment).goToNextPage();
+                    }
+                }else{
+                    if (result[2].equals("facebook") || result[2].equals("twitter")){
+                        login((String[]) result[3]);
+                    }else if (result[2].equals("simple")){
+                        Toast.makeText(mContext, ""+result[1], Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            if (mContext instanceof AuthActivity){
+                ((AuthActivity)mContext).mProgressDialog.dismiss();
+            }
+        }
+    }
 
     public class RegRequestTask extends AsyncTask<String, Void, String[]> {
 
         @Override
         protected String[] doInBackground(String... params) {
 
-            String urlStr = "http://api.svcontact.ru/users.reg";
+            String urlStr = "http://dopeapi.elantix.net/users.reg";
             String response = requestToServerPOST(urlStr, params, POSTRequestPurpose.Registration);
 
             try {
@@ -572,7 +640,7 @@ public class HttpKit {
         @Override
         protected String[] doInBackground(String... params) {
 
-            String urlStr = "http://api.svcontact.ru/users.login";
+            String urlStr = "http://dopeapi.elantix.net/users.login";
             String response = requestToServerPOST(urlStr, params, POSTRequestPurpose.Login);
 
             try {
@@ -635,6 +703,7 @@ public class HttpKit {
         return String.valueOf(str.charAt(str.length() - 1)).equals("?");
     }
 
+    // Not in use currently
     public class ShareDopeTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -646,11 +715,15 @@ public class HttpKit {
         @Override
         protected String doInBackground(String... params) {
 
-            String urlStr = "http://api.svcontact.ru/dopes.share?dope=" + params[0];
+//            String urlStr = "http://dopeapi.elantix.net/dopes.share?dope=" + params[0];
+            String urlStr = "http://dopeapi.elantix.net/dopes.share";
+            String paramsStr = "dope=" + params[0];
             if (params[1] != null) {
-                urlStr += "&token=" + params[1];
+//                urlStr += "&token=" + params[1];
+                paramsStr += "&token=" + params[1];
             }
-            String response = RequestToServerGET(urlStr);
+//            String response = RequestToServerGET(urlStr);
+            String response = requestToServerPOST(urlStr, paramsStr);
 
             try {
                 JSONObject json = new JSONObject(response);
@@ -706,7 +779,8 @@ public class HttpKit {
         @Override
         protected Object[] doInBackground(String... params) {
 
-            String urlStr = "http://api.svcontact.ru/dopes.user?uid=" + params[0];
+//            String urlStr = "http://api.svcontact.ru/dopes.user?uid=" + params[0];
+            String urlStr = "http://dopeapi.elantix.net/dopes.user?uid=" + params[0];
 
 //            if (params[0] instanceof String[]){
 //                String[] uidList = (String[]) params[0];
@@ -795,13 +869,42 @@ public class HttpKit {
         protected Object doInBackground(String... params) {
 
 
-            String urlStr = "http://api.svcontact.ru/users.profile?uid=" + params[0];
+            String urlStr = "http://dopeapi.elantix.net/users.profile?uid=" + params[0];
             if (params[1] != null) {
                 urlStr += "&token=" + params[1];
             }
             String response = RequestToServerGET(urlStr);
 
+
+//            String followString = "http://api.svcontact.ru/users.followings?uid="+Utilities.sUid;
+            String followString = "http://dopeapi.elantix.net/users.followings?uid="+Utilities.sUid;
+            followString += "&fields=id";
+//            followString += "&count="+999;
+            String responseFollowings = RequestToServerGET(followString);
+
             try {
+
+                // Get my followings
+                JSONObject jsonFollowings = new JSONObject(responseFollowings);
+                Boolean successFollowings = jsonFollowings.getBoolean("success");
+
+                String[] followings;
+
+                if (successFollowings) {
+                    JSONObject responseObjFollowings = jsonFollowings.getJSONObject("response");
+                    JSONArray listFollowings = responseObjFollowings.getJSONArray("list");
+
+                    followings = new String[listFollowings.length()];
+                    Arrays.fill(followings, null);
+
+                    for (int i = 0; i < listFollowings.length(); i++) {
+                        JSONObject item = listFollowings.getJSONObject(i);
+                        followings[i] = item.getString("id");
+                    }
+                    Utilities.sMyFollowings = followings;
+                }
+
+
                 JSONObject json = new JSONObject(response);
                 Boolean success = json.getBoolean("success");
 
@@ -819,7 +922,7 @@ public class HttpKit {
                     info.email = objectResponse.getString("email");
                     info.username = objectResponse.getString("username");
                     info.fullname = objectResponse.getString("fullname");
-                    info.bio = objectResponse.getString("bio");
+                    info.bio = objectResponse.getString("bio").replaceAll("(\\r|\\n)", "");
                     info.avatar = objectResponse.getString("avatar");
                     info.cover = objectResponse.getString("cover");
                     info.gender = objectResponse.getString("gender");
@@ -875,10 +978,12 @@ public class HttpKit {
         @Override
         protected Object doInBackground(String... params) {
 
+//            String urlStr = "http://api.svcontact.ru/users.profile?uid=" + Utilities.sUid+"&token="+Utilities.sToken;
+            String urlStr = "http://dopeapi.elantix.net/users.profile";
+            String paramsStr = "uid=" + Utilities.sUid+"&token="+Utilities.sToken;
 
-            String urlStr = "http://api.svcontact.ru/users.profile?uid=" + Utilities.sUid+"&token="+Utilities.sToken;
-
-            String response = RequestToServerGET(urlStr);
+//            String response = RequestToServerGET(urlStr);
+            String response = requestToServerPOST(urlStr, paramsStr);
 
             try {
                 JSONObject json = new JSONObject(response);
@@ -898,7 +1003,7 @@ public class HttpKit {
                     info.email = objectResponse.getString("email");
                     info.username = objectResponse.getString("username");
                     info.fullname = objectResponse.getString("fullname");
-                    info.bio = objectResponse.getString("bio");
+                    info.bio = objectResponse.getString("bio").replaceAll("(\\r|\\n)", "");
                     info.avatar = objectResponse.getString("avatar");
                     info.cover = objectResponse.getString("cover");
                     info.gender = objectResponse.getString("gender");
@@ -910,6 +1015,8 @@ public class HttpKit {
                     info.followers = objectResponse.getInt("followers");
                     info.followings = objectResponse.getInt("followings");
                     info.follow = objectResponse.getInt("follow");
+
+                    Log.e("HttpKit users.profile", "bio: " + info.bio+"||))");
 
                     return info;
                 }
@@ -953,6 +1060,7 @@ public class HttpKit {
         }
     }
 
+    // Not in use currently
     public class LogOutTask extends AsyncTask<String, Void, String> {
 
         @Override
@@ -975,6 +1083,7 @@ public class HttpKit {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            Log.e("HttpKit Logout", "SUCCESS: "+s);
             if (!s.equals("success")) {
                 Toast.makeText(mContext, "" + s, Toast.LENGTH_SHORT).show();
             }
@@ -992,11 +1101,15 @@ public class HttpKit {
         @Override
         protected String[] doInBackground(String... params) {
             String replacedSpaces = params[2].replaceAll(" ", "%20");
-            String urlStr = "http://api.svcontact.ru/dopes.comment?token="+params[0]+"&dope="+params[1]+"&text="+replacedSpaces;
+//            String urlStr = "http://dopeapi.elantix.net/dopes.comment?token="+params[0]+"&dope="+params[1]+"&text="+replacedSpaces;
+            String urlStr = "http://dopeapi.elantix.net/dopes.comment";
+            String paramsStr = "token="+params[0]+"&dope="+params[1]+"&text="+replacedSpaces;
             if (params[3] != null){
-                urlStr += "&parent="+params[3];
+//                urlStr += "&parent="+params[3];
+                paramsStr += "&parent="+params[3];
             }
-            String response = RequestToServerGET(urlStr);
+//            String response = RequestToServerGET(urlStr);
+            String response = requestToServerPOST(urlStr, paramsStr);
             try {
                 JSONObject json = new JSONObject(response);
                 Boolean success = json.getBoolean("success");
@@ -1026,7 +1139,7 @@ public class HttpKit {
         }
     }
 
-    public class GetFollowersTask extends AsyncTask<String, Void, String[]>{
+    public class FollowUnfollowTask extends AsyncTask<String, Void, String[]>{
 
         @Override
         protected void onPreExecute() {
@@ -1035,12 +1148,161 @@ public class HttpKit {
 
         @Override
         protected String[] doInBackground(String... params) {
+
+            String insert = (params[0].equals("follow")) ? "follow" : "unfollow";
+            String urlStr = "http://dopeapi.elantix.net/users."+insert;
+            String paramsStr = "uid=" + params[1]+"&token="+params[2];
+//            followers
+            String response = requestToServerPOST(urlStr, paramsStr);
+            try {
+                JSONObject json = new JSONObject(response);
+                Boolean success = json.getBoolean("success");
+                String responseText = json.getString("response_text");
+
+                String[] result = {""+success, responseText};
+                return result;
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
             return null;
         }
 
         @Override
-        protected void onPostExecute(String[] strings) {
-            super.onPostExecute(strings);
+        protected void onPostExecute(String[] result) {
+            super.onPostExecute(result);
+            if (result != null){
+                if (!result[0].equals("true")){
+                }
+                Toast.makeText(mContext, ""+result[1], Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
+    public class GetFollowersTask extends AsyncTask<String, Void, Object[]>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if (((MainActivity) mContext).mProgressDialog == null) {
+                ((MainActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+            }
+        }
+
+        @Override
+        protected Object[] doInBackground(String... params) {
+            String urlStr = "http://dopeapi.elantix.net/users."+params[6];
+            String paramsStr = "uid="+params[0];
+
+            String fields = "id,username,fullname,avatar,bio";
+            paramsStr += "&fields="+fields;
+            if (params[1] != null) paramsStr += "&token="+params[1];
+            if (params[2] != null) paramsStr += "&q="+params[2];
+            if (params[3] != null) paramsStr += "&p="+params[3];
+            if (params[4] != null) paramsStr += "&count="+params[4];
+            if (params[5] != null) paramsStr += "&sort="+params[5];
+
+            String response = requestToServerPOST(urlStr, paramsStr);
+
+            String followString = "http://dopeapi.elantix.net/users.followings";
+
+            String paramsFollowString = "uid="+Utilities.sUid;
+            paramsFollowString += "&fields=id";
+            String responseFollowings = requestToServerPOST(followString, paramsFollowString);
+
+            try{
+                // Get followings
+                JSONObject jsonFollowings = new JSONObject(responseFollowings);
+                Boolean successFollowings = jsonFollowings.getBoolean("success");
+
+                String[] followings;
+
+                if (successFollowings){
+                    JSONObject responseObjFollowings = jsonFollowings.getJSONObject("response");
+                    JSONArray listFollowings = responseObjFollowings.getJSONArray("list");
+
+                    followings = new String[listFollowings.length()];
+                    Arrays.fill(followings, null);
+
+                    for (int i=0; i<listFollowings.length(); i++){
+                        JSONObject item = listFollowings.getJSONObject(i);
+                        followings[i] = item.getString("id");
+                    }
+
+                }else{
+                    followings = null;
+                    String responseTextFollowings = jsonFollowings.getString("response_text");
+                }
+
+                // Get followers
+                JSONObject json = new JSONObject(response);
+                Boolean success = json.getBoolean("success");
+                if (success){
+                    JSONObject responseObj = json.getJSONObject("response");
+                    int count = responseObj.getInt("count");
+                    JSONArray list = responseObj.getJSONArray("list");
+
+                    ProfileInfo[] profileList = new ProfileInfo[list.length()];
+                    String[] followersIds = new String[list.length()];
+                    Arrays.fill(profileList, null);
+
+                    for (int i=0; i<list.length(); i++){
+                        ProfileInfo info = new ProfileInfo();
+                        JSONObject item = list.getJSONObject(i);
+                        info.username = item.getString("username");
+                        info.fullname = item.getString("fullname");
+                        info.avatar = item.getString("avatar");
+                        info.id = item.getString("id");
+                        info.bio = item.getString("bio");
+
+                        followersIds[i] = info.id;
+
+                        // not in use, but don`t delete yet
+//                        info.email = item.getString("email");
+//                        info.fb_id = item.getString("fb_id");
+//                        info.tw_id = item.getString("tw_id");
+//                        info.gender = item.getString("gender");
+//                        info.date_reg = item.getString("date_reg");
+//                        info.birthday = item.getString("birthday");
+
+                        profileList[i] = info;
+
+                    }
+                        Object[] result = {""+success, count, profileList, followersIds, followings};
+                    return result;
+
+                }else{
+                    String responseText = json.getString("response_text");
+                    Object[] result = {""+success, responseText};
+                    return result;
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object[] result) {
+            super.onPostExecute(result);
+            ((MainActivity) mContext).mProgressDialog.dismiss();
+
+            if (result != null) {
+                if (result[0].toString().equals("true")) {
+                    int count = (int) result[1];
+                    ProfileInfo[] resultList = (ProfileInfo[]) result[2];
+
+                    ((FragmentProfileFollowers) ((MainActivity) mContext).mCurrentFragment).setFollowersInfo(resultList, (String[])result[3], (String[])result[4]);
+                    for (int i = 0; i < resultList.length; i++) {
+                        Log.d("HttpKit Followers", "" + resultList[i]);
+                    }
+                }
+            }
         }
     }
 
@@ -1055,8 +1317,11 @@ public class HttpKit {
         @Override
         protected String[] doInBackground(String... params) {
             String replacedSpaces = params[2].replaceAll(" ", "%20");
-            String urlStr = "http://api.svcontact.ru/dopes.report?token="+params[0]+"&dope="+params[1]+"&report="+replacedSpaces;
-            String response = RequestToServerGET(urlStr);
+//            String urlStr = "http://dopeapi.elantix.net/dopes.report?token="+params[0]+"&dope="+params[1]+"&report="+replacedSpaces;
+            String urlStr = "http://dopeapi.elantix.net/dopes.report";
+            String paramsStr = "token="+params[0]+"&dope="+params[1]+"&report="+replacedSpaces;
+//            String response = RequestToServerGET(urlStr);
+            String response = requestToServerPOST(urlStr, paramsStr);
             try{
                 JSONObject json = new JSONObject(response);
                 Boolean success = json.getBoolean("success");
@@ -1079,7 +1344,55 @@ public class HttpKit {
             super.onPostExecute(result);
             Toast.makeText(mContext, ""+result[1], Toast.LENGTH_SHORT).show();
             ((ReportPostActivity) mContext).finish();
-//            ((ReportPostActivity) mContext).mProgressDialog.dismiss();
+        }
+    }
+
+    public class DeleteCommentTask extends AsyncTask<String, Void, String[]>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+//            ((CommentsActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+        }
+
+        @Override
+        protected String[] doInBackground(String... params) {
+//            String urlStr = "http://dopeapi.elantix.net/dopes.deletecomment?token="+params[0]+"&comment_id="+params[1];
+            String urlStr = "http://dopeapi.elantix.net/dopes.deletecomment?token="+params[0]+"&comment_id="+params[1];
+            String paramsStr = "token="+params[0]+"&comment_id="+params[1];
+            if (params[2] != null){
+                paramsStr += "&flag_id="+params[2];
+            }
+            String response = requestToServerPOST(urlStr, paramsStr);
+//            String response = RequestToServerGET(urlStr);
+            try {
+                JSONObject json = new JSONObject(response);
+                Boolean success = json.getBoolean("success");
+                String responseText = json.getString("response_text");
+
+                String[] result = {""+success, responseText, params[3]};
+                return  result;
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String[] result) {
+            super.onPostExecute(result);
+            CommentsActivity activity = ((CommentsActivity) mContext);
+//            activity.mProgressDialog.dismiss();
+            if (result != null){
+                if (result[0].equals("true")){
+//                    ((AdapterComments)activity.mAdapter).remove(Integer.parseInt(result[2]));
+                }else{
+                    Toast.makeText(mContext, ""+result[1], Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 
@@ -1094,11 +1407,20 @@ public class HttpKit {
         @Override
         protected Object[] doInBackground(String... params) {
 
-            String urlStr = "http://api.svcontact.ru/dopes.comments?dope="+params[0];
-            if (params[1] != null)  urlStr += "&token="+params[1];
-            if (params[2] != null)  urlStr += "&p="+params[2];
-            if (params[3] != null)  urlStr += "&count="+params[3];
-            String response = RequestToServerGET(urlStr);
+//            String urlStr = "http://api.svcontact.ru/dopes.comments?dope="+params[0];
+//            String urlStr = "http://dopeapi.elantix.net/dopes.comments?dope="+params[0];
+            String urlStr = "http://dopeapi.elantix.net/dopes.comments?dope="+params[0];
+            String paramsStr = "dope="+params[0];
+
+            if (params[1] != null)  paramsStr += "&token="+params[1];
+            if (params[2] != null)  paramsStr += "&p="+params[2];
+            if (params[3] != null)  paramsStr += "&count="+params[3];
+
+//            if (params[1] != null)  urlStr += "&token="+params[1];
+//            if (params[2] != null)  urlStr += "&p="+params[2];
+//            if (params[3] != null)  urlStr += "&count="+params[3];
+//            String response = RequestToServerGET(urlStr);
+            String response = requestToServerPOST(urlStr, paramsStr);
             try {
                 JSONObject json = new JSONObject(response);
                 Boolean success = json.getBoolean("success");
@@ -1119,7 +1441,7 @@ public class HttpKit {
                         info.email = item.getString("email");
                         info.avatar = item.getString("avatar");
                         info.id = item.getString("id");
-                        info.parent_id = item.getString("parent_id");
+//                        info.parent_id = item.getString("parent_id");
                         info.user_id = item.getString("user_id");
                         info.dope_id = item.getString("dope_id");
                         info.comment = item.getString("comment");
@@ -1159,7 +1481,8 @@ public class HttpKit {
 
         @Override
         protected String doInBackground(String... params) {
-            String urlStr = "http://api.svcontact.ru/dopes.vote?token=" + params[0] + "&dope=" + params[1] + "&vote=" + params[2];
+//            String urlStr = "http://api.svcontact.ru/dopes.vote?token=" + params[0] + "&dope=" + params[1] + "&vote=" + params[2];
+            String urlStr = "http://dopeapi.elantix.net/dopes.vote?token=" + params[0] + "&dope=" + params[1] + "&vote=" + params[2];
             String response = RequestToServerGET(urlStr);
 
             try {
@@ -1195,7 +1518,8 @@ public class HttpKit {
         @Override
         protected Object[] doInBackground(String... params) {
 
-            String urlStr = "http://api.svcontact.ru/dopes.day10";
+//            String urlStr = "http://api.svcontact.ru/dopes.day10";
+            String urlStr = "http://dopeapi.elantix.net/dopes.day10";
             if (params[0].equals("100")) {
                 urlStr += "0?";
                 if (params[1] != null) {
@@ -1301,7 +1625,7 @@ public class HttpKit {
 
         @Override
         protected String[] doInBackground(String... params) {
-            String urlStr = "http://api.svcontact.ru/users.forgot?email=" + params[0];
+            String urlStr = "http://dopeapi.elantix.net/users.forgot?email=" + params[0];
 
             String response = RequestToServerGET(urlStr);
 

@@ -41,13 +41,15 @@ public class FragmentProfileOverview extends Fragment implements View.OnClickLis
     private LinearLayout mFollowersInfo;
     private LinearLayout mFollowingsInfo;
     private Boolean mIsOwn;
-//    private static int sNumberOfOwnDopes = 0;
+    private String mUid;
+    private boolean mIsFollowed = false;
     private TextView mUsername;
     private TextView mFirstLastNames;
     private LinearLayout mNoDopesLayout;
     private FancyButton mNoDopesButton;
     private RecyclerView mRecyclerView;
     private TextView mNumberOfDopesView;
+    private String uid;
 
     // TODO:
     // rename variable for Following/Edit_Profile buttons
@@ -61,6 +63,13 @@ public class FragmentProfileOverview extends Fragment implements View.OnClickLis
         Utilities.sCurProfile = null;
         Bundle bundle = this.getArguments();
         mIsOwn = bundle.getBoolean("own");
+        mUid = bundle.getString("uid");
+        Boolean isRecovery = bundle.getBoolean("isRecovery", false);
+
+        if (isRecovery) {
+//            Utilities.sFragmentHistory.remove(Utilities.sFragmentHistory.size()-1);
+        }
+
 
         mUsername = (TextView) mFragmentView.findViewById(R.id.profile_overview_user_name);
         mFirstLastNames = (TextView) mFragmentView.findViewById(R.id.profile_overview_user_description);
@@ -80,26 +89,9 @@ public class FragmentProfileOverview extends Fragment implements View.OnClickLis
             followButtonIconView.setImageResource(R.drawable.profile_edit_pencil_white);
             mFollowButton.getTextViewObject().setText(R.string.profile_settings_edit_profile_left_button_text);
             followButtonIconView.setLayoutParams(new LinearLayout.LayoutParams(60, 60));
-
-//            String username = (Utilities.profileUsername.isEmpty()) ? getActivity().getResources().getString(R.string.profile_settings_username_placeholder_text) : Utilities.profileUsername;
-//            mUsername.setText(username);
-//            String firstLastNames = (Utilities.profileFirstLastNames.isEmpty()) ? getActivity().getResources().getString(R.string.profile_settings_firstlastnames_placeholder_text) : Utilities.profileFirstLastNames;
-//            mFirstLastNames.setText(firstLastNames);
-//            mNumberOfDopesView.setText(String.valueOf(sNumberOfOwnDopes));
-
-//            if (sNumberOfOwnDopes > 0){
-//                mNoDopesLayout.setVisibility(View.GONE);
-//                mRecyclerView.setVisibility(View.VISIBLE);
-//                configurateRecyclerView();
-//            }else{
-//                mNoDopesLayout.setVisibility(View.VISIBLE);
-//                mRecyclerView.setVisibility(View.GONE);
-//            }
-
         }else{
             followButtonIconView.setLayoutParams(new LinearLayout.LayoutParams(50, 50));
             mAvatar.setVisibility(View.VISIBLE);
-//            Glide.with(this).load(R.drawable.ania2).into(mAvatar);
         }
 
         mShareProfileButton = (FancyButton) mFragmentView.findViewById(R.id.profile_overview_share_profile_button);
@@ -113,19 +105,20 @@ public class FragmentProfileOverview extends Fragment implements View.OnClickLis
         mFollowersInfo.setOnClickListener(this);
         mFollowingsInfo.setOnClickListener(this);
 
-//        if (!mIsOwn) {
-//            mNoDopesLayout.setVisibility(View.GONE);
-//            mRecyclerView.setVisibility(View.VISIBLE);
-//
-//            configurateRecyclerView();
-//        }
+        uid = (mIsOwn) ? Utilities.sUid : mUid;
+//        HttpKit http = new HttpKit(getActivity());
+//        http.getProfileInformation(uid, Utilities.sToken);
+//        http.getUsersDopes(uid, Utilities.sToken, null, null);
 
-        String uid = (mIsOwn) ? Utilities.sUid : bundle.getString("uid");
+        return mFragmentView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         HttpKit http = new HttpKit(getActivity());
         http.getProfileInformation(uid, Utilities.sToken);
         http.getUsersDopes(uid, Utilities.sToken, null, null);
-
-        return mFragmentView;
     }
 
     public void drawUserDopesPanel(DopeInfo[] dopes){
@@ -160,7 +153,6 @@ public class FragmentProfileOverview extends Fragment implements View.OnClickLis
     public void setInfo(ProfileInfo info){
 
         Utilities.sCurProfile = info;
-        Log.w("ProfileOverview", "info.id: "+info.id+"\nsUid: "+Utilities.sUid);
         if (info.id.equals(Utilities.sUid)){
             Utilities.sMyProfile = info;
             SharedPreferences.Editor editor = getActivity().getSharedPreferences(Utilities.MY_PREFS_NAME, getActivity().MODE_PRIVATE).edit();
@@ -171,28 +163,31 @@ public class FragmentProfileOverview extends Fragment implements View.OnClickLis
             editor.putString("fullname", info.fullname);
             editor.putString("email", info.email);
             editor.commit();
-
-//            public String username;
-//            public String fullname;
-//            public String email;
-//            public String avatar;
-//            public String id;
-//            public String parent_id;
-//            public String user_id;
-//            public String dope_id;
-//            public String comment;
-//            public String date_create;
-
         }
-//        Uri avatar = Uri.parse(info.avatar);
-//        Glide.with(getActivity()).load(avatar).into(mAvatar);
+
         mUsername.setText(info.username);
         mFirstLastNames.setText(info.fullname);
         mNumberOfDopesView.setText(String.valueOf(info.dopes));
+        String toolbarTitle = (!info.username.isEmpty()) ? info.username : info.fullname;
+        ((MainActivity)getActivity()).toolbarTitle.setText(toolbarTitle);
+
+        if(!mIsOwn) {
+            if (Utilities.sMyFollowings != null) {
+                for (int i = 0; i < Utilities.sMyFollowings.length; i++) {
+                    if (Utilities.sMyFollowings[i].equals(info.id)) {
+                        mIsFollowed = true;
+                        mFollowButton.setText("Following");
+                        mFollowButton.getIconImageObject().setVisibility(View.GONE);
+                        break;
+                    }
+                }
+            }
+
+        }
 
         if (Utilities.sCurProfile.avatar == null || Utilities.sCurProfile.avatar.isEmpty()){
-        Log.e("ProfileOverview", "ava: "+Utilities.sCurProfile.avatar);
             mAvatarPlaceHolder.setVisibility(View.VISIBLE);
+            mAvatar.setVisibility(View.GONE);
         }else{
             mAvatar.setVisibility(View.VISIBLE);
             if (Utilities.sCurProfile.avatar.startsWith("http")) {
@@ -207,10 +202,6 @@ public class FragmentProfileOverview extends Fragment implements View.OnClickLis
         followersNum.setText(String.valueOf(info.followers));
         followingsNum.setText(String.valueOf(info.followings));
     }
-
-
-
-
 
     @Override
     public void onClick(View v) {
@@ -230,6 +221,21 @@ public class FragmentProfileOverview extends Fragment implements View.OnClickLis
             if (mIsOwn){
                 Intent i = new Intent(getActivity(), ProfileSettingsActivity.class);
                 startActivityForResult(i, Utilities.EDIT_PROFILE);
+            }else {
+                HttpKit http = new HttpKit(getActivity());
+                boolean isFollow;
+                if (mIsFollowed){
+                    mFollowButton.setText("Follow");
+                    mFollowButton.getIconImageObject().setVisibility(View.VISIBLE);
+                    isFollow = false;
+                }else{
+                    mFollowButton.setText("Following");
+                    mFollowButton.getIconImageObject().setVisibility(View.GONE);
+                    isFollow = true;
+                }
+                mIsFollowed = !mIsFollowed;
+
+                http.followUnfollow(isFollow, Utilities.sCurProfile.id, Utilities.sToken);
             }
         }else if(id == mNoDopesButton.getId()){
             Intent intent = new Intent(getActivity(), TabPlusActivity.class);

@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v13.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,11 +42,14 @@ public class FragmentViewPager extends Fragment {
 //        Arrays.fill(Utilities.sRateStateBackups, null);
         Bundle bundle = this.getArguments();
         numItems = bundle.getInt("num", 10);
+        int itemPosition = bundle.getInt("position", 0);
+        Log.w("FragmentViewPager", "itemPosition: "+itemPosition);
         Utilities.sRateStateBackups = new RateStateBackup[numItems];
 
         FragmentStatePagerAdapter adapter = new MyPagerAdapter(getActivity().getFragmentManager());
         mViewPager = (ViewPager) mFragmentView.findViewById(R.id.view_pager);
         mViewPager.setAdapter(adapter);
+        mViewPager.setCurrentItem(itemPosition);
 
 
 
@@ -55,6 +59,14 @@ public class FragmentViewPager extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 ((MainActivity) getActivity()).toolbarTitle.setText((position + 1) + "/"+numItems);
+                Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size() - 1).bundleData.put("position", position);
+
+//                if (Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size()-1).data.size() != 0) {
+//                    Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size() - 1).data.set(0, position);
+//                }else{
+//                    Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size() - 1).data.add(position);
+//                }
+//                Log.w("FragmentViewPager", "data.size(): " + Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size() - 1).data.get(0));
             }
 
             @Override

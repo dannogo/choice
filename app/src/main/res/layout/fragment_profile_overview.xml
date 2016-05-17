@@ -45,7 +45,9 @@
                             android:visibility="gone"
                             android:layout_width="@dimen/profile_settings_avatar_user_icon_size"
                             android:layout_height="@dimen/profile_settings_avatar_user_icon_size"
-                            android:src="@drawable/profile_user_icon_white" />
+                            android:src="@drawable/profile_user_icon_white"
+                            />
+                            <!--android:layout_centerInParent="true"-->
 
                     </RelativeLayout>
                 </RelativeLayout>
@@ -172,7 +174,7 @@
                         android:id="@+id/profile_overview_number_of_followERS"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="1244"
+                        android:text="0"
                         android:textSize="@dimen/profile_overview_number_text_size"
                         android:textColor="@color/main_screen_question_font_color"
                         android:layout_marginBottom="@dimen/profile_overview_distance_between_number_and_description"
@@ -203,7 +205,7 @@
                         android:id="@+id/profile_overview_number_of_followINGS"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="12455"
+                        android:text="0"
                         android:textSize="@dimen/profile_overview_number_text_size"
                         android:textColor="@color/main_screen_question_font_color"
                         android:layout_marginBottom="@dimen/profile_overview_distance_between_number_and_description"

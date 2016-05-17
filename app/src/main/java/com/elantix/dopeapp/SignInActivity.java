@@ -3,6 +3,7 @@ package com.elantix.dopeapp;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +30,7 @@ public class SignInActivity extends AppCompatActivity{
     private TextView mToolbarTitle;
     private TextView mToolbarRightButton;
     private String mPredecessorActivity;
+    public ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

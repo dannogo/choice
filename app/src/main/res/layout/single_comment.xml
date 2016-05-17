@@ -8,14 +8,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:id="@+id/single_comment_content"
+        >
 
         <ImageView
             android:id="@+id/single_comment_avatar"
             android:layout_width="@dimen/message_list_avatar_size"
             android:layout_height="@dimen/message_list_avatar_size"
             android:layout_gravity="center_horizontal"
-            android:src="@drawable/fr3" />
+            />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -53,7 +55,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/undo_button"
+        android:id="@+id/single_comment_undo_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/button_undo"

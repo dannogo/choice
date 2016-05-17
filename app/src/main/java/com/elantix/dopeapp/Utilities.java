@@ -31,6 +31,7 @@ import android.widget.Toast;
 import com.desarrollodroide.libraryfragmenttransactionextended.FragmentTransactionExtended;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -39,6 +40,17 @@ import java.util.regex.Pattern;
  * Created by oleh on 3/25/16.
  */
 public class Utilities {
+
+    // Save chain of fragments
+    // Save data and settings of each fragment
+    // Recognize
+
+    // ArrayList with enums for fragments in chain
+    // ArrayList with settings and data of fragments in chain
+    // Four Base Fragments related to buttons in the lower bar
+    // When user click on one of the tabs, chain clears
+    // Back navigation in chain with button in toolbar and back navigation button
+    //
 
     public static final int CAPTURE_IMAGE_WITH_CAMERA = 1888;
     public static final int PICK_IMAGE_FROM_GALLERY = 1887;
@@ -50,23 +62,14 @@ public class Utilities {
     public static final String MY_PREFS_NAME = "DopePrefs";
     public static String sToken = null;
     public static String sUid = null;
-//    public static ProfileInfo sMyProfile
-
-    //temp
-//    public static Uri avatarUri = null;
-//    public static Boolean isLogedIn = true;
-//    public static String profileUsername = "";
-//    public static String profileFirstLastNames = "";
 
     public static DopeInfo[] sDopes10;
     public static DopeInfo[] sDopes100;
     public static ProfileInfo sCurProfile;
     public static ProfileInfo sMyProfile;
+    public static String[] sMyFollowings;
+    public static ArrayList<ChainLink> sFragmentHistory = new ArrayList<>();
 
-//    public static int sAnimationNumber = 0;
-//    public static int sDopeNumber = 0;
-
-//    public static Boolean sRateAnimationDirection = true;
     public static RateStateBackup sRateStateBackups[] = new RateStateBackup[10];
     public static DopeListType sDopeListType;
 

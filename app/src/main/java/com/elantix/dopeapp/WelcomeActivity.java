@@ -103,26 +103,30 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
                     public void success(Result<TwitterSession> twitterSessionResult) {
                         TwitterSession sessionData = twitterSessionResult.data;
                         String uid = String.valueOf(sessionData.getUserId());
-//                        Log.w("WelcomeActivity", "userId: " + uid);
+                        Log.w("WelcomeActivity", "userId: " + uid);
                         String username = sessionData.getUserName();
 //                        Log.w("WelcomeActivity", "username: " + username);
                         sessionData.getAuthToken();
 //                        sessionData.getUserId()
 
-                        TwitterAuthClient authClient = new TwitterAuthClient();
-                        authClient.requestEmail(new TwitterSession(sessionData.getAuthToken(), sessionData.getUserId(), username), new Callback<String>() {
-                            @Override
-                            public void success(Result<String> result) {
-                                // Do something with the result, which provides the email address
-                                Log.w("WelcomeActivity", "Email should be here: "+result.data.toString());
-                            }
+                        HttpKit http = new HttpKit(WelcomeActivity.this);
+                        String[] params = {"twitter", uid, null};
+                        http.checkUsername("tw_" + uid, "twitter", params);
 
-                            @Override
-                            public void failure(TwitterException exception) {
-                                // Do something on failure
-                                Log.w("WelcomeActivity", "Email failure: "+exception.toString());
-                            }
-                        });
+//                        TwitterAuthClient authClient = new TwitterAuthClient();
+//                        authClient.requestEmail(new TwitterSession(sessionData.getAuthToken(), sessionData.getUserId(), username), new Callback<String>() {
+//                            @Override
+//                            public void success(Result<String> result) {
+//                                // Do something with the result, which provides the email address
+//                                Log.w("WelcomeActivity", "Email should be here: "+result.data.toString());
+//                            }
+//
+//                            @Override
+//                            public void failure(TwitterException exception) {
+//                                // Do something on failure
+//                                Log.w("WelcomeActivity", "Email failure: "+exception.toString());
+//                            }
+//                        });
                     }
 
                     @Override
@@ -195,7 +199,8 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
                                                 String str_email = json.getString("email");
                                                 HttpKit http = new HttpKit(WelcomeActivity.this);
                                                 String[] params = {"facebook", str_id, str_email};
-                                                http.regAndLogin(params);
+                                                http.checkUsername("fb_"+str_id, "facebook", params);
+//                                                http.regAndLogin(params);
 
 //                                                String str_firstname = json.getString("first_name");
 //                                                String str_lastname = json.getString("last_name");

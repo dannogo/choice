@@ -90,7 +90,7 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
         mInfoBar = (LinearLayout) fragmentView.findViewById(R.id.daily_dope_info_bar);
         mInfoBar.setOnClickListener(this);
 
-        if (mCurItem.myVote != 0){
+        if (mCurItem != null && mCurItem.myVote != 0){
             if (Utilities.sRateStateBackups[mDopeNum] == null){
                 ChoiceAnimationHelper.ChoiceSide side;
                 if (mCurItem.myVote == 1){
@@ -105,7 +105,7 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
             }
         }
 
-        if (Utilities.sRateStateBackups[mDopeNum] != null){
+        if (Utilities.sRateStateBackups != null && Utilities.sRateStateBackups[mDopeNum] != null){
             applyRestoredRateData();
         }
 
@@ -227,12 +227,10 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
                     showNextPage();
                 }
             }else{
-//                Toast.makeText(getActivity(), "You have already voted this dope", Toast.LENGTH_SHORT).show();
                 Utilities.showExtremelyShortToast(getActivity(), "You have already voted this dope", 500);
             }
         }else if(id == mInfoBar.getId()){
-            Intent intent = new Intent(getActivity(), CommentsActivity.class);
-            startActivity(intent);
+
         }else if (id == moreButton.getId()){
             Bundle bundle = this.getArguments();
             ((MainActivity) getActivity()).showContextOptions(true, mDopeNum);
@@ -240,6 +238,8 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
         }else if(id == mMessageButton.getId()){
             Intent intent = new Intent(getActivity(), CommentsActivity.class);
             intent.putExtra("dopeId", mCurItem.id);
+            intent.putExtra("question", mCurItem.question);
+            intent.putExtra("votesCnt", mCurItem.votesAll);
             intent.putExtra("type", 0);
             startActivity(intent);
         }

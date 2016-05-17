@@ -1,8 +1,10 @@
 package com.elantix.dopeapp;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,9 +13,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import mehdi.sakout.fancybuttons.FancyButton;
 
 /**
@@ -23,40 +29,47 @@ public class AdapterSearchFriends extends RecyclerView.Adapter<AdapterSearchFrie
 
     private LayoutInflater inflater;
     private Context context;
-
-    String[] contactNames = {"Yana Sheleykis", "Nikolay Maletskiy", "Voktoria Colt", "Alisa Parker", "Nataliya Trush", "Maria Tkachik",
-            "Yana Sheleykis", "Nikolay Maletskiy", "Voktoria Colt", "Alisa Parker", "Nataliya Trush", "Maria Tkachik",
-            "Yana Sheleykis", "Nikolay Maletskiy", "Voktoria Colt", "Alisa Parker", "Nataliya Trush", "Maria Tkachik"
-    };
-
-    String[] occupation ={
-            "Specialist", "Designer", "M.Style", "dance",
-            "Management", "schastie", "free", "busy",
-            "Specialist", "Designer", "M.Style", "dance",
-            "Management", "schastie", "free", "busy",
-            "Specialist", "Designer"
-    };
-
-    int[] avatars = {
-            R.drawable.fr1, R.drawable.fr2, R.drawable.fr3, R.drawable.fr4,
-            R.drawable.fr5, R.drawable.fr6, R.drawable.fr7,
-            R.drawable.fr1, R.drawable.fr2, R.drawable.fr3, R.drawable.fr4,
-            R.drawable.fr5, R.drawable.fr6, R.drawable.fr7,
-            R.drawable.fr1, R.drawable.fr2, R.drawable.fr3, R.drawable.fr4,
-    };
+    private ArrayList<ProfileInfo> mUsers;
+    private String[] mFollowingsIds;
 
 
     ArrayList<Integer> checkedItems = new ArrayList<>();
     private Utilities.FollowingListType mType;
 
-    public AdapterSearchFriends(Context context, Utilities.FollowingListType type) {
+    public AdapterSearchFriends(Context context, Utilities.FollowingListType type, ProfileInfo[] users, String[] followersIds, String[] followingsIds) {
         this.inflater = LayoutInflater.from(context);
         this.context = context;
+        mFollowingsIds = followingsIds;
+        mUsers = new ArrayList<>();
+
+        if (users != null) {
+            for (int i = 0; i < users.length; i++) {
+                mUsers.add(users[i]);
+            }
+        }
+
+        ArrayList<String> followersIdsArr = new ArrayList<>();
+        for (int i=0; i<followersIds.length; i++){
+//            if (followersIds[i].equals(Utilities.sUid)) {
+//                mUsers.remove(i);
+//                continue;
+//            }
+            followersIdsArr.add(followersIds[i]);
+
+        }
+
+
+        for (int i=0; i<followingsIds.length; i++){
+            if (followersIdsArr.contains(followingsIds[i])){
+                checkedItems.add(followersIdsArr.indexOf(followingsIds[i]));
+            }
+        }
+
         mType = type;
         switch (type){
             case ProfileFollowing:
-                for (int i=0; i<contactNames.length; i++){
-                    checkedItems.add(i);
+                for (int i=0; i<mUsers.size(); i++){
+//                    checkedItems.add(i);
                 }
                 break;
             default:
@@ -74,7 +87,10 @@ public class AdapterSearchFriends extends RecyclerView.Adapter<AdapterSearchFrie
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        if (checkedItems.contains(Integer.valueOf(position))){
+        if (mUsers.get(position).id.equals(Utilities.sUid)){
+            holder.mFollowButton.setVisibility(View.GONE);
+            holder.mFollowButtonChecked.setVisibility(View.GONE);
+        }else if (checkedItems.contains(Integer.valueOf(position))){
             holder.mFollowButton.setVisibility(View.GONE);
             holder.mFollowButtonChecked.setVisibility(View.VISIBLE);
         }else{
@@ -82,15 +98,19 @@ public class AdapterSearchFriends extends RecyclerView.Adapter<AdapterSearchFrie
             holder.mFollowButtonChecked.setVisibility(View.GONE);
         }
 
-        holder.description.setText(occupation[position]);
-        holder.contactName.setText(contactNames[position]);
-        holder.avatar.setImageResource(avatars[position]);
+        holder.description.setText(mUsers.get(position).bio);
+        String name = (!mUsers.get(position).fullname.isEmpty()) ? mUsers.get(position).fullname : mUsers.get(position).username;
+        holder.contactName.setText(name);
+        if (!mUsers.get(position).avatar.isEmpty()) {
+            Glide.with(context).load(Uri.parse(mUsers.get(position).avatar))
+                    .bitmapTransform(new CropCircleTransformation(context)).into(holder.avatar);
+        }
 
     }
 
     @Override
     public int getItemCount() {
-        return contactNames.length;
+        return mUsers.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
@@ -118,22 +138,31 @@ public class AdapterSearchFriends extends RecyclerView.Adapter<AdapterSearchFrie
 
         @Override
         public void onClick(View v) {
+            HttpKit http = new HttpKit(context);
+            boolean isFollow;
             if (v.getId() == mFollowButton.getId()){
                 checkedItems.add(getAdapterPosition());
                 mFollowButton.setVisibility(View.GONE);
                 mFollowButtonChecked.setVisibility(View.VISIBLE);
+                isFollow = true;
             }else if (v.getId() == mFollowButtonChecked.getId()){
                 checkedItems.remove(Integer.valueOf(getAdapterPosition()));
                 mFollowButton.setVisibility(View.VISIBLE);
                 mFollowButtonChecked.setVisibility(View.GONE);
+                isFollow = false;
+            }else{
+                isFollow = false;
             }
 
+            String id = mUsers.get(getAdapterPosition()).id;
+            Log.e("AdapterSearchFriends", "id: "+id+"\nisFollow: "+isFollow);
+            http.followUnfollow(isFollow, id, Utilities.sToken);
 
         }
 
         @Override
         public boolean onLongClick(View v) {
-            ((MainActivity)context).switchPageHandler(MainActivity.Page.FriendsDope);
+//            ((MainActivity)context).switchPageHandler(MainActivity.Page.FriendsDope);
             return false;
         }
     }

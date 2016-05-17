@@ -24,40 +24,20 @@
         >
 
         <TextView
+            android:id="@+id/comments_question"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/share_dope_dummy_question_text"
             android:textColor="@color/main_screen_question_font_color"
             android:textSize="@dimen/main_screen_question_font_size" />
 
         <TextView
+            android:id="@+id/comments_number_of_votes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/fish_votes_quantity"
             android:textColor="@color/main_screen_votes_font_color"
             android:textSize="@dimen/main_screen_votes_font_size" />
 
     </LinearLayout>
-
-    <!--DEPRECATED NOT IN USE under-->
-    <ScrollView
-        android:id="@+id/comments_scroll_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/comments_add_comment_bar"
-        android:layout_below="@+id/comments_info_bar"
-        android:visibility="gone">
-
-        <LinearLayout
-            android:id="@+id/comments_comments_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-        </LinearLayout>
-
-    </ScrollView>
-    <!--DEPRECATED NOT IN USE above-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/comments_comment_list"

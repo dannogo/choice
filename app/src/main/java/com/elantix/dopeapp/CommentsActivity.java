@@ -2,13 +2,20 @@ package com.elantix.dopeapp;
 
 import android.app.ProgressDialog;
 import android.app.Service;
+import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,24 +30,25 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.util.Util;
+
 /**
  * Created by oleh on 4/3/16.
  */
 public class CommentsActivity extends AppCompatActivity implements View.OnClickListener{
 
     private Toolbar mToolbar;
-    private LinearLayout mCommentsContainer;
-    private ScrollView mScrollView;
     private ImageButton mSendButton;
     private ImageButton mLeftToolbarButton;
     private EditText mNewCommentField;
     protected RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    public RecyclerView.Adapter mAdapter;
     private SoftKeyboard softKeyboard;
     private LinearLayout mInfoBar;
     private ChatType mType;
     public ProgressDialog mProgressDialog;
     private String mDopeId;
+
 
 
     private enum ChatType{
@@ -57,7 +65,15 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
             http.getMyProfileInfo();
         }
 
-        mDopeId = getIntent().getStringExtra("dopeId");
+        Intent intent = getIntent();
+        mDopeId = intent.getStringExtra("dopeId");
+        String question = intent.getStringExtra("question");
+        int votesCnt = intent.getIntExtra("votesCnt", 0);
+
+        TextView questionView = (TextView) findViewById(R.id.comments_question);
+        TextView votesView = (TextView) findViewById(R.id.comments_number_of_votes);
+        questionView.setText(question);
+        votesView.setText(""+votesCnt+" Votes");
 
         mInfoBar = (LinearLayout) findViewById(R.id.comments_info_bar);
         int type = getIntent().getIntExtra("type", 0);
@@ -124,13 +140,6 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
 //        softKeyboard.closeSoftKeyboard();
 
 
-
-        // DEPRECATED
-        mCommentsContainer = (LinearLayout) findViewById(R.id.comments_comments_container);
-        mScrollView = (ScrollView) findViewById(R.id.comments_scroll_view);
-        // DEPRECATED
-
-
         mSendButton = (ImageButton) findViewById(R.id.comments_send_button);
         mSendButton.setOnClickListener(this);
 
@@ -156,6 +165,9 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
         mAdapter = new AdapterComments(this, mDopeId, comments);
         mRecyclerView.setAdapter(mAdapter);
 //        mRecyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
+        mRecyclerView.setHasFixedSize(true);
+        setUpItemTouchHelper();
+        setUpAnimationDecoratorHelper();
     }
 
     @Override
@@ -165,65 +177,8 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
         softKeyboard.unRegisterSoftKeyboardCallback();
     }
 
-//    // DEPRECATED
-//    private void addComments(Boolean dummy){
-//
-//        LayoutInflater inflater = getLayoutInflater();
-//
-//        if (dummy) {
-//            int[] avatarsResources = {R.drawable.fr3, R.drawable.fr4, R.drawable.fr5
-//                    , R.drawable.fr3, R.drawable.fr4, R.drawable.fr5
-//
-//            };
-//            int[] usersNames = {R.string.single_comment_dummy_user_name_1, R.string.single_comment_dummy_user_name_2, R.string.single_comment_dummy_user_name_3
-//                    , R.string.single_comment_dummy_user_name_1, R.string.single_comment_dummy_user_name_2, R.string.single_comment_dummy_user_name_3
-//
-//            };
-//            int[] commentsText = {R.string.single_comment_dummy_text_1, R.string.single_comment_dummy_text_2, R.string.single_comment_dummy_text_3
-//                    , R.string.single_comment_dummy_text_1, R.string.single_comment_dummy_text_2, R.string.single_comment_dummy_text_3
-//            };
-//
-//            for (int i=0; i< avatarsResources.length; i++){
-//                inflateComment(inflater, true, avatarsResources[i], usersNames[i], commentsText[i]);
-//            }
-//        }else{
-//            if (!mNewCommentField.getText().toString().matches("")) {
-//                inflateComment(inflater, false, null, null, null);
-//            }
-//        }
-//
-//
-//        mScrollView.post(new Runnable() {
-//            public void run() {
-//                mScrollView.fullScroll(ScrollView.FOCUS_DOWN);
-//            }
-//        });
-//
-//    }
 
-//    // DEPRECATED
-//    private void inflateComment(LayoutInflater inflater, Boolean dummy, Integer avatarRes, Integer userNameRes, Integer textRes) {
-//        View comment = inflater.inflate(R.layout.single_comment, mCommentsContainer, false);
-//        ImageView avatar = (ImageView) comment.findViewById(R.id.single_comment_avatar);
-//        TextView userName = (TextView) comment.findViewById(R.id.single_comment_user_name);
-//        TextView commentText = (TextView) comment.findViewById(R.id.single_comment_comment_text);
-//        if(dummy){
-//            avatar.setImageResource(avatarRes);
-//            userName.setText(userNameRes);
-//            commentText.setText(textRes);
-//        }else{
-//            userName.setTextColor(ContextCompat.getColor(CommentsActivity.this, R.color.single_comment_user_name_color));
-//            TextView time = (TextView) comment.findViewById(R.id.single_comment_time);
-//            time.setText("Just now");
-//            avatar.setImageResource(R.drawable.maletskiy1);
-//            userName.setText("Nikolay Maletskiy");
-//
-//            commentText.setText(mNewCommentField.getText());
-//
-//        }
-//
-//        mCommentsContainer.addView(comment);
-//    }
+
 
     private void sendComment(){
         //Send to server. If success call adapters addComment method
@@ -252,5 +207,177 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
 //            addComments(false);
             sendComment();
         }
+    }
+
+    private void setUpItemTouchHelper() {
+
+        ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
+
+            // we want to cache these and not allocate anything repeatedly in the onChildDraw method
+            Drawable background;
+            Drawable xMark;
+            int xMarkMargin;
+            boolean initiated;
+
+            private void init() {
+                background = new ColorDrawable(Color.RED);
+                xMark = ContextCompat.getDrawable(CommentsActivity.this, R.drawable.ic_clear_24dp);
+                xMark.setColorFilter(Color.WHITE, PorterDuff.Mode.SRC_ATOP);
+                xMarkMargin = (int) CommentsActivity.this.getResources().getDimension(R.dimen.ic_clear_margin);
+                initiated = true;
+            }
+
+            // not important, we don't want drag & drop
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+                return false;
+            }
+
+            @Override
+            public int getSwipeDirs(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+                int position = viewHolder.getAdapterPosition();
+                AdapterComments testAdapter = (AdapterComments)recyclerView.getAdapter();
+                if (testAdapter.isPendingRemoval(position)) {
+                    return 0;
+                }
+                if (Utilities.sUid == null){
+                    return 0;
+                }
+                if (!testAdapter.mCommentsList.get(position).user_id.equals(Utilities.sUid)) {
+                    return 0;
+                }
+                return super.getSwipeDirs(recyclerView, viewHolder);
+            }
+
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+                int swipedPosition = viewHolder.getAdapterPosition();
+                AdapterComments adapter = (AdapterComments)mRecyclerView.getAdapter();
+//                if (adapter.mCommentsList.get(swipedPosition).user_id.equals(Utilities.sUid)) {
+                    adapter.pendingRemoval(swipedPosition);
+//                }
+            }
+
+            @Override
+            public void onChildDraw(Canvas c, RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
+                View itemView = viewHolder.itemView;
+
+                // not sure why, but this method get's called for viewholder that are already swiped away
+                if (viewHolder.getAdapterPosition() == -1) {
+                    // not interested in those
+                    return;
+                }
+
+                if (!initiated) {
+                    init();
+                }
+
+                // draw red background
+                background.setBounds(itemView.getRight() + (int) dX, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                background.draw(c);
+
+                // draw x mark
+                int itemHeight = itemView.getBottom() - itemView.getTop();
+                int intrinsicWidth = xMark.getIntrinsicWidth();
+                int intrinsicHeight = xMark.getIntrinsicWidth();
+
+                int xMarkLeft = itemView.getRight() - xMarkMargin - intrinsicWidth;
+                int xMarkRight = itemView.getRight() - xMarkMargin;
+                int xMarkTop = itemView.getTop() + (itemHeight - intrinsicHeight)/2;
+                int xMarkBottom = xMarkTop + intrinsicHeight;
+                xMark.setBounds(xMarkLeft, xMarkTop, xMarkRight, xMarkBottom);
+
+                xMark.draw(c);
+
+                super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
+            }
+
+        };
+        ItemTouchHelper mItemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
+    }
+
+    /**
+     * We're gonna setup another ItemDecorator that will draw the red background in the empty space while the items are animating to thier new positions
+     * after an item is removed.
+     */
+    private void setUpAnimationDecoratorHelper() {
+        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+
+            // we want to cache this and not allocate anything repeatedly in the onDraw method
+            Drawable background;
+            boolean initiated;
+
+            private void init() {
+                background = new ColorDrawable(Color.RED);
+                initiated = true;
+            }
+
+            @Override
+            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+
+                if (!initiated) {
+                    init();
+                }
+
+                // only if animation is in progress
+                if (parent.getItemAnimator().isRunning()) {
+
+                    // some items might be animating down and some items might be animating up to close the gap left by the removed item
+                    // this is not exclusive, both movement can be happening at the same time
+                    // to reproduce this leave just enough items so the first one and the last one would be just a little off screen
+                    // then remove one from the middle
+
+                    // find first child with translationY > 0
+                    // and last one with translationY < 0
+                    // we're after a rect that is not covered in recycler-view views at this point in time
+                    View lastViewComingDown = null;
+                    View firstViewComingUp = null;
+
+                    // this is fixed
+                    int left = 0;
+                    int right = parent.getWidth();
+
+                    // this we need to find out
+                    int top = 0;
+                    int bottom = 0;
+
+                    // find relevant translating views
+                    int childCount = parent.getLayoutManager().getChildCount();
+                    for (int i = 0; i < childCount; i++) {
+                        View child = parent.getLayoutManager().getChildAt(i);
+                        if (child.getTranslationY() < 0) {
+                            // view is coming down
+                            lastViewComingDown = child;
+                        } else if (child.getTranslationY() > 0) {
+                            // view is coming up
+                            if (firstViewComingUp == null) {
+                                firstViewComingUp = child;
+                            }
+                        }
+                    }
+
+                    if (lastViewComingDown != null && firstViewComingUp != null) {
+                        // views are coming down AND going up to fill the void
+                        top = lastViewComingDown.getBottom() + (int) lastViewComingDown.getTranslationY();
+                        bottom = firstViewComingUp.getTop() + (int) firstViewComingUp.getTranslationY();
+                    } else if (lastViewComingDown != null) {
+                        // views are going down to fill the void
+                        top = lastViewComingDown.getBottom() + (int) lastViewComingDown.getTranslationY();
+                        bottom = lastViewComingDown.getBottom();
+                    } else if (firstViewComingUp != null) {
+                        // views are coming up to fill the void
+                        top = firstViewComingUp.getTop();
+                        bottom = firstViewComingUp.getTop() + (int) firstViewComingUp.getTranslationY();
+                    }
+
+//                    background.setBounds(left, top, right, bottom);
+                    background.draw(c);
+
+                }
+                super.onDraw(c, parent, state);
+            }
+
+        });
     }
 }

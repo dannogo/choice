@@ -223,6 +223,8 @@ public class ProfileSettingsActivity extends AppCompatActivity implements View.O
             mTempProf.username = mUsernameEdittext.getText().toString();
             mTempProf.fullname = mFirstLastNamesEdittext.getText().toString();
             mTempProf.bio = mBioField.getText().toString();
+            mTempProf.bio = mTempProf.bio.replaceAll("(\\r|\\n)", "");
+
             mTempProf.email = mEmailField.getText().toString();
             mTempProf.phone = mPhoneField.getText().toString();
 
@@ -230,11 +232,12 @@ public class ProfileSettingsActivity extends AppCompatActivity implements View.O
             if (!mAvatarWasNotChanged) {
                 ResizeAvatarTask task = new ResizeAvatarTask();
                 task.execute();
-            }
+            }else {
 
-            HttpKit http = new HttpKit(ProfileSettingsActivity.this);
-            http.saveProfileChanges(Utilities.sUid, Utilities.sToken, mTempProf.email, mTempProf.username,
-                    mTempProf.fullname, avatarParam, mTempProf.phone, mTempProf.gender, mTempProf.bio);
+                HttpKit http = new HttpKit(ProfileSettingsActivity.this);
+                http.saveProfileChanges(Utilities.sUid, Utilities.sToken, mTempProf.email, mTempProf.username,
+                        mTempProf.fullname, avatarParam, mTempProf.phone, mTempProf.gender, mTempProf.bio);
+            }
 
 //            doneButtonAction();
         }else if (id == mChangeGender.getId()){
@@ -293,7 +296,6 @@ public class ProfileSettingsActivity extends AppCompatActivity implements View.O
             mTempProf.avatar = Utilities.getPath(ProfileSettingsActivity.this, selectedImage);
         }
         mAvatarWasNotChanged = false;
-        Log.d("SetAct", "path: "+mTempProf.avatar);
         setProperAvatarState();
     }
 
