@@ -49,19 +49,22 @@ public class AdapterSearchFriends extends RecyclerView.Adapter<AdapterSearchFrie
         }
 
         ArrayList<String> followersIdsArr = new ArrayList<>();
-        for (int i=0; i<followersIds.length; i++){
+        if (followersIds != null) {
+            for (int i = 0; i < followersIds.length; i++) {
 //            if (followersIds[i].equals(Utilities.sUid)) {
 //                mUsers.remove(i);
 //                continue;
 //            }
-            followersIdsArr.add(followersIds[i]);
+                followersIdsArr.add(followersIds[i]);
 
+            }
         }
 
-
-        for (int i=0; i<followingsIds.length; i++){
-            if (followersIdsArr.contains(followingsIds[i])){
-                checkedItems.add(followersIdsArr.indexOf(followingsIds[i]));
+        if (followingsIds != null) {
+            for (int i = 0; i < followingsIds.length; i++) {
+                if (followersIdsArr.contains(followingsIds[i])) {
+                    checkedItems.add(followersIdsArr.indexOf(followingsIds[i]));
+                }
             }
         }
 
@@ -99,7 +102,7 @@ public class AdapterSearchFriends extends RecyclerView.Adapter<AdapterSearchFrie
         }
 
         holder.description.setText(mUsers.get(position).bio);
-        String name = (!mUsers.get(position).fullname.isEmpty()) ? mUsers.get(position).fullname : mUsers.get(position).username;
+        String name = (mUsers.get(position).fullname != null && !mUsers.get(position).fullname.isEmpty()) ? mUsers.get(position).fullname : mUsers.get(position).username;
         holder.contactName.setText(name);
         if (!mUsers.get(position).avatar.isEmpty()) {
             Glide.with(context).load(Uri.parse(mUsers.get(position).avatar))

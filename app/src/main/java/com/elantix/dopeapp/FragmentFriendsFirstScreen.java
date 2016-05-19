@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import mehdi.sakout.fancybuttons.FancyButton;
 
@@ -29,9 +30,10 @@ public class FragmentFriendsFirstScreen extends Fragment {
         fancyButtonSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ((MainActivity)getActivity()).switchPageHandler(MainActivity.Page.FriendsSearch);
+                ((MainActivity) getActivity()).switchPageHandler(MainActivity.Page.FriendsSearch);
             }
         });
+
 
         return fragmentView;
     }

@@ -49,15 +49,17 @@ public class AdapterComments extends RecyclerView.Adapter<AdapterComments.Commen
         }
     }
 
-    public void addComment(String message){
+    public void addComment(String message, String commentId, String dateCreate){
         if (Utilities.sMyProfile == null){
             Toast.makeText(mContext, "You are not logged in", Toast.LENGTH_SHORT).show();
         }else {
             CommentInfo commentInfo = new CommentInfo();
             commentInfo.fullname = Utilities.sMyProfile.fullname;
             commentInfo.username = Utilities.sMyProfile.username;
-            commentInfo.date_create = new Date().toString();
+//            commentInfo.date_create = new Date().toString();
             commentInfo.comment = message;
+            commentInfo.id = commentId;
+            commentInfo.date_create = dateCreate;
             commentInfo.avatar = Utilities.sMyProfile.avatar;
             commentInfo.email = Utilities.sMyProfile.email;
             commentInfo.user_id = Utilities.sMyProfile.id;

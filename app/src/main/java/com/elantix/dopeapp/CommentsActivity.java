@@ -191,8 +191,8 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    public void showMyNewComment(String text){
-        ((AdapterComments)mAdapter).addComment(text);
+    public void showMyNewComment(String text, String commentId, String dateCreate){
+        ((AdapterComments)mAdapter).addComment(text, commentId, dateCreate);
         mNewCommentField.setText("");
         DopeStatisticsActivity.sNumOfComments++;
     }

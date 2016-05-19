@@ -51,26 +51,7 @@ public class ShareProfileActivity extends AppCompatActivity implements View.OnCl
         mAvatar = (CircularImageView) findViewById(R.id.share_profile_avatar);
         mAvatarPlaceholder = (ImageView) findViewById(R.id.profile_settings_user_icon);
         Boolean isOwn = getIntent().getBooleanExtra("own", false);
-//        if (isOwn){
-//            if (Utilities.sCurProfile.avatar != null) {
-//                if (Utilities.sCurProfile.avatar.startsWith("http")) {
-//                    Glide.with(this).load(Uri.parse(Utilities.sCurProfile.avatar)).into(mAvatar);
-//                }else {
-//                    Glide.with(this).load(new File(Utilities.sCurProfile.avatar).getPath()).into(mAvatar);
-//                }
-//            }else{
-//                mAvatar.setVisibility(View.GONE);
-//                mAvatarPlaceholder.setVisibility(View.VISIBLE);
-//            }
-//            String username = (Utilities.sCurProfile.username.isEmpty()) ? getResources().getString(R.string.profile_settings_username_placeholder_text) : Utilities.sCurProfile.username;
-//            mUsername.setText(username);
-//            String firstLastNames = (Utilities.sCurProfile.fullname.isEmpty()) ? getResources().getString(R.string.profile_settings_firstlastnames_placeholder_text) : Utilities.sCurProfile.fullname;
-//            mFirstLastNames.setText(firstLastNames);
-//        }else {
-//            Glide.with(this).load(R.drawable.ania2).into(mAvatar);
-//        }
 
-        // Experiment
         if (Utilities.sCurProfile.avatar != null) {
             if (Utilities.sCurProfile.avatar.startsWith("http")) {
                 Glide.with(this).load(Uri.parse(Utilities.sCurProfile.avatar)).into(mAvatar);
@@ -85,10 +66,6 @@ public class ShareProfileActivity extends AppCompatActivity implements View.OnCl
         mUsername.setText(username);
         String firstLastNames = (Utilities.sCurProfile.fullname.isEmpty()) ? getResources().getString(R.string.profile_settings_firstlastnames_placeholder_text) : Utilities.sCurProfile.fullname;
         mFirstLastNames.setText(firstLastNames);
-        // Experiment
-
-
-
     }
 
     private void buttonsAppearenceHandling(){

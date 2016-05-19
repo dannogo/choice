@@ -170,9 +170,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Utilities.sFragmentHistory.add(chainLinkDaily);
                     Log.e("MainActivity daily", "Utilities.sFragmentHistory.size(): " + Utilities.sFragmentHistory.size());
                 }else{
-                    int position = (int) Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size()-1).bundleData.get("position");
-                    bundle.putInt("position", position);
-                    Log.w("MainActivity daily", "bundle position: " + position);
+                    if (Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size()-1).bundleData.get("position") != null) {
+                        int position = (int) Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size() - 1).bundleData.get("position");
+                        bundle.putInt("position", position);
+                        Log.w("MainActivity daily", "bundle position: " + position);
+                    }
                 }
 
                 bundle.putInt("num", Utilities.sDopes10.length);

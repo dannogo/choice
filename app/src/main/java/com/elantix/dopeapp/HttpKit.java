@@ -2,6 +2,7 @@ package com.elantix.dopeapp;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -158,6 +159,13 @@ public class HttpKit {
         String[] params = {uid, token, query, page, count, sort, purpose};
         GetFollowersTask task = new GetFollowersTask();
         task.execute(params);
+    }
+
+    public void getFriends(String token, String page, String query, String count, String sort){
+        String[] params = {token, page, query, count, sort};
+        GetFriendsTask task = new GetFriendsTask();
+        task.execute(params);
+
     }
 
     public void createDope(String token, String question, String photo1, String photo2) {
@@ -1101,21 +1109,22 @@ public class HttpKit {
         @Override
         protected String[] doInBackground(String... params) {
             String replacedSpaces = params[2].replaceAll(" ", "%20");
-//            String urlStr = "http://dopeapi.elantix.net/dopes.comment?token="+params[0]+"&dope="+params[1]+"&text="+replacedSpaces;
             String urlStr = "http://dopeapi.elantix.net/dopes.comment";
             String paramsStr = "token="+params[0]+"&dope="+params[1]+"&text="+replacedSpaces;
             if (params[3] != null){
-//                urlStr += "&parent="+params[3];
                 paramsStr += "&parent="+params[3];
             }
-//            String response = RequestToServerGET(urlStr);
+
             String response = requestToServerPOST(urlStr, paramsStr);
             try {
                 JSONObject json = new JSONObject(response);
                 Boolean success = json.getBoolean("success");
                 String responseText = json.getString("response_text");
+                JSONObject responseObj = json.getJSONObject("response");
+                String commentId = responseObj.getString("comment_id");
+                String dateCreate = responseObj.getString("date_create");
 
-                String[] result = {""+success, responseText, params[2]};
+                String[] result = {""+success, responseText, params[2], commentId, dateCreate};
                 return result;
 
             } catch (JSONException e) {
@@ -1130,7 +1139,7 @@ public class HttpKit {
             CommentsActivity activity = ((CommentsActivity) mContext);
             if (result != null){
                 if (result[0].equals("true")){
-                    activity.showMyNewComment(result[2]);
+                    activity.showMyNewComment(result[2], result[3], result[4]);
                 }else{
                     Toast.makeText(mContext, result[1], Toast.LENGTH_SHORT).show();
                 }
@@ -1152,7 +1161,6 @@ public class HttpKit {
             String insert = (params[0].equals("follow")) ? "follow" : "unfollow";
             String urlStr = "http://dopeapi.elantix.net/users."+insert;
             String paramsStr = "uid=" + params[1]+"&token="+params[2];
-//            followers
             String response = requestToServerPOST(urlStr, paramsStr);
             try {
                 JSONObject json = new JSONObject(response);
@@ -1174,9 +1182,139 @@ public class HttpKit {
             super.onPostExecute(result);
             if (result != null){
                 if (!result[0].equals("true")){
+                    Toast.makeText(mContext, "" + result[1], Toast.LENGTH_SHORT).show();
                 }
-                Toast.makeText(mContext, ""+result[1], Toast.LENGTH_SHORT).show();
             }
+        }
+    }
+
+    public class GetFriendsTask extends AsyncTask<String, Void, Object[]>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            ((MainActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+        }
+
+        @Override
+        protected Object[] doInBackground(String... params) {
+//            http://dopeapi.elantix.net/users.lists?token=8bd5a40d9d9c4f96199b2b935d5a368d
+//            String[] params = {token, page, query, count, sort};
+            String urlStr = "http://dopeapi.elantix.net/users.lists";
+            String paramsStr = "token="+params[0];
+            if (params[1] != null) paramsStr += "&p="+params[1];
+            if (params[2] != null) paramsStr += "&q="+params[2];
+            if (params[3] != null) paramsStr += "&count="+params[3];
+            if (params[4] != null) paramsStr += "&sort="+params[4];
+
+            String response = requestToServerPOST(urlStr, paramsStr);
+            Log.w("HttpKit Friends", response);
+
+
+            String followString = "http://dopeapi.elantix.net/users.followings";
+
+            String paramsFollowString = "uid="+Utilities.sUid;
+            paramsFollowString += "&fields=id";
+            paramsFollowString += "&count=9999";
+            String responseFollowings = requestToServerPOST(followString, paramsFollowString);
+
+            try{
+                // Get followings
+                JSONObject jsonFollowings = new JSONObject(responseFollowings);
+                Boolean successFollowings = jsonFollowings.getBoolean("success");
+
+                String[] followings;
+
+                if (successFollowings){
+                    JSONObject responseObjFollowings = jsonFollowings.getJSONObject("response");
+                    JSONArray listFollowings = responseObjFollowings.getJSONArray("list");
+
+                    followings = new String[listFollowings.length()];
+                    Arrays.fill(followings, null);
+
+                    for (int i=0; i<listFollowings.length(); i++){
+                        JSONObject item = listFollowings.getJSONObject(i);
+                        followings[i] = item.getString("id");
+                    }
+
+                }else{
+                    followings = null;
+                    String responseTextFollowings = jsonFollowings.getString("response_text");
+                }
+                JSONObject json = new JSONObject(response);
+                Boolean success = json.getBoolean("success");
+
+                if (success){
+                    JSONObject responseObj = json.getJSONObject("response");
+                    Integer totalCount = responseObj.getInt("count");
+                    JSONArray list = responseObj.getJSONArray("list");
+                    ProfileInfo[] profiles = new ProfileInfo[list.length()];
+                    String[] usersIds = new String[profiles.length];
+                    for (int i=0; i<list.length(); i++){
+                        JSONObject item = list.getJSONObject(i);
+
+                        usersIds[i] = item.getString("id");
+
+                        ProfileInfo profile = new ProfileInfo();
+                        profile.id = item.getString("id");
+                        profile.fb_id = item.getString("fb_id");
+                        profile.tw_id = item.getString("tw_id");
+                        profile.email = item.getString("email");
+                        profile.username = item.getString("username");
+                        profile.avatar = item.getString("avatar");
+                        profile.gender = item.getString("gender");
+                        profile.birthday = item.getString("birthday");
+                        profile.date_reg = item.getString("date_reg");
+                        profile.follow = Integer.parseInt(item.getString("follow"));
+                        profile.bio = item.getString("bio");
+                        profiles[i] = profile;
+                    }
+                    Object[] result = {success, totalCount, profiles, usersIds, followings};
+                    return result;
+                }else{
+                    String responseText = json.getString("response_text");
+                    Object[] result = {success, responseText};
+                    return result;
+                }
+
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object[] result) {
+            super.onPostExecute(result);
+            ((MainActivity) mContext).mProgressDialog.dismiss();
+
+            if (result != null){
+                if ((Boolean)result[0]){
+                    int count = (int) result[1];
+                    ProfileInfo[] users = (ProfileInfo[]) result[2];
+                    ((FragmentSearchFriends) ((MainActivity) mContext).mCurrentFragment).setUsersInfo(users, (String[])result[3], (String[])result[4]);
+                }
+            }
+
+            /*
+
+            ((MainActivity) mContext).mProgressDialog.dismiss();
+
+            if (result != null) {
+                if (result[0].toString().equals("true")) {
+                    int count = (int) result[1];
+                    ProfileInfo[] resultList = (ProfileInfo[]) result[2];
+
+                    ((FragmentProfileFollowers) ((MainActivity) mContext).mCurrentFragment).setFollowersInfo(resultList, (String[])result[3], (String[])result[4]);
+                    for (int i = 0; i < resultList.length; i++) {
+                        Log.d("HttpKit Followers", "" + resultList[i]);
+                    }
+                }
+            }
+             */
+
         }
     }
 
@@ -1210,6 +1348,7 @@ public class HttpKit {
 
             String paramsFollowString = "uid="+Utilities.sUid;
             paramsFollowString += "&fields=id";
+            paramsFollowString += "&count=9999";
             String responseFollowings = requestToServerPOST(followString, paramsFollowString);
 
             try{
