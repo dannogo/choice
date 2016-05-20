@@ -1198,8 +1198,6 @@ public class HttpKit {
 
         @Override
         protected Object[] doInBackground(String... params) {
-//            http://dopeapi.elantix.net/users.lists?token=8bd5a40d9d9c4f96199b2b935d5a368d
-//            String[] params = {token, page, query, count, sort};
             String urlStr = "http://dopeapi.elantix.net/users.lists";
             String paramsStr = "token="+params[0];
             if (params[1] != null) paramsStr += "&p="+params[1];
@@ -1208,39 +1206,8 @@ public class HttpKit {
             if (params[4] != null) paramsStr += "&sort="+params[4];
 
             String response = requestToServerPOST(urlStr, paramsStr);
-            Log.w("HttpKit Friends", response);
-
-
-            String followString = "http://dopeapi.elantix.net/users.followings";
-
-            String paramsFollowString = "uid="+Utilities.sUid;
-            paramsFollowString += "&fields=id";
-            paramsFollowString += "&count=9999";
-            String responseFollowings = requestToServerPOST(followString, paramsFollowString);
 
             try{
-                // Get followings
-                JSONObject jsonFollowings = new JSONObject(responseFollowings);
-                Boolean successFollowings = jsonFollowings.getBoolean("success");
-
-                String[] followings;
-
-                if (successFollowings){
-                    JSONObject responseObjFollowings = jsonFollowings.getJSONObject("response");
-                    JSONArray listFollowings = responseObjFollowings.getJSONArray("list");
-
-                    followings = new String[listFollowings.length()];
-                    Arrays.fill(followings, null);
-
-                    for (int i=0; i<listFollowings.length(); i++){
-                        JSONObject item = listFollowings.getJSONObject(i);
-                        followings[i] = item.getString("id");
-                    }
-
-                }else{
-                    followings = null;
-                    String responseTextFollowings = jsonFollowings.getString("response_text");
-                }
                 JSONObject json = new JSONObject(response);
                 Boolean success = json.getBoolean("success");
 
@@ -1249,11 +1216,8 @@ public class HttpKit {
                     Integer totalCount = responseObj.getInt("count");
                     JSONArray list = responseObj.getJSONArray("list");
                     ProfileInfo[] profiles = new ProfileInfo[list.length()];
-                    String[] usersIds = new String[profiles.length];
                     for (int i=0; i<list.length(); i++){
                         JSONObject item = list.getJSONObject(i);
-
-                        usersIds[i] = item.getString("id");
 
                         ProfileInfo profile = new ProfileInfo();
                         profile.id = item.getString("id");
@@ -1263,13 +1227,14 @@ public class HttpKit {
                         profile.username = item.getString("username");
                         profile.avatar = item.getString("avatar");
                         profile.gender = item.getString("gender");
-                        profile.birthday = item.getString("birthday");
+//                        profile.birthday = item.getString("birthday");
                         profile.date_reg = item.getString("date_reg");
                         profile.follow = Integer.parseInt(item.getString("follow"));
                         profile.bio = item.getString("bio");
                         profiles[i] = profile;
                     }
-                    Object[] result = {success, totalCount, profiles, usersIds, followings};
+                    Object[] result = {success, totalCount, profiles};
+                    Log.e("HttpKit GetFriends", "totalCount: "+totalCount);
                     return result;
                 }else{
                     String responseText = json.getString("response_text");
@@ -1294,26 +1259,9 @@ public class HttpKit {
                 if ((Boolean)result[0]){
                     int count = (int) result[1];
                     ProfileInfo[] users = (ProfileInfo[]) result[2];
-                    ((FragmentSearchFriends) ((MainActivity) mContext).mCurrentFragment).setUsersInfo(users, (String[])result[3], (String[])result[4]);
+                    ((FragmentSearchFriends) ((MainActivity) mContext).mCurrentFragment).setUsersInfo(users, count);
                 }
             }
-
-            /*
-
-            ((MainActivity) mContext).mProgressDialog.dismiss();
-
-            if (result != null) {
-                if (result[0].toString().equals("true")) {
-                    int count = (int) result[1];
-                    ProfileInfo[] resultList = (ProfileInfo[]) result[2];
-
-                    ((FragmentProfileFollowers) ((MainActivity) mContext).mCurrentFragment).setFollowersInfo(resultList, (String[])result[3], (String[])result[4]);
-                    for (int i = 0; i < resultList.length; i++) {
-                        Log.d("HttpKit Followers", "" + resultList[i]);
-                    }
-                }
-            }
-             */
 
         }
     }
@@ -1344,38 +1292,7 @@ public class HttpKit {
 
             String response = requestToServerPOST(urlStr, paramsStr);
 
-            String followString = "http://dopeapi.elantix.net/users.followings";
-
-            String paramsFollowString = "uid="+Utilities.sUid;
-            paramsFollowString += "&fields=id";
-            paramsFollowString += "&count=9999";
-            String responseFollowings = requestToServerPOST(followString, paramsFollowString);
-
             try{
-                // Get followings
-                JSONObject jsonFollowings = new JSONObject(responseFollowings);
-                Boolean successFollowings = jsonFollowings.getBoolean("success");
-
-                String[] followings;
-
-                if (successFollowings){
-                    JSONObject responseObjFollowings = jsonFollowings.getJSONObject("response");
-                    JSONArray listFollowings = responseObjFollowings.getJSONArray("list");
-
-                    followings = new String[listFollowings.length()];
-                    Arrays.fill(followings, null);
-
-                    for (int i=0; i<listFollowings.length(); i++){
-                        JSONObject item = listFollowings.getJSONObject(i);
-                        followings[i] = item.getString("id");
-                    }
-
-                }else{
-                    followings = null;
-                    String responseTextFollowings = jsonFollowings.getString("response_text");
-                }
-
-                // Get followers
                 JSONObject json = new JSONObject(response);
                 Boolean success = json.getBoolean("success");
                 if (success){
@@ -1384,7 +1301,6 @@ public class HttpKit {
                     JSONArray list = responseObj.getJSONArray("list");
 
                     ProfileInfo[] profileList = new ProfileInfo[list.length()];
-                    String[] followersIds = new String[list.length()];
                     Arrays.fill(profileList, null);
 
                     for (int i=0; i<list.length(); i++){
@@ -1395,8 +1311,7 @@ public class HttpKit {
                         info.avatar = item.getString("avatar");
                         info.id = item.getString("id");
                         info.bio = item.getString("bio");
-
-                        followersIds[i] = info.id;
+                        info.follow = Integer.parseInt(item.getString("follow"));
 
                         // not in use, but don`t delete yet
 //                        info.email = item.getString("email");
@@ -1409,7 +1324,7 @@ public class HttpKit {
                         profileList[i] = info;
 
                     }
-                        Object[] result = {""+success, count, profileList, followersIds, followings};
+                        Object[] result = {""+success, count, profileList};
                     return result;
 
                 }else{
@@ -1436,7 +1351,8 @@ public class HttpKit {
                     int count = (int) result[1];
                     ProfileInfo[] resultList = (ProfileInfo[]) result[2];
 
-                    ((FragmentProfileFollowers) ((MainActivity) mContext).mCurrentFragment).setFollowersInfo(resultList, (String[])result[3], (String[])result[4]);
+//                    ((FragmentProfileFollowers) ((MainActivity) mContext).mCurrentFragment).setFollowersInfo(resultList, (String[])result[3], (String[])result[4]);
+                    ((FragmentProfileFollowers) ((MainActivity) mContext).mCurrentFragment).setFollowersInfo(resultList);
                     for (int i = 0; i < resultList.length; i++) {
                         Log.d("HttpKit Followers", "" + resultList[i]);
                     }

@@ -29,54 +29,22 @@ public class AdapterSearchFriends extends RecyclerView.Adapter<AdapterSearchFrie
 
     private LayoutInflater inflater;
     private Context context;
-    private ArrayList<ProfileInfo> mUsers;
+    public ArrayList<ProfileInfo> mUsers;
     private String[] mFollowingsIds;
 
 
     ArrayList<Integer> checkedItems = new ArrayList<>();
     private Utilities.FollowingListType mType;
 
-    public AdapterSearchFriends(Context context, Utilities.FollowingListType type, ProfileInfo[] users, String[] followersIds, String[] followingsIds) {
+    public AdapterSearchFriends(Context context, Utilities.FollowingListType type, ProfileInfo[] users){
         this.inflater = LayoutInflater.from(context);
         this.context = context;
-        mFollowingsIds = followingsIds;
         mUsers = new ArrayList<>();
 
         if (users != null) {
             for (int i = 0; i < users.length; i++) {
                 mUsers.add(users[i]);
             }
-        }
-
-        ArrayList<String> followersIdsArr = new ArrayList<>();
-        if (followersIds != null) {
-            for (int i = 0; i < followersIds.length; i++) {
-//            if (followersIds[i].equals(Utilities.sUid)) {
-//                mUsers.remove(i);
-//                continue;
-//            }
-                followersIdsArr.add(followersIds[i]);
-
-            }
-        }
-
-        if (followingsIds != null) {
-            for (int i = 0; i < followingsIds.length; i++) {
-                if (followersIdsArr.contains(followingsIds[i])) {
-                    checkedItems.add(followersIdsArr.indexOf(followingsIds[i]));
-                }
-            }
-        }
-
-        mType = type;
-        switch (type){
-            case ProfileFollowing:
-                for (int i=0; i<mUsers.size(); i++){
-//                    checkedItems.add(i);
-                }
-                break;
-            default:
-
         }
     }
 
@@ -93,7 +61,7 @@ public class AdapterSearchFriends extends RecyclerView.Adapter<AdapterSearchFrie
         if (mUsers.get(position).id.equals(Utilities.sUid)){
             holder.mFollowButton.setVisibility(View.GONE);
             holder.mFollowButtonChecked.setVisibility(View.GONE);
-        }else if (checkedItems.contains(Integer.valueOf(position))){
+        }else if (mUsers.get(position).follow == 1){
             holder.mFollowButton.setVisibility(View.GONE);
             holder.mFollowButtonChecked.setVisibility(View.VISIBLE);
         }else{

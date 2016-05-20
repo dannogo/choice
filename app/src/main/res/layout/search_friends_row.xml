@@ -21,14 +21,17 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="180dp"
         android:layout_height="wrap_content">
 
 
             <TextView
                 android:id="@+id/list_contact_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:lines="1"
+                android:ellipsize="end"
                 android:text="Some Name"
                 android:textSize="@dimen/message_list_contact_name_font_size"
                 android:textColor="@color/main_screen_question_font_color"
@@ -37,7 +40,7 @@
 
         <TextView
             android:id="@+id/contact_description"
-            android:layout_width="180dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
             android:lines="1"

@@ -59,8 +59,13 @@ public class FragmentProfileFollowers extends Fragment {
         return mFragmentView;
     }
 
-    public void setFollowersInfo(ProfileInfo[] followers, String[] followersIds, String[] followingsIds){
-        AdapterSearchFriends adapter = new AdapterSearchFriends(getActivity(), type, followers, followersIds, followingsIds);
+//    public void setFollowersInfo(ProfileInfo[] followers, String[] followersIds, String[] followingsIds){
+//        AdapterSearchFriends adapter = new AdapterSearchFriends(getActivity(), type, followers, followersIds, followingsIds);
+//        recyclerView.setAdapter(adapter);
+//    }
+
+    public void setFollowersInfo(ProfileInfo[] followers){
+        AdapterSearchFriends adapter = new AdapterSearchFriends(getActivity(), type, followers);
         recyclerView.setAdapter(adapter);
     }
 }
