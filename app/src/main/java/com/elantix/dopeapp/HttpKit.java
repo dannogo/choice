@@ -119,6 +119,13 @@ public class HttpKit {
         task.execute(params);
     }
 
+    public void getFriendsFeed(String token, String page, String count){
+        Utilities.sDopeListType = Utilities.DopeListType.Friends;
+        String[] params = {token, page, count};
+        GetFriendsFeed task = new GetFriendsFeed();
+        task.execute(params);
+    }
+
     public void getComments(String dopeId, String token, String page, String count){
         String[] params = {dopeId, token, page, count};
         GetCommentsTask task = new GetCommentsTask();
@@ -161,6 +168,11 @@ public class HttpKit {
         task.execute(params);
     }
 
+    public void checkMyFollowersPresence(){
+        CheckMyFollowersPresence task = new CheckMyFollowersPresence();
+        task.execute();
+    }
+
     public void getFriends(String token, String page, String query, String count, String sort){
         String[] params = {token, page, query, count, sort};
         GetFriendsTask task = new GetFriendsTask();
@@ -188,17 +200,7 @@ public class HttpKit {
 
     public void saveProfileChanges(String uid, String token, String email, String username,
                                    String fullname, String avatarPath, String phone, String gender, String bio) {
-        /*
-            params[0] - uid. required
-            params[1] - token. required
-            params[2] - email
-            params[3] - username
-            params[4] - firstname (fullname)
-            params[5] - avatar
-            params[6] - phone
-            params[7] - gender
-            params[8] - bio
-             */
+
         String[] params = {uid, token, email, username, fullname, avatarPath, phone, gender, bio};
         SaveProfileChangesTask task = new SaveProfileChangesTask();
         task.execute(params);
@@ -787,7 +789,6 @@ public class HttpKit {
         @Override
         protected Object[] doInBackground(String... params) {
 
-//            String urlStr = "http://api.svcontact.ru/dopes.user?uid=" + params[0];
             String urlStr = "http://dopeapi.elantix.net/dopes.user?uid=" + params[0];
 
 //            if (params[0] instanceof String[]){
@@ -1193,7 +1194,10 @@ public class HttpKit {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            ((MainActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+            MainActivity activity = (MainActivity)mContext;
+            if (((FragmentSearchFriends)activity.mCurrentFragment).isNewFetch) {
+                activity.mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+            }
         }
 
         @Override
@@ -1266,6 +1270,51 @@ public class HttpKit {
         }
     }
 
+    public class CheckMyFollowersPresence extends AsyncTask<Void, Void, Boolean>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            ((MainActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+        }
+
+        @Override
+        protected Boolean doInBackground(Void... params) {
+            String urlStr = "http://dopeapi.elantix.net/users.followings";
+            String paramsStr = "uid="+Utilities.sUid+"&token="+Utilities.sToken;
+            String response = requestToServerPOST(urlStr, paramsStr);
+//            String response = RequestToServerGET(urlStr);
+
+
+            try {
+                JSONObject json = new JSONObject(response);
+                Boolean success = json.getBoolean("success");
+                boolean result;
+                if (success) {
+                    JSONObject responseObj = json.getJSONObject("response");
+                    int count = responseObj.getInt("count");
+                    result = (count > 0) ? true : false;
+                    return result;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return false;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean result) {
+            super.onPostExecute(result);
+            MainActivity activity = ((MainActivity)mContext);
+            activity.mProgressDialog.dismiss();
+            if (result){
+                activity.switchPageHandler(MainActivity.Page.FriendsDope);
+            }else {
+                activity.switchPageHandler(MainActivity.Page.Friends);
+            }
+        }
+    }
 
     public class GetFollowersTask extends AsyncTask<String, Void, Object[]>{
 
@@ -1349,13 +1398,13 @@ public class HttpKit {
             if (result != null) {
                 if (result[0].toString().equals("true")) {
                     int count = (int) result[1];
+                    Log.e("HttpKit Followers", "count: "+count);
                     ProfileInfo[] resultList = (ProfileInfo[]) result[2];
 
-//                    ((FragmentProfileFollowers) ((MainActivity) mContext).mCurrentFragment).setFollowersInfo(resultList, (String[])result[3], (String[])result[4]);
-                    ((FragmentProfileFollowers) ((MainActivity) mContext).mCurrentFragment).setFollowersInfo(resultList);
-                    for (int i = 0; i < resultList.length; i++) {
-                        Log.d("HttpKit Followers", "" + resultList[i]);
-                    }
+                    ((FragmentProfileFollowers) ((MainActivity) mContext).mCurrentFragment).setFollowersInfo(resultList, count);
+//                    for (int i = 0; i < resultList.length; i++) {
+//                        Log.d("HttpKit Followers", "" + resultList[i]);
+//                    }
                 }
             }
         }
@@ -1462,8 +1511,6 @@ public class HttpKit {
         @Override
         protected Object[] doInBackground(String... params) {
 
-//            String urlStr = "http://api.svcontact.ru/dopes.comments?dope="+params[0];
-//            String urlStr = "http://dopeapi.elantix.net/dopes.comments?dope="+params[0];
             String urlStr = "http://dopeapi.elantix.net/dopes.comments?dope="+params[0];
             String paramsStr = "dope="+params[0];
 
@@ -1471,10 +1518,6 @@ public class HttpKit {
             if (params[2] != null)  paramsStr += "&p="+params[2];
             if (params[3] != null)  paramsStr += "&count="+params[3];
 
-//            if (params[1] != null)  urlStr += "&token="+params[1];
-//            if (params[2] != null)  urlStr += "&p="+params[2];
-//            if (params[3] != null)  urlStr += "&count="+params[3];
-//            String response = RequestToServerGET(urlStr);
             String response = requestToServerPOST(urlStr, paramsStr);
             try {
                 JSONObject json = new JSONObject(response);
@@ -1485,6 +1528,7 @@ public class HttpKit {
                     return result;
                 }else {
                     JSONObject responseObject = json.getJSONObject("response");
+                    int count = responseObject.getInt("count");
                     JSONArray arr = responseObject.getJSONArray("list");
                     CommentInfo[] commentList = new CommentInfo[arr.length()];
                     Arrays.fill(commentList, null);
@@ -1505,7 +1549,9 @@ public class HttpKit {
 
                     }
 
-                    return commentList;
+                    Object[] result = {commentList, count};
+//                    return commentList;
+                    return result;
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -1520,11 +1566,11 @@ public class HttpKit {
             super.onPostExecute(result);
             ((CommentsActivity) mContext).mProgressDialog.dismiss();
             if (result != null) {
-                if (result instanceof CommentInfo[]){
+                if (result[0] instanceof CommentInfo[]){
 //                    for (int i=0; i<result.length; i++){
 //                        Log.w("GetComments", result[i].toString());
 //                    }
-                    ((CommentsActivity) mContext).showComments((CommentInfo[])result);
+                    ((CommentsActivity) mContext).showComments((CommentInfo[])result[0], (int)result[1]);
                 }else{
                     Toast.makeText(mContext, ((String[]) result)[0], Toast.LENGTH_SHORT).show();
                 }
@@ -1536,7 +1582,6 @@ public class HttpKit {
 
         @Override
         protected String doInBackground(String... params) {
-//            String urlStr = "http://api.svcontact.ru/dopes.vote?token=" + params[0] + "&dope=" + params[1] + "&vote=" + params[2];
             String urlStr = "http://dopeapi.elantix.net/dopes.vote?token=" + params[0] + "&dope=" + params[1] + "&vote=" + params[2];
             String response = RequestToServerGET(urlStr);
 
@@ -1561,6 +1606,99 @@ public class HttpKit {
             }
         }
     }
+
+    public class GetFriendsFeed extends AsyncTask<String, Void, Object[]>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            ((MainActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+        }
+
+        @Override
+        protected Object[] doInBackground(String... params) {
+
+            String urlStr = "http://dopeapi.elantix.net/dopes.feed?token="+params[0];
+            if (params[1] != null) urlStr += "&p="+params[1];
+            if (params[2] != null) urlStr += "&count="+params[2];
+
+            String response = RequestToServerGET(urlStr);
+
+            try {
+                JSONObject json = new JSONObject(response);
+                Boolean success = json.getBoolean("success");
+                if (success) {
+                    JSONArray array = json.getJSONArray("response");
+                    DopeInfo[] dopes = new DopeInfo[array.length()];
+                    Arrays.fill(dopes, null);
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject item = array.getJSONObject(i);
+                        DopeInfo dopeInfo = new DopeInfo();
+                        dopeInfo.fullname = item.getString("fullname");
+                        dopeInfo.username = item.getString("username");
+                        dopeInfo.email = item.getString("email");
+                        dopeInfo.avatar = Uri.parse(item.getString("avatar"));
+                        dopeInfo.id = item.getString("id");
+                        dopeInfo.userId = item.getString("user_id");
+                        dopeInfo.question = item.getString("question");
+                        dopeInfo.photo1 = Uri.parse(item.getString("photo1"));
+                        dopeInfo.photo2 = Uri.parse(item.getString("photo2"));
+                        dopeInfo.dateCreate = item.getString("date_cteate");
+                        dopeInfo.top10 = item.getString("top10");
+                        dopeInfo.top100 = item.getString("top100");
+                        dopeInfo.ban = item.getString("ban");
+                        JSONObject votes = item.getJSONObject("votes");
+                        dopeInfo.votesAll = votes.getInt("all");
+                        JSONObject quantity = votes.getJSONObject("quantity");
+                        dopeInfo.votes1 = quantity.getInt("1");
+                        dopeInfo.votes2 = quantity.getInt("2");
+                        JSONObject percent = votes.getJSONObject("percent");
+                        dopeInfo.percent1 = percent.getInt("1");
+                        dopeInfo.percent2 = percent.getInt("2");
+                        dopeInfo.comments = item.getInt("comments");
+                        dopeInfo.myVote = item.getInt("myvote");
+                        dopes[i] = dopeInfo;
+                    }
+
+                    return dopes;
+                } else {
+                    String responseText = json.getString("response_text");
+                    String[] result = {responseText};
+                    return result;
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object[] result) {
+            super.onPostExecute(result);
+            ((MainActivity) mContext).mProgressDialog.dismiss();
+
+            if (result != null && result[0] != null) {
+                if (result[0] instanceof String) {
+                    Toast.makeText(mContext, "" + result[0], Toast.LENGTH_LONG).show();
+                } else {
+                    ((MainActivity) mContext).saveDopes((DopeInfo[]) result);
+                    ((MainActivity) mContext).launchFragment(((MainActivity) mContext).page);
+//                for (int i=0; i<result.length; i++){
+//                    Log.w("HttpKit", "" + result[i]);
+//                }
+                }
+            }
+
+//            if (result != null){
+//                for (int i=0; i<result.length; i++){
+//                    Log.d("HttpKit Feed", ""+result[i]);
+//                }
+//            }
+        }
+    }
+
+
 
     public class GetDopesTask extends AsyncTask<String, Void, Object[]> {
 

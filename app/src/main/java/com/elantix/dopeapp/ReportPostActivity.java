@@ -32,9 +32,15 @@ public class ReportPostActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_post);
 
-//        int postId = getIntent().getExtras().getInt("post_id");
         int dopeNum = getIntent().getIntExtra("dopeNum", 0);
-        curItem = (Utilities.sDopeListType == Utilities.DopeListType.Ten) ? Utilities.sDopes10[dopeNum] : Utilities.sDopes100[dopeNum];
+
+        if (Utilities.sDopeListType == Utilities.DopeListType.Ten){
+            curItem = Utilities.sDopes10[dopeNum];
+        }else if (Utilities.sDopeListType == Utilities.DopeListType.Hundred){
+            curItem = Utilities.sDopes100[dopeNum];
+        }else{
+            curItem = Utilities.sDopesFriendsFeed[dopeNum];
+        }
 
         mCloseToolbarButton = (ImageView) findViewById(R.id.report_post_left_toolbar_button);
         mOption1 = (TextView) findViewById(R.id.report_post_option_1);

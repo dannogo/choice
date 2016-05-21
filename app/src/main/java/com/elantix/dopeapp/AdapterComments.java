@@ -103,7 +103,11 @@ public class AdapterComments extends RecyclerView.Adapter<AdapterComments.Commen
         }else {
             holder.itemView.setBackgroundColor(Color.WHITE);
             holder.mainContent.setVisibility(View.VISIBLE);
-            Glide.with(mContext).load(mCommentsList.get(position).avatar).bitmapTransform(new CropCircleTransformation(mContext)).into(holder.avatar);
+            if(mCommentsList.get(position).avatar != null && !mCommentsList.get(position).avatar.isEmpty() ) {
+                Glide.with(mContext).load(mCommentsList.get(position).avatar).bitmapTransform(new CropCircleTransformation(mContext)).into(holder.avatar);
+            }else {
+                Glide.with(mContext).load(R.drawable.user_photo_placeholder).into(holder.avatar);
+            }
             holder.userName.setText(mCommentsList.get(position).username);
             holder.commentText.setText(mCommentsList.get(position).comment);
             holder.time.setText(mCommentsList.get(position).date_create);

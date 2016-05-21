@@ -33,7 +33,7 @@ public class FragmentSearchFriends extends Fragment {
     final private int mPageCount = 50;
     private int mPageNum = 1;
     private String mQuery;
-    private boolean isNewFetch = true;
+    public boolean isNewFetch = true;
     AdapterSearchFriends mAdapter;
 
     @Nullable
@@ -123,9 +123,6 @@ public class FragmentSearchFriends extends Fragment {
                     if (loading){
                         if ( (visibleItemCount + pastVisiblesItems) >= totalItemCount * 0.65){
                             loading = false;
-                            Log.e("SearchFriends", "35% left! Fetch new data!");
-                            Log.e("SearchFriends", "mTotalItemCount / mPageCount: "+ (mTotalItemCount / mPageCount));
-                            Log.e("SearchFriends", "mPageNum <= (mTotalItemCount / mPageCount): "+ (mPageNum <= (mTotalItemCount / mPageCount)));
 
                             if (mPageNum <= (mTotalItemCount / mPageCount)){
                                 mPageNum++;

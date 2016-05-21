@@ -43,6 +43,9 @@ public class FragmentViewPager extends Fragment {
         Bundle bundle = this.getArguments();
         numItems = bundle.getInt("num", 10);
         int itemPosition = bundle.getInt("position", 0);
+        if (itemPosition == 0){
+            Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size() - 1).bundleData.put("position", 0);
+        }
         Log.w("FragmentViewPager", "itemPosition: "+itemPosition);
         Utilities.sRateStateBackups = new RateStateBackup[numItems];
 
@@ -61,12 +64,6 @@ public class FragmentViewPager extends Fragment {
                 ((MainActivity) getActivity()).toolbarTitle.setText((position + 1) + "/"+numItems);
                 Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size() - 1).bundleData.put("position", position);
 
-//                if (Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size()-1).data.size() != 0) {
-//                    Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size() - 1).data.set(0, position);
-//                }else{
-//                    Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size() - 1).data.add(position);
-//                }
-//                Log.w("FragmentViewPager", "data.size(): " + Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size() - 1).data.get(0));
             }
 
             @Override

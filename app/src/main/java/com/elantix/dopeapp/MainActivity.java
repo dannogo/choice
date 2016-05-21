@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     Page page = Page.Daily;
     private boolean isContextOptionsPanelShown = false;
+    public String mListUserId = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,9 +102,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (page == Page.Daily) {
 //            mDopes10 = dopes;
             Utilities.sDopes10 = dopes;
-        }else{
+        }else if (page == Page.Tranding){
 //            mDopes100 = dopes;
             Utilities.sDopes100 = dopes;
+        }else if (page == Page.FriendsDope){
+            Utilities.sDopesFriendsFeed = dopes;
         }
     }
 
@@ -205,13 +208,57 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 fragmentTAG = "FragmentFriendsFirstScreen";
                 break;
             case FriendsSearch:
+                if (isRecovery){
+
+                }else {
+                    ChainLink chainLinkFriendsSearch = new ChainLink(Page.FriendsSearch);
+//                  chainLinkFriendsSearch.bundleData.put("own", isOwn);
+//                  chainLinkFriendsSearch.bundleData.put("uid", userId);
+                    Utilities.sFragmentHistory.add(chainLinkFriendsSearch);
+                }
                 mCurrentFragment = new FragmentSearchFriends();
                 fragmentTAG = "FragmentSearchFriends";
                 break;
             case FriendsDope:
+
+//                mCurrentFragment = new FragmentViewPager();
+//                bundle = new Bundle();
+
+//                if (!isRecovery) {
+//                    ChainLink chainLinkDaily = new ChainLink(Page.Daily);
+//                    chainLinkDaily.bundleData.put("num", Utilities.sDopes10.length);
+//                    Utilities.sFragmentHistory.add(chainLinkDaily);
+//                    Log.e("MainActivity daily", "Utilities.sFragmentHistory.size(): " + Utilities.sFragmentHistory.size());
+//                }else{
+//                    if (Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size()-1).bundleData.get("position") != null) {
+//                        int position = (int) Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size() - 1).bundleData.get("position");
+//                        bundle.putInt("position", position);
+//                        Log.w("MainActivity daily", "bundle position: " + position);
+//                    }
+//                }
+//
+//                bundle.putInt("num", Utilities.sDopes10.length);
+//                mCurrentFragment.setArguments(bundle);
+//                fragmentTAG = "FragmentDailyDope";
+
+
+
                 mCurrentFragment = new FragmentViewPager();
                 bundle = new Bundle();
-                bundle.putInt("num", 3);
+
+                if (!isRecovery){
+                    ChainLink chainLinkFriendsFeed = new ChainLink(Page.FriendsDope);
+                    chainLinkFriendsFeed.bundleData.put("num", Utilities.sDopesFriendsFeed.length);
+                    Utilities.sFragmentHistory.add(chainLinkFriendsFeed);
+                }else{
+                    if (Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size()-1).bundleData.get("position") != null) {
+                        int position = (int) Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size() - 1).bundleData.get("position");
+                        bundle.putInt("position", position);
+                        Log.w("MainActivity daily", "bundle position: " + position);
+                    }
+                }
+
+                bundle.putInt("num", Utilities.sDopesFriendsFeed.length);
                 mCurrentFragment.setArguments(bundle);
                 fragmentTAG = "FragmentFriendsDope";
                 break;
@@ -249,14 +296,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     DopeInfo curItem;
                     if (Utilities.sDopeListType == Utilities.DopeListType.Ten) {
                         curItem = Utilities.sDopes10[mContextOptionsDopeNum];
-                    } else {
+                    } else if (Utilities.sDopeListType == Utilities.DopeListType.Hundred){
                         curItem = Utilities.sDopes100[mContextOptionsDopeNum];
+                    }else {
+                        curItem = Utilities.sDopesFriendsFeed[mContextOptionsDopeNum];
                     }
-                    boolean isOwn = (curItem.userId.equals(Utilities.sUid)) ? true : false;
+
+                    String userId = (mListUserId == null) ? curItem.userId : mListUserId;
+                    boolean isOwn = (userId.equals(Utilities.sUid)) ? true : false;
                     bundle.putBoolean("own", isOwn);
-                    bundle.putString("uid", curItem.userId);
+                    bundle.putString("uid", userId);
                     chainLinkProfileOverview.bundleData.put("own", isOwn);
-                    chainLinkProfileOverview.bundleData.put("uid", curItem.userId);
+                    chainLinkProfileOverview.bundleData.put("uid", userId);
                     Utilities.sFragmentHistory.add(chainLinkProfileOverview);
                 }
                 mCurrentFragment.setArguments(bundle);
@@ -311,15 +362,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         page = newPage;
         checkLowertabItem(page);
         toolbarTitleAndButtonChangesHandler(page);
+        HttpKit http = new HttpKit(this);
 
         Log.e("MainActivity launch", "isRecovery: "+isRecovery);
         if (!isRecovery) {
             if (page == Page.Daily) {
-                HttpKit http = new HttpKit(this);
                 http.get10Dopes(Utilities.sToken, null);
             } else if (page == Page.Tranding) {
-                HttpKit http = new HttpKit(this);
+//                HttpKit http = new HttpKit(this);
                 http.get100Dopes(Utilities.sToken, null, null);
+            }else if (page == Page.FriendsDope){
+                http.getFriendsFeed(Utilities.sToken, null, null);
             }else{
                 launchFragment(page, isRecovery);
             }
@@ -333,6 +386,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         switchPageHandler(newPage, false);
     }
 
+    // currently not in use
     protected void switchPageAnimatedHandler(Page newPage){
         uncheckLowertabItem(page);
         animatedLaunchFragment(newPage);
@@ -341,6 +395,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         toolbarTitleAndButtonChangesHandler(page);
     }
 
+    // currently not in use
     private void animatedLaunchFragment(Page newPage){
 
         Fragment fragmentTo;
@@ -589,11 +644,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else if (id == friendsLL.getId()){
             if (page != Page.Friends){
                 Utilities.sFragmentHistory.clear();
-                switchPageHandler(Page.Friends);
+                HttpKit http = new HttpKit(this);
+                http.checkMyFollowersPresence();
+
+//                switchPageHandler(Page.Friends);
+//                switchPageHandler(Page.FriendsDope);
             }
         }else if(id == profileLL.getId()){
             if (page != Page.Profile){
 //                Utilities.sFragmentHistory.clear();
+                mListUserId = null;
                 switchPageHandler(Page.Profile);
             }
         }else if (id == mContextOptionsSharePost.getId()){
@@ -604,6 +664,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else if (id == mContextOptionsCancel.getId()){
             showContextOptions(false, null);
         }else if (id == mContextOptionsViewProfile.getId()){
+            mListUserId = null;
             showContextOptions(false, null);
             switchPageHandler(Page.ProfileOverview);
         }else if (id == mContextOptionsReportPost.getId()){

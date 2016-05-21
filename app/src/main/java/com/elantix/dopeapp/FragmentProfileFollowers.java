@@ -19,7 +19,16 @@ public class FragmentProfileFollowers extends Fragment {
     private View mFragmentView;
     Utilities.FollowingListType type;
     RecyclerView recyclerView;
-    String[] mFollowings;
+
+    private HttpKit http;
+    private boolean loading = true;
+    private int pastVisiblesItems, visibleItemCount, totalItemCount;
+    private int mTotalItemCount = 0;
+    final private int mPageCount = 50;
+    private int mPageNum = 1;
+    public boolean isNewFetch = true;
+    AdapterSearchFriends mAdapter;
+    private String param6;
 
     @Nullable
     @Override
@@ -30,14 +39,49 @@ public class FragmentProfileFollowers extends Fragment {
         searchContainer.setVisibility(View.GONE);
 
         recyclerView = (RecyclerView) mFragmentView.findViewById(R.id.search_friends_friends_list);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    visibleItemCount = layoutManager.getChildCount();
+                    totalItemCount = layoutManager.getItemCount();
+                    pastVisiblesItems = layoutManager.findFirstVisibleItemPosition();
+
+
+                    if (loading) {
+                        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount * 0.65) {
+                            loading = false;
+
+                            if (mPageNum <= (mTotalItemCount / mPageCount)) {
+                                mPageNum++;
+                                Log.e("SearchFriends", "mPageNum: " + mPageNum);
+                                isNewFetch = false;
+//                                sendFriendsRequest(String.valueOf(mPageNum), mQuery, String.valueOf(mPageCount));
+                                sentGetFollowersRequest(String.valueOf(mPageNum), String.valueOf(mPageCount));
+                            }
+
+
+                        }
+                    }
+                }
+            }
+        });
 
         Bundle bundle = this.getArguments();
 
         Boolean isFollowers = bundle.getBoolean("followers", true);
-        String param6;
+
         if (isFollowers){
             type = Utilities.FollowingListType.ProfileFollowers;
             param6 = "followers";
@@ -45,8 +89,8 @@ public class FragmentProfileFollowers extends Fragment {
             type = Utilities.FollowingListType.ProfileFollowing;
             param6 = "followings";
         }
-        HttpKit http = new HttpKit(getActivity());
-        http.getFollowers(Utilities.sCurProfile.id, Utilities.sToken, null, null, null, null, param6);
+        http = new HttpKit(getActivity());
+        sentGetFollowersRequest(String.valueOf(mPageNum), String.valueOf(mPageCount));
 
         ChainLink chainLink = new ChainLink(MainActivity.Page.ProfileFollowers);
         chainLink.bundleData.put("followers", isFollowers);
@@ -59,13 +103,24 @@ public class FragmentProfileFollowers extends Fragment {
         return mFragmentView;
     }
 
-//    public void setFollowersInfo(ProfileInfo[] followers, String[] followersIds, String[] followingsIds){
-//        AdapterSearchFriends adapter = new AdapterSearchFriends(getActivity(), type, followers, followersIds, followingsIds);
-//        recyclerView.setAdapter(adapter);
-//    }
+    private void sentGetFollowersRequest(String page, String count){
+        http.getFollowers(Utilities.sCurProfile.id, Utilities.sToken, null, page, count, null, param6);
+    }
 
-    public void setFollowersInfo(ProfileInfo[] followers){
-        AdapterSearchFriends adapter = new AdapterSearchFriends(getActivity(), type, followers);
-        recyclerView.setAdapter(adapter);
+    public void setFollowersInfo(ProfileInfo[] followers, int totalCount){
+
+        loading = true;
+        mTotalItemCount = totalCount;
+        if (isNewFetch) {
+            mAdapter = new AdapterSearchFriends(getActivity(), Utilities.FollowingListType.FriendsSearch, followers);
+            recyclerView.setAdapter(mAdapter);
+        }else{
+            int positionStart = mAdapter.mUsers.size()-1;
+            for (int i=0; i<followers.length; i++){
+                mAdapter.mUsers.add(followers[i]);
+            }
+            mAdapter.notifyItemRangeInserted(positionStart, followers.length);
+        }
+
     }
 }

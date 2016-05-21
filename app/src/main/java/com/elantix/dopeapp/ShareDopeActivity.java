@@ -58,7 +58,14 @@ public class ShareDopeActivity extends AppCompatActivity implements View.OnClick
             mCurItem.photo2 = Uri.parse(intent.getStringExtra("rightPic"));
             mCurItem.question = intent.getStringExtra("question");
         }else{
-            mCurItem = (Utilities.sDopeListType == Utilities.DopeListType.Ten) ? Utilities.sDopes10[dopeNum] : Utilities.sDopes100[dopeNum];
+
+            if (Utilities.sDopeListType == Utilities.DopeListType.Ten){
+                mCurItem = Utilities.sDopes10[dopeNum];
+            }else if (Utilities.sDopeListType == Utilities.DopeListType.Hundred){
+                mCurItem = Utilities.sDopes100[dopeNum];
+            }else{
+                mCurItem = Utilities.sDopesFriendsFeed[dopeNum];
+            }
         }
 
 

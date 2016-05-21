@@ -60,11 +60,16 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
         super.onCreate(savedInstanceState);
         Bundle bundle = this.getArguments();
         mDopeNum = bundle.getInt("dopeNum", 0);
+
         if (Utilities.sDopeListType == Utilities.DopeListType.Ten){
             mCurItem = Utilities.sDopes10[mDopeNum];
-        }else{
+        }else if (Utilities.sDopeListType == Utilities.DopeListType.Hundred){
             if (Utilities.sDopes100 != null) {
                 mCurItem = Utilities.sDopes100[mDopeNum];
+            }
+        }else {
+            if (Utilities.sDopesFriendsFeed != null){
+                mCurItem = Utilities.sDopesFriendsFeed[mDopeNum];
             }
         }
 

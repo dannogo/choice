@@ -49,6 +49,14 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
     public ProgressDialog mProgressDialog;
     private String mDopeId;
 
+    // endless list support stuff
+    private HttpKit http;
+    private boolean loading = true;
+    private int pastVisiblesItems, visibleItemCount, totalItemCount;
+    private int mTotalItemCount = 0;
+    final private int mPageCount = 20;
+    private int mPageNum = 1;
+    public boolean isNewFetch = true;
 
 
     private enum ChatType{
@@ -60,8 +68,9 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
 
+        http = new HttpKit(CommentsActivity.this);
         if (Utilities.sMyProfile == null){
-            HttpKit http = new HttpKit(CommentsActivity.this);
+//            HttpKit http = new HttpKit(CommentsActivity.this);
             http.getMyProfileInfo();
         }
 
@@ -84,11 +93,50 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
         }
 
         mRecyclerView = (RecyclerView) findViewById(R.id.comments_comment_list);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                if (dy > 0) {
+                    Log.w("CommentActivity", "dy>0");
+                    visibleItemCount = linearLayoutManager.getChildCount();
+                    totalItemCount = linearLayoutManager.getItemCount();
+                    pastVisiblesItems = linearLayoutManager.findFirstVisibleItemPosition();
+
+
+                    if (loading) {
+                        Log.w("CommentActivity", "Loading");
+                        if ((visibleItemCount + pastVisiblesItems) >= totalItemCount * 0.65) {
+                            loading = false;
+
+                            if (mPageNum <= (mTotalItemCount / mPageCount)) {
+                                mPageNum++;
+                                Log.e("SearchFriends", "mPageNum: " + mPageNum);
+                                isNewFetch = false;
+//                                sendFriendsRequest(String.valueOf(mPageNum), mQuery, String.valueOf(mPageCount));
+                                getCommentsRequest(mPageNum, mPageCount);
+//                                sentGetFollowersRequest(String.valueOf(mPageNum), String.valueOf(mPageCount));
+                            }
+
+
+                        }
+                    }
+                }
+            }
+        });
 
         switch (mType){
             case Comments:
-                HttpKit http = new HttpKit(CommentsActivity.this);
-                http.getComments(mDopeId, Utilities.sToken, null, null);
+//                HttpKit http = new HttpKit(CommentsActivity.this);
+//                http.getComments(mDopeId, Utilities.sToken, null, null);
+                getCommentsRequest(mPageNum, mPageCount);
 
 //                mAdapter = new AdapterComments(this, null);
 //                mRecyclerView.setAdapter(mAdapter);
@@ -104,7 +152,7 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
         }
 
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
 
@@ -161,13 +209,32 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
 
     }
 
-    public void showComments(CommentInfo[] comments){
-        mAdapter = new AdapterComments(this, mDopeId, comments);
-        mRecyclerView.setAdapter(mAdapter);
+    private void getCommentsRequest(int page, int count){
+        http.getComments(mDopeId, Utilities.sToken, String.valueOf(page), String.valueOf(count));
+    }
+
+    public void showComments(CommentInfo[] comments, int totalCount){
+
+        loading = true;
+        mTotalItemCount = totalCount;
+
+        if (isNewFetch) {
+            mAdapter = new AdapterComments(this, mDopeId, comments);
+            mRecyclerView.setAdapter(mAdapter);
+            mRecyclerView.setHasFixedSize(true);
+            setUpItemTouchHelper();
+            setUpAnimationDecoratorHelper();
+        }else {
+            int positionStart = ((AdapterComments)mAdapter).mCommentsList.size()-1;
+            for (int i=0; i<comments.length; i++){
+                ((AdapterComments)mAdapter).mCommentsList.add(comments[i]);
+            }
+            mAdapter.notifyItemRangeInserted(positionStart, comments.length);
+        }
 //        mRecyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
-        mRecyclerView.setHasFixedSize(true);
-        setUpItemTouchHelper();
-        setUpAnimationDecoratorHelper();
+//        mRecyclerView.setHasFixedSize(true);
+//        setUpItemTouchHelper();
+//        setUpAnimationDecoratorHelper();
     }
 
     @Override
@@ -185,7 +252,7 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
 
         String msg = mNewCommentField.getText().toString();
         if (!msg.isEmpty()) {
-            HttpKit http = new HttpKit(CommentsActivity.this);
+//            HttpKit http = new HttpKit(CommentsActivity.this);
             http.sendComment(Utilities.sToken, mDopeId, msg, null);
         }
 

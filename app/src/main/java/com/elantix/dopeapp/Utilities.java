@@ -65,6 +65,8 @@ public class Utilities {
 
     public static DopeInfo[] sDopes10;
     public static DopeInfo[] sDopes100;
+    public static DopeInfo[] sDopesFriendsFeed;
+
     public static ProfileInfo sCurProfile;
     public static ProfileInfo sMyProfile;
     public static String[] sMyFollowings;
@@ -74,7 +76,7 @@ public class Utilities {
     public static DopeListType sDopeListType;
 
     public enum DopeListType{
-        Ten, Hundred
+        Ten, Hundred, Friends
     }
 
     public static Bitmap createTrimmedBitmap(Bitmap bmp) {

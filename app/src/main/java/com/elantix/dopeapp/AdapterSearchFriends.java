@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -31,6 +32,7 @@ public class AdapterSearchFriends extends RecyclerView.Adapter<AdapterSearchFrie
     private Context context;
     public ArrayList<ProfileInfo> mUsers;
     private String[] mFollowingsIds;
+    private HttpKit http = new HttpKit(context);
 
 
     ArrayList<Integer> checkedItems = new ArrayList<>();
@@ -84,7 +86,7 @@ public class AdapterSearchFriends extends RecyclerView.Adapter<AdapterSearchFrie
         return mUsers.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener{
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private TextView contactName;
         private TextView description;
@@ -103,39 +105,37 @@ public class AdapterSearchFriends extends RecyclerView.Adapter<AdapterSearchFrie
             mFollowButton.getIconImageObject().setLayoutParams(new LinearLayout.LayoutParams(50, 50));
             mFollowButton.setOnClickListener(this);
             mFollowButtonChecked.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
 
         }
 
         @Override
         public void onClick(View v) {
-            HttpKit http = new HttpKit(context);
-            boolean isFollow;
-            if (v.getId() == mFollowButton.getId()){
-                checkedItems.add(getAdapterPosition());
-                mFollowButton.setVisibility(View.GONE);
-                mFollowButtonChecked.setVisibility(View.VISIBLE);
-                isFollow = true;
-            }else if (v.getId() == mFollowButtonChecked.getId()){
+            String id = mUsers.get(getAdapterPosition()).id;
+            int vId = v.getId();
+            if (vId == mFollowButton.getId()){
+                if (Utilities.sToken != null) {
+                    checkedItems.add(getAdapterPosition());
+                    mFollowButton.setVisibility(View.GONE);
+                    mFollowButtonChecked.setVisibility(View.VISIBLE);
+                    http.followUnfollow(true, id, Utilities.sToken);
+                }else {
+                    Toast.makeText(context, "You are not logged in.", Toast.LENGTH_SHORT).show();
+                }
+
+            }else if (vId == mFollowButtonChecked.getId()){
                 checkedItems.remove(Integer.valueOf(getAdapterPosition()));
                 mFollowButton.setVisibility(View.VISIBLE);
                 mFollowButtonChecked.setVisibility(View.GONE);
-                isFollow = false;
-            }else{
-                isFollow = false;
+                http.followUnfollow(false, id, Utilities.sToken);
+
+            }else if (vId == itemView.getId()){
+                MainActivity activity = ((MainActivity) context);
+                activity.mListUserId = id;
+                activity.switchPageHandler(MainActivity.Page.ProfileOverview);
             }
 
-            String id = mUsers.get(getAdapterPosition()).id;
-            Log.e("AdapterSearchFriends", "id: "+id+"\nisFollow: "+isFollow);
-            http.followUnfollow(isFollow, id, Utilities.sToken);
-
         }
 
-        @Override
-        public boolean onLongClick(View v) {
-//            ((MainActivity)context).switchPageHandler(MainActivity.Page.FriendsDope);
-            return false;
-        }
     }
 
 }
