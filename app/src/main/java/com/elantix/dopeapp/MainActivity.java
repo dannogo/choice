@@ -204,6 +204,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 fragmentTAG = "FragmentTranding";
                 break;
             case Friends:
+
                 mCurrentFragment = new FragmentFriendsFirstScreen();
                 fragmentTAG = "FragmentFriendsFirstScreen";
                 break;
@@ -216,32 +217,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                  chainLinkFriendsSearch.bundleData.put("uid", userId);
                     Utilities.sFragmentHistory.add(chainLinkFriendsSearch);
                 }
+
                 mCurrentFragment = new FragmentSearchFriends();
                 fragmentTAG = "FragmentSearchFriends";
                 break;
             case FriendsDope:
-
-//                mCurrentFragment = new FragmentViewPager();
-//                bundle = new Bundle();
-
-//                if (!isRecovery) {
-//                    ChainLink chainLinkDaily = new ChainLink(Page.Daily);
-//                    chainLinkDaily.bundleData.put("num", Utilities.sDopes10.length);
-//                    Utilities.sFragmentHistory.add(chainLinkDaily);
-//                    Log.e("MainActivity daily", "Utilities.sFragmentHistory.size(): " + Utilities.sFragmentHistory.size());
-//                }else{
-//                    if (Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size()-1).bundleData.get("position") != null) {
-//                        int position = (int) Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size() - 1).bundleData.get("position");
-//                        bundle.putInt("position", position);
-//                        Log.w("MainActivity daily", "bundle position: " + position);
-//                    }
-//                }
-//
-//                bundle.putInt("num", Utilities.sDopes10.length);
-//                mCurrentFragment.setArguments(bundle);
-//                fragmentTAG = "FragmentDailyDope";
-
-
 
                 mCurrentFragment = new FragmentViewPager();
                 bundle = new Bundle();
@@ -279,6 +259,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Log.e("MainActivity", "history size: " + Utilities.sFragmentHistory.size());
                     Log.e("MinActivity", "isRecovery: "+isRecovery);
                 }
+
                 fragmentTAG = "FragmentFriendsNotRegistered";
                 break;
             case ProfileOverview:
@@ -310,12 +291,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     chainLinkProfileOverview.bundleData.put("uid", userId);
                     Utilities.sFragmentHistory.add(chainLinkProfileOverview);
                 }
+
                 mCurrentFragment.setArguments(bundle);
                 fragmentTAG = "FragmentProfileOverview";
                 break;
             case ProfileFollowers:
                 mCurrentFragment = new FragmentProfileFollowers();
                 bundle = new Bundle();
+
+                if (isRecovery){
+                    Utilities.sCurProfile = (ProfileInfo) Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size()-1).data.get(0);
+                }else {
+                    ChainLink chainLinkProfileFollowers = new ChainLink(Page.ProfileFollowers);
+                    ProfileInfo profileInfo = new ProfileInfo(Utilities.sCurProfile);
+                    chainLinkProfileFollowers.data.add(profileInfo);
+                    Utilities.sFragmentHistory.add(chainLinkProfileFollowers);
+                }
+
                 bundle.putBoolean("followers", true);
                 mCurrentFragment.setArguments(bundle);
                 fragmentTAG = "FragmentProfileFollowers";
@@ -323,13 +315,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case ProfileFollowings:
                 mCurrentFragment = new FragmentProfileFollowers();
                 bundle = new Bundle();
+
+                if (isRecovery){
+                    Utilities.sCurProfile = (ProfileInfo) Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size()-1).data.get(0);
+                }else {
+                    ChainLink chainLinkProfileFollowings = new ChainLink(Page.ProfileFollowings);
+                    ProfileInfo profileInfo = new ProfileInfo(Utilities.sCurProfile);
+                    chainLinkProfileFollowings.data.add(profileInfo);
+                    Utilities.sFragmentHistory.add(chainLinkProfileFollowings);
+                }
+
                 bundle.putBoolean("followers", false);
+
                 mCurrentFragment.setArguments(bundle);
                 fragmentTAG = "FragmentProfileFollowings";
                 break;
             case ProfileSettings:
                 mCurrentFragment = new FragmentProfileSettings();
                 fragmentTAG = "FragmentProfileSettings";
+
+
                 break;
             default:
                 mCurrentFragment = new FragmentDailyDope();
@@ -523,7 +528,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        switchPageHandler(Page.Friends);
+//                        switchPageHandler(Page.Friends);
+                        Log.e("MainActivity", "FriendsSearch back arrow");
+                        for(int i=0; i<Utilities.sFragmentHistory.size(); i++){
+                            Log.w("MainActivity", "record "+i+": "+Utilities.sFragmentHistory.get(i).fragment);
+                        }
+                        Utilities.sFragmentHistory.remove(Utilities.sFragmentHistory.size() - 1);
+                        switchPageHandler(Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size()-1).fragment, true);
                     }
                 });
                 break;
@@ -533,6 +544,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mRightToolbarButton.setVisibility(View.VISIBLE);
                 mRightToolbarButton.setImageResource(R.drawable.dir_message);
                 mLeftToolbarButton.setImageResource(R.drawable.toolbar_magnifier_icon);
+                mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        switchPageHandler(Page.FriendsSearch);
+                    }
+                });
                 break;
             case Profile:
                 toolbarTitle.setText(R.string.lower_tab_profile);
@@ -577,11 +594,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        for(int i=0; i<Utilities.sFragmentHistory.size(); i++){
-                            Log.w("MainActivity", "record "+i+": "+Utilities.sFragmentHistory.get(i).fragment);
-                        }
+//                        Log.w("MainActivity", "ProfileFollowers back arrow");
+//                        for(int i=0; i<Utilities.sFragmentHistory.size(); i++){
+//                            Log.w("MainActivity", "Before record "+i+": "+Utilities.sFragmentHistory.get(i).fragment);
+//                        }
                         Utilities.sFragmentHistory.remove(Utilities.sFragmentHistory.size() - 1);
                         switchPageHandler(Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size()-1).fragment, true);
+                        for(int i=0; i<Utilities.sFragmentHistory.size(); i++){
+                            Log.w("MainActivity", "After record "+i+": "+Utilities.sFragmentHistory.get(i).fragment);
+                        }
                     }
                 });
                 break;
@@ -595,6 +616,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+//                        Log.e("MainActivity", "FriendsSearch back arrow");
+//                        for(int i=0; i<Utilities.sFragmentHistory.size(); i++){
+//                            Log.w("MainActivity", "record "+i+": "+Utilities.sFragmentHistory.get(i).fragment);
+//                        }
                         Utilities.sFragmentHistory.remove(Utilities.sFragmentHistory.size()-1);
                         switchPageHandler(Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size()-1).fragment, true);
                     }
@@ -609,7 +634,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        switchPageHandler(Page.ProfileOverview, true);
+//                        switchPageHandler(Page.ProfileOverview, true);
+                        switchPageHandler(Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size()-1).fragment, true);
                     }
                 });
                 break;

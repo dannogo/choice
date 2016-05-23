@@ -54,7 +54,7 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
     private boolean loading = true;
     private int pastVisiblesItems, visibleItemCount, totalItemCount;
     private int mTotalItemCount = 0;
-    final private int mPageCount = 20;
+    final private int mPageCount = 50;
     private int mPageNum = 1;
     public boolean isNewFetch = true;
 
@@ -105,24 +105,19 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (dy > 0) {
-                    Log.w("CommentActivity", "dy>0");
                     visibleItemCount = linearLayoutManager.getChildCount();
                     totalItemCount = linearLayoutManager.getItemCount();
                     pastVisiblesItems = linearLayoutManager.findFirstVisibleItemPosition();
 
 
                     if (loading) {
-                        Log.w("CommentActivity", "Loading");
                         if ((visibleItemCount + pastVisiblesItems) >= totalItemCount * 0.65) {
                             loading = false;
 
                             if (mPageNum <= (mTotalItemCount / mPageCount)) {
                                 mPageNum++;
-                                Log.e("SearchFriends", "mPageNum: " + mPageNum);
                                 isNewFetch = false;
-//                                sendFriendsRequest(String.valueOf(mPageNum), mQuery, String.valueOf(mPageCount));
                                 getCommentsRequest(mPageNum, mPageCount);
-//                                sentGetFollowersRequest(String.valueOf(mPageNum), String.valueOf(mPageCount));
                             }
 
 
@@ -134,12 +129,7 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
 
         switch (mType){
             case Comments:
-//                HttpKit http = new HttpKit(CommentsActivity.this);
-//                http.getComments(mDopeId, Utilities.sToken, null, null);
                 getCommentsRequest(mPageNum, mPageCount);
-
-//                mAdapter = new AdapterComments(this, null);
-//                mRecyclerView.setAdapter(mAdapter);
                 break;
             case Chat:
                 mAdapter = new AdapterChat(this);
@@ -252,7 +242,6 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
 
         String msg = mNewCommentField.getText().toString();
         if (!msg.isEmpty()) {
-//            HttpKit http = new HttpKit(CommentsActivity.this);
             http.sendComment(Utilities.sToken, mDopeId, msg, null);
         }
 

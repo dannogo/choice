@@ -92,13 +92,13 @@ public class FragmentProfileFollowers extends Fragment {
         http = new HttpKit(getActivity());
         sentGetFollowersRequest(String.valueOf(mPageNum), String.valueOf(mPageCount));
 
-        ChainLink chainLink = new ChainLink(MainActivity.Page.ProfileFollowers);
-        chainLink.bundleData.put("followers", isFollowers);
-        ProfileInfo profToChain = new ProfileInfo(Utilities.sCurProfile);
-        chainLink.data.add(profToChain);
-
-        Utilities.sFragmentHistory.add(chainLink);
-        Log.w("FragmentProfileFollower", "HISTORYCHAIN LENGTH: " + Utilities.sFragmentHistory.size());
+//        ChainLink chainLink = new ChainLink(MainActivity.Page.ProfileFollowers);
+//        chainLink.bundleData.put("followers", isFollowers);
+//        ProfileInfo profToChain = new ProfileInfo(Utilities.sCurProfile);
+//        chainLink.data.add(profToChain);
+//
+//        Utilities.sFragmentHistory.add(chainLink);
+//        Log.w("FragmentProfileFollower", "HISTORYCHAIN LENGTH: " + Utilities.sFragmentHistory.size());
 
         return mFragmentView;
     }
