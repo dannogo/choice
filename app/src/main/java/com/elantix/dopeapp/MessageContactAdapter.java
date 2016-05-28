@@ -25,7 +25,7 @@ public class MessageContactAdapter extends RecyclerView.Adapter<MessageContactAd
 
     private LayoutInflater inflater;
     private Context context;
-    HttpKit http;
+    HttpChat http;
 
     String[] dates = {
             "13:23", "14:22", "Yesterday", "00:12", "11:23",
@@ -55,7 +55,7 @@ public class MessageContactAdapter extends RecyclerView.Adapter<MessageContactAd
 
         mUsers = new ArrayList<ProfileInfo>(Arrays.asList(users));
         listType = type;
-        http = new HttpKit(this.context);
+        http = new HttpChat(this.context);
     }
 
     @Override

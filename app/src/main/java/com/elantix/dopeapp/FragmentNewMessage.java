@@ -45,7 +45,7 @@ public class FragmentNewMessage extends Fragment {
     }
 
     protected ListType currentListType;
-    private static HttpKit http;
+    private static HttpChat http;
     private int pastVisiblesItems, visibleItemCount, totalItemCount;
     private int mTotalItemCount = 0;
     final private int mPageCount = 50;
@@ -177,7 +177,7 @@ public class FragmentNewMessage extends Fragment {
 
         setProperFragmentAppearance();
 
-        http = new HttpKit(getActivity());
+        http = new HttpChat(getActivity());
         http.getCrossFollowingFriends(Utilities.sToken, null, null, null, null);
 
         activity.rightToolbarButton.setOnClickListener(new View.OnClickListener() {

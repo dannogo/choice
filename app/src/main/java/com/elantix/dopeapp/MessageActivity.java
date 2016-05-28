@@ -29,7 +29,7 @@ public class MessageActivity extends AppCompatActivity {
     ImageButton rightToolbarButton;
     RelativeLayout bottomArea;
     FancyButton fancyButton;
-    private HttpKit http;
+    private HttpChat http;
 
     public Fragment mCurrentFragment;
 
@@ -57,7 +57,7 @@ public class MessageActivity extends AppCompatActivity {
         });
         bottomArea = (RelativeLayout) findViewById(R.id.bottom_area);
 
-        http = new HttpKit(MessageActivity.this);
+        http = new HttpChat(MessageActivity.this);
         http.getConversationList(Utilities.sToken, Utilities.sUid, null, null);
     }
 

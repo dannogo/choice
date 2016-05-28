@@ -30,7 +30,15 @@ import android.widget.Toast;
 
 import com.desarrollodroide.libraryfragmenttransactionextended.FragmentTransactionExtended;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -112,6 +120,80 @@ public class Utilities {
         bmp=Bitmap.createBitmap(bmp,left,top,imgWidth-left-right, imgHeight-top-bottom);
 
         return bmp;
+    }
+
+    public static String RequestToServerGET(String urlStr) {
+
+        StringBuffer response = new StringBuffer();
+        URL url;
+        try {
+            url = new URL(urlStr);
+
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("GET");
+            int responseCode = con.getResponseCode();
+            Log.w("StartLogin", "Sending 'GET' request to URL : " + url);
+            Log.w("StartLogin", "Response Code : " + responseCode);
+
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(con.getInputStream()));
+            String inputLine;
+
+            while ((inputLine = in.readLine()) != null) {
+                response.append(inputLine);
+            }
+            in.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Log.w("StartLogin", response.toString());
+        return response.toString();
+    }
+
+    public static String requestToServerPOST(String urlStr, String paramsStr){
+
+        Log.w("HttpKit POST", "url: "+urlStr);
+        Log.w("HttpKit POST", "params: "+paramsStr);
+        URL url;
+        HttpURLConnection connection = null;
+        try {
+            url = new URL(urlStr);
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("POST");
+            connection.setUseCaches(false);
+            connection.setDoInput(true);
+            connection.setDoOutput(true);
+
+            DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+            wr.writeBytes(paramsStr);
+            wr.flush();
+            wr.close();
+
+            InputStream is = connection.getInputStream();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
+            String line;
+            StringBuffer response = new StringBuffer();
+            while ((line = rd.readLine()) != null) {
+                response.append(line);
+                response.append("\n");
+            }
+            rd.close();
+            String responseStr = response.toString();
+            Log.w("HttpKit POST", responseStr);
+            return responseStr;
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+        }
+        return null;
     }
 
     public static boolean deleteDirectory(File path) {

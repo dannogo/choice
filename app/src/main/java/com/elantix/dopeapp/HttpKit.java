@@ -182,13 +182,6 @@ public class HttpKit {
 
     }
 
-    public void getCrossFollowingFriends(String token, String query, Integer page, Integer count, String exlude_ids){
-
-        String[] params = {token, query, String.valueOf(page), String.valueOf(count), exlude_ids};
-        GetCrossFollowingFriends task = new GetCrossFollowingFriends();
-        task.execute(params);
-    }
-
     public void createDope(String token, String question, String photo1, String photo2) {
         String[] params = {token, question, photo1, photo2};
         CreateDopeTask task = new CreateDopeTask();
@@ -221,96 +214,7 @@ public class HttpKit {
         task.execute(params);
     }
 
-    public void getConversationList(String token, String uid, String p, String count){
-        String[] params = {token, uid, p, count};
-        GetConversationsList task = new GetConversationsList();
-        task.execute(params);
-    }
 
-    /**
-     *
-     * @param token
-     * @param uids - coma-separated list of uids to be included in to conversation
-     */
-    public void createConversation(String token, String uids){
-        String[] params = {token, uids};
-        CreateConversation task = new CreateConversation();
-        task.execute(params);
-    }
-
-    public static String RequestToServerGET(String urlStr) {
-
-        StringBuffer response = new StringBuffer();
-        URL url;
-        try {
-            url = new URL(urlStr);
-
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setRequestMethod("GET");
-            int responseCode = con.getResponseCode();
-            Log.w("StartLogin", "Sending 'GET' request to URL : " + url);
-            Log.w("StartLogin", "Response Code : " + responseCode);
-
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(con.getInputStream()));
-            String inputLine;
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        Log.w("StartLogin", response.toString());
-        return response.toString();
-    }
-
-    public static String requestToServerPOST(String urlStr, String paramsStr){
-
-        Log.w("HttpKit POST", "url: "+urlStr);
-        Log.w("HttpKit POST", "params: "+paramsStr);
-        URL url;
-        HttpURLConnection connection = null;
-        try {
-            url = new URL(urlStr);
-            connection = (HttpURLConnection) url.openConnection();
-            connection.setRequestMethod("POST");
-            connection.setUseCaches(false);
-            connection.setDoInput(true);
-            connection.setDoOutput(true);
-
-            DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
-            wr.writeBytes(paramsStr);
-            wr.flush();
-            wr.close();
-
-            InputStream is = connection.getInputStream();
-            BufferedReader rd = new BufferedReader(new InputStreamReader(is));
-            String line;
-            StringBuffer response = new StringBuffer();
-            while ((line = rd.readLine()) != null) {
-                response.append(line);
-                response.append("\n");
-            }
-            rd.close();
-            String responseStr = response.toString();
-            Log.w("HttpKit POST", responseStr);
-            return responseStr;
-
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            if (connection != null) {
-                connection.disconnect();
-            }
-        }
-        return null;
-    }
 
     public static String requestToServerPOST(String urlStr, String[] params, POSTRequestPurpose purpose) {
         String paramsStr = "";
@@ -387,187 +291,6 @@ public class HttpKit {
             }
         }
         return null;
-    }
-
-    public class CreateConversation extends AsyncTask<String, Void, Object[]>{
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            ((MessageActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
-        }
-
-        @Override
-        protected Object[] doInBackground(String... params) {
-
-            String urlStr = "http://dopeapi.elantix.net/im.list";
-            String paramStr = "token="+params[0]+"&uids="+params[1];
-
-            String response = requestToServerPOST(urlStr, paramStr);
-
-            try {
-                JSONObject json = new JSONObject(response);
-                boolean success = json.getBoolean("success");
-                if (success){
-                    JSONObject responseObj = json.getJSONObject("response");
-                    String message = responseObj.getString("message");
-                    int dialog_id = responseObj.getInt("dialog_id");
-                    JSONObject data = responseObj.getJSONObject("data");
-
-                    ConversationInfo convInfo = new ConversationInfo();
-                    convInfo.id = data.getString("id");
-                    convInfo.dialogs_id = data.getString("dialogs_id");
-                    convInfo.users_id = data.getString("users_id");
-                    convInfo.fullname = data.getString("fullname");
-                    convInfo.username = data.getString("username");
-                    convInfo.avatar = data.getString("avatar");
-                    convInfo.unreads = Integer.parseInt(data.getString("unreads"));
-
-                    JSONArray members =  data.getJSONArray("members");
-
-                    ConversationMemberInfo[] memberInfos = new ConversationMemberInfo[members.length()];
-                    Arrays.fill(memberInfos, null);
-
-                    for (int i=0; i<members.length(); i++){
-                        JSONObject item = members.getJSONObject(i);
-                        ConversationMemberInfo member = new ConversationMemberInfo();
-                        member.id = item.getString("memberId");
-                        member.username = item.getString("username");
-                        member.fullname = item.getString("fullname");
-                        member.avatar = item.getString("avatar");
-                        member.email = item.getString("email");
-                        memberInfos[i] = member;
-                    }
-
-                    Object[] result = {success, dialog_id, convInfo, memberInfos};
-                    return result;
-                }else{
-                    String response_text = json.getString("response_text");
-                    Object[] result = {success, response_text};
-                    return result;
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object[] result) {
-            super.onPostExecute(result);
-            MessageActivity activity = ((MessageActivity)mContext);
-            activity.mProgressDialog.dismiss();
-            if (result != null){
-                if ((Boolean)result[0]){
-                    Log.e("HttpKit", "new conversation created. Id: "+result[1]);
-                    Intent intent = new Intent(activity, TabPlusActivity.class);
-                    mContext.startActivity(intent);
-                }else {
-                    Toast.makeText(mContext, ""+result[1], Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    }
-
-    public class GetConversationsList extends AsyncTask<String, Void, Object[]>{
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            ((MessageActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
-        }
-
-        @Override
-        protected Object[] doInBackground(String... params) {
-            String urlStr = "http://dopeapi.elantix.net/im.list?token="+params[0]+"&uid="+params[1];
-            if (params[2] != null) urlStr += "&p="+params[2];
-            if (params[3] != null) urlStr += "&count="+params[3];
-
-            String response = RequestToServerGET(urlStr);
-            try {
-                JSONObject json = new JSONObject(response);
-                Boolean success = json.getBoolean("success");
-                if (success){
-                    JSONObject responseObj = json.getJSONObject("response");
-                    int count = responseObj.getInt("count");
-                    Log.e("HttpKit Conversations", "Conversation count: "+count);
-                    JSONArray array = responseObj.getJSONArray("list");
-
-                    ConversationInfo[] conversations = new ConversationInfo[array.length()];
-                    Arrays.fill(conversations, null);
-
-                    for (int i=0; i<array.length(); i++){
-                        JSONObject item = array.getJSONObject(i);
-                        ConversationInfo conversation = new ConversationInfo();
-                        conversation.id = item.getString("id");
-                        conversation.dialogs_id = item.getString("dialogs_id");
-                        conversation.users_id = item.getString("users_id");
-                        conversation.is_read = item.getString("is_read");
-                        conversation.is_group = item.getString("is_group");
-                        conversation.fullname = item.getString("fullname");
-                        conversation.username = item.getString("username");
-                        conversation.avatar = item.getString("avatar");
-                        conversation.date_updated = item.getString("date_updated");
-                        conversation.last_message = item.getString("last_message");
-                        conversation.unreads = item.getInt("unreads");
-
-                        JSONArray members = item.getJSONArray("members");
-//                        ConversationMemberInfo[] memberInfos = new ConversationMemberInfo[members.length()];
-//                        Arrays.fill(memberInfos, null);
-                        for (int j=0; j<members.length(); j++){
-                            JSONObject memberItem = members.getJSONObject(j);
-                            ConversationMemberInfo member = new ConversationMemberInfo();
-
-                            member.id = memberItem.getString("id");
-                            member.username = memberItem.getString("username");
-                            member.fullname = memberItem.getString("fullname");
-                            member.email = memberItem.getString("email");
-                            member.avatar = memberItem.getString("avatar");
-//                            memberInfos[j] = member;
-                            conversation.members.add(member);
-                        }
-
-//                        for (int j=0; j<memberInfos.length; j++) {
-//                            conversation.members.add(memberInfos[j]);
-//                        }
-
-                        conversations[i] = conversation;
-                    }
-
-                    Object[] result = {success, count, conversations};
-                    return result;
-                }else{
-                    String response_text = json.getString("response_text");
-                    Object[] result = {success, response_text};
-                    return result;
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object[] result) {
-            super.onPostExecute(result);
-            MessageActivity activity = ((MessageActivity) mContext);
-            if (result != null){
-                if ((Boolean)result[0]){
-                    Log.e("HttpKit Conversation", "Count: "+result[1]+"\nnumber of items: "+((ConversationInfo[])result[2]).length);
-                    if (((ConversationInfo[])result[2]).length > 0){
-                        activity.switchPageHandler(MessageActivity.DirectMessages.NewMessage1, 1);
-                    }else{
-                        activity.switchPageHandler(MessageActivity.DirectMessages.NoMessage);
-                    }
-                }else{
-                    Toast.makeText(mContext, ""+result[1], Toast.LENGTH_SHORT).show();
-                }
-            }
-            activity.mProgressDialog.dismiss();
-        }
     }
 
     public class SaveProfileChangesTask extends AsyncTask<String, Void, String[]> {
@@ -946,7 +669,7 @@ public class HttpKit {
                 paramsStr += "&token=" + params[1];
             }
 //            String response = RequestToServerGET(urlStr);
-            String response = requestToServerPOST(urlStr, paramsStr);
+            String response = Utilities.requestToServerPOST(urlStr, paramsStr);
 
             try {
                 JSONObject json = new JSONObject(response);
@@ -1022,7 +745,7 @@ public class HttpKit {
             if (params[2] != null) urlStr += "&p=" + params[2];
             if (params[3] != null) urlStr += "&count=" + params[3];
 
-            String response = RequestToServerGET(urlStr);
+            String response = Utilities.RequestToServerGET(urlStr);
             try {
                 JSONObject json = new JSONObject(response);
                 Boolean success = json.getBoolean("success");
@@ -1095,14 +818,14 @@ public class HttpKit {
             if (params[1] != null) {
                 urlStr += "&token=" + params[1];
             }
-            String response = RequestToServerGET(urlStr);
+            String response = Utilities.RequestToServerGET(urlStr);
 
 
 //            String followString = "http://api.svcontact.ru/users.followings?uid="+Utilities.sUid;
             String followString = "http://dopeapi.elantix.net/users.followings?uid="+Utilities.sUid;
             followString += "&fields=id";
 //            followString += "&count="+999;
-            String responseFollowings = RequestToServerGET(followString);
+            String responseFollowings = Utilities.RequestToServerGET(followString);
 
             try {
 
@@ -1205,7 +928,7 @@ public class HttpKit {
             String paramsStr = "uid=" + Utilities.sUid+"&token="+Utilities.sToken;
 
 //            String response = RequestToServerGET(urlStr);
-            String response = requestToServerPOST(urlStr, paramsStr);
+            String response = Utilities.requestToServerPOST(urlStr, paramsStr);
 
             try {
                 JSONObject json = new JSONObject(response);
@@ -1288,7 +1011,7 @@ public class HttpKit {
         @Override
         protected String doInBackground(String... params) {
             String urlStr = "http://api.svcontact.ru/users.logout?token=" + params[0];
-            String response = RequestToServerGET(urlStr);
+            String response = Utilities.RequestToServerGET(urlStr);
 
             try {
                 JSONObject json = new JSONObject(response);
@@ -1329,7 +1052,7 @@ public class HttpKit {
                 paramsStr += "&parent="+params[3];
             }
 
-            String response = requestToServerPOST(urlStr, paramsStr);
+            String response = Utilities.requestToServerPOST(urlStr, paramsStr);
             try {
                 JSONObject json = new JSONObject(response);
                 Boolean success = json.getBoolean("success");
@@ -1375,7 +1098,7 @@ public class HttpKit {
             String insert = (params[0].equals("follow")) ? "follow" : "unfollow";
             String urlStr = "http://dopeapi.elantix.net/users."+insert;
             String paramsStr = "uid=" + params[1]+"&token="+params[2];
-            String response = requestToServerPOST(urlStr, paramsStr);
+            String response = Utilities.requestToServerPOST(urlStr, paramsStr);
             try {
                 JSONObject json = new JSONObject(response);
                 Boolean success = json.getBoolean("success");
@@ -1402,76 +1125,7 @@ public class HttpKit {
         }
     }
 
-    public class GetCrossFollowingFriends extends AsyncTask<String, Void, Object[]>{
 
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            ((MessageActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
-        }
-
-        @Override
-        protected Object[] doInBackground(String... params) {
-
-            String urlStr = "http://dopeapi.elantix.net/users.friends";
-            String paramStr = "token="+params[0];
-            if (params[1] != null) paramStr += "&q="+params[1];
-            if (params[2] != null) paramStr += "&p="+params[2];
-            if (params[3] != null) paramStr += "&count="+params[3];
-            if (params[4] != null) paramStr += "&exlude_ids="+params[4];
-
-            String response = requestToServerPOST(urlStr, paramStr);
-
-            try{
-                JSONObject json = new JSONObject(response);
-                Boolean success = json.getBoolean("success");
-                JSONObject responseObj = json.getJSONObject("response");
-                int count = responseObj.getInt("count");
-                JSONArray list = responseObj.getJSONArray("list");
-
-                ProfileInfo[] infoList = new ProfileInfo[list.length()];
-                Arrays.fill(infoList, null);
-
-                for (int i=0; i<list.length(); i++){
-                    JSONObject item = list.getJSONObject(i);
-
-                    ProfileInfo info = new ProfileInfo();
-                    info.id = item.getString("id");
-                    info.username = item.getString("username");
-                    info.fullname = item.getString("fullname");
-                    info.avatar = item.getString("avatar");
-                    info.bio = item.getString("bio");
-                    info.date_follow = item.getString("date_follow");
-                    info.is_chat = item.getString("is_chat");
-                    info.dialog_id = item.getString("dialog_id");
-
-                    infoList[i] = info;
-                }
-
-                Object[] result = {success, count, infoList};
-                return result;
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Object[] result) {
-            super.onPostExecute(result);
-            MessageActivity activity = ((MessageActivity) mContext);
-            activity.mProgressDialog.dismiss();
-            if (result != null){
-                if ((boolean) result[0]){
-                    ((FragmentNewMessage)activity.mCurrentFragment).setDataToAdapter((int)result[1], (ProfileInfo[])result[2]);
-                }else{
-                    Toast.makeText(mContext, "Can`t fetch list of friends", Toast.LENGTH_SHORT).show();
-                }
-            }
-        }
-    }
 
     public class GetFriendsTask extends AsyncTask<String, Void, Object[]>{
 
@@ -1493,7 +1147,7 @@ public class HttpKit {
             if (params[3] != null) paramsStr += "&count="+params[3];
             if (params[4] != null) paramsStr += "&sort="+params[4];
 
-            String response = requestToServerPOST(urlStr, paramsStr);
+            String response = Utilities.requestToServerPOST(urlStr, paramsStr);
 
             try{
                 JSONObject json = new JSONObject(response);
@@ -1566,7 +1220,7 @@ public class HttpKit {
         protected Boolean doInBackground(Void... params) {
             String urlStr = "http://dopeapi.elantix.net/users.followings";
             String paramsStr = "uid="+Utilities.sUid+"&token="+Utilities.sToken;
-            String response = requestToServerPOST(urlStr, paramsStr);
+            String response = Utilities.requestToServerPOST(urlStr, paramsStr);
 //            String response = RequestToServerGET(urlStr);
 
 
@@ -1623,7 +1277,7 @@ public class HttpKit {
             if (params[4] != null) paramsStr += "&count="+params[4];
             if (params[5] != null) paramsStr += "&sort="+params[5];
 
-            String response = requestToServerPOST(urlStr, paramsStr);
+            String response = Utilities.requestToServerPOST(urlStr, paramsStr);
 
             try{
                 JSONObject json = new JSONObject(response);
@@ -1706,7 +1360,7 @@ public class HttpKit {
         protected Object[] doInBackground(String... params) {
             String urlStr = "http://dopeapi.elantix.net/dopes.delete";
             String paramsStr = "token="+params[0]+"&dope_id="+params[1];
-            String response = requestToServerPOST(urlStr, paramsStr);
+            String response = Utilities.requestToServerPOST(urlStr, paramsStr);
 
             try {
                 JSONObject json = new JSONObject(response);
@@ -1757,7 +1411,7 @@ public class HttpKit {
             String urlStr = "http://dopeapi.elantix.net/dopes.report";
             String paramsStr = "token="+params[0]+"&dope="+params[1]+"&report="+replacedSpaces;
 //            String response = RequestToServerGET(urlStr);
-            String response = requestToServerPOST(urlStr, paramsStr);
+            String response = Utilities.requestToServerPOST(urlStr, paramsStr);
             try{
                 JSONObject json = new JSONObject(response);
                 Boolean success = json.getBoolean("success");
@@ -1799,7 +1453,7 @@ public class HttpKit {
             if (params[2] != null){
                 paramsStr += "&flag_id="+params[2];
             }
-            String response = requestToServerPOST(urlStr, paramsStr);
+            String response = Utilities.requestToServerPOST(urlStr, paramsStr);
 //            String response = RequestToServerGET(urlStr);
             try {
                 JSONObject json = new JSONObject(response);
@@ -1850,7 +1504,7 @@ public class HttpKit {
             if (params[2] != null)  paramsStr += "&p="+params[2];
             if (params[3] != null)  paramsStr += "&count="+params[3];
 
-            String response = requestToServerPOST(urlStr, paramsStr);
+            String response = Utilities.requestToServerPOST(urlStr, paramsStr);
             try {
                 JSONObject json = new JSONObject(response);
                 Boolean success = json.getBoolean("success");
@@ -1915,7 +1569,7 @@ public class HttpKit {
         @Override
         protected String doInBackground(String... params) {
             String urlStr = "http://dopeapi.elantix.net/dopes.vote?token=" + params[0] + "&dope=" + params[1] + "&vote=" + params[2];
-            String response = RequestToServerGET(urlStr);
+            String response = Utilities.RequestToServerGET(urlStr);
 
             try {
                 JSONObject json = new JSONObject(response);
@@ -1954,7 +1608,7 @@ public class HttpKit {
             if (params[1] != null) urlStr += "&p="+params[1];
             if (params[2] != null) urlStr += "&count="+params[2];
 
-            String response = RequestToServerGET(urlStr);
+            String response = Utilities.RequestToServerGET(urlStr);
 
             try {
                 JSONObject json = new JSONObject(response);
@@ -2075,7 +1729,7 @@ public class HttpKit {
                 }
             }
 
-            String response = RequestToServerGET(urlStr);
+            String response = Utilities.RequestToServerGET(urlStr);
 
             try {
                 JSONObject json = new JSONObject(response);
@@ -2152,7 +1806,7 @@ public class HttpKit {
         protected String[] doInBackground(String... params) {
             String urlStr = "http://dopeapi.elantix.net/users.forgot?email=" + params[0];
 
-            String response = RequestToServerGET(urlStr);
+            String response = Utilities.RequestToServerGET(urlStr);
 
             try {
                 JSONObject json = new JSONObject(response);
