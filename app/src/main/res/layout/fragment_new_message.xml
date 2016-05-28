@@ -27,6 +27,7 @@
                 android:background="@drawable/rounded_rectangle"
                 android:hint="Search"
                 android:gravity="center"
+                android:imeOptions="actionSearch"
                 android:textColorHint="@color/friends_desription_text_color"
                 android:textSize="@dimen/message_search_font_size"
                 android:inputType="textPersonName"

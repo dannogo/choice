@@ -23,6 +23,11 @@ public class ProfileInfo {
     int followings;
     int follow;
 
+    // addition fields for users.friends
+    String date_follow;
+    String is_chat;
+    String dialog_id;
+
     public ProfileInfo() {
 
     }
@@ -46,6 +51,10 @@ public class ProfileInfo {
         this.followers = another.followers;
         this.followings = another.followings;
         this.follow = another.follow;
+
+        this.date_follow = another.date_follow;
+        this.is_chat = another.is_chat;
+        this.dialog_id = another.dialog_id;
     }
 
     @Override

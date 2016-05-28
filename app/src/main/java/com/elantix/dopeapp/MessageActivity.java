@@ -2,6 +2,7 @@ package com.elantix.dopeapp;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -28,12 +29,17 @@ public class MessageActivity extends AppCompatActivity {
     ImageButton rightToolbarButton;
     RelativeLayout bottomArea;
     FancyButton fancyButton;
+    private HttpKit http;
+
+    public Fragment mCurrentFragment;
+
+    public ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
-        launchFragment(directMessages);
+//        launchFragment(directMessages);
 
         toolbar = (Toolbar) findViewById(R.id.main_app_bar);
         toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
@@ -51,50 +57,54 @@ public class MessageActivity extends AppCompatActivity {
         });
         bottomArea = (RelativeLayout) findViewById(R.id.bottom_area);
 
-
+        http = new HttpKit(MessageActivity.this);
+        http.getConversationList(Utilities.sToken, Utilities.sUid, null, null);
     }
 
-    private void removeFragment(DirectMessages fragEnum){
 
-        String fragmentTAG;
+
+    private void toolbarStuffChangeHandler(DirectMessages fragEnum){
+//        NoMessage, NewMessage1, Chat, GroupChat, GroupChatSettings, TabPlus
         switch (fragEnum){
             case NoMessage:
-                fragmentTAG = "FragmentNoMessage";
+                toolbarTitle.setText(R.string.message_title_1);
                 break;
-            case NewMessage1:
-                fragmentTAG = "FragmentNewMessage1";
-                break;
-            case TabPlus:
-                fragmentTAG = "FragmentTabPlus";
-                break;
-            default:
-                fragmentTAG = "FragmentNoMessage";
         }
-        Fragment fragment = getFragmentManager().findFragmentByTag(fragmentTAG);
-        if(fragment != null) {
+    }
+
+    // new approach
+    private void removeFragment(){
+        if(mCurrentFragment != null) {
             transaction = manager.beginTransaction();
-            transaction.remove(fragment);
+            transaction.remove(mCurrentFragment);
             transaction.commit();
         }
     }
 
-    protected void switchPageHandler(DirectMessages fragEnum, int title){
-        removeFragment(directMessages);
-        directMessages = fragEnum;
-        toolbarTitle.setText(title);
-        launchFragment(directMessages);
+    public void switchPageHandler(DirectMessages fragEnum){
+        switchPageHandler(fragEnum, -1);
     }
 
-    private void launchFragment(DirectMessages directMessages){
+    protected void switchPageHandler(DirectMessages fragEnum, int bundleData){
+        removeFragment();
+        directMessages = fragEnum;
+        launchFragment(directMessages, bundleData);
+    }
+
+    public void launchFragment(DirectMessages directMessages){
+        launchFragment(directMessages, -1);
+    }
+
+    public void launchFragment(DirectMessages directMessages, int bundleData){
         Fragment frag;
         String fragmentTAG;
         switch (directMessages){
             case NoMessage:
-                frag = new FragmentNoMessage();
+                mCurrentFragment = new FragmentNoMessage();
                 fragmentTAG = "FragmentNoMessage";
                 break;
             case NewMessage1:
-                frag = new FragmentNewMessage();
+                mCurrentFragment = new FragmentNewMessage();
                 fragmentTAG = "FragmentNewMessage1";
                 break;
 //            case Chat:
@@ -107,15 +117,19 @@ public class MessageActivity extends AppCompatActivity {
 //
 //                break;
             case TabPlus:
-                frag = new FragmentTabPlus();
+                mCurrentFragment = new FragmentTabPlus();
                 fragmentTAG = "FragmentTabPlus";
                 break;
             default:
-                frag = new FragmentNoMessage();
+                mCurrentFragment = new FragmentNoMessage();
                 fragmentTAG = "FragmentNoMessage";
         }
+        Bundle bundle = new Bundle();
+        bundle.putInt("type", bundleData);
+        mCurrentFragment.setArguments(bundle);
+
         transaction = manager.beginTransaction();
-        transaction.add(R.id.fragment_container, frag, fragmentTAG);
+        transaction.add(R.id.fragment_container, mCurrentFragment, fragmentTAG);
         transaction.commit();
     }
 

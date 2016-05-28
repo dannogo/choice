@@ -121,39 +121,41 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
     public void onStart() {
         super.onStart();
 
-        mQuestion.setText(mCurItem.question);
-        mVotes.setText(""+mCurItem.votesAll+" Votes");
-        if (!mCurItem.fullname.isEmpty()) {
-            mUserName.setText(mCurItem.fullname);
-        }else{
-            mUserName.setText(mCurItem.username);
+        if (mCurItem != null) {
+            mQuestion.setText(mCurItem.question);
+            mVotes.setText("" + mCurItem.votesAll + " Votes");
+            if (!mCurItem.fullname.isEmpty()) {
+                mUserName.setText(mCurItem.fullname);
+            } else {
+                mUserName.setText(mCurItem.username);
+            }
+
+            Glide.with(this).load(mCurItem.avatar)
+                    .bitmapTransform(new CropCircleTransformation(getActivity()))
+                    .into(mAvatar);
+
+            ImageView blurredPicture1 = (ImageView) fragmentView.findViewById(R.id.blurred_picture_1);
+            ImageView blurredPicture2 = (ImageView) fragmentView.findViewById(R.id.blurred_picture_2);
+
+            mOptionPicture1 = (ImageView) fragmentView.findViewById(R.id.option_picture_1);
+            mOptionPicture2 = (ImageView) fragmentView.findViewById(R.id.option_picture_2);
+            mOptionPicture1.setOnClickListener(this);
+            mOptionPicture2.setOnClickListener(this);
+
+            Uri image1 = mCurItem.photo1;
+            Uri image2 = mCurItem.photo2;
+
+            Glide.with(this).load(image1).into(mOptionPicture1);
+            Glide.with(this).load(image2).into(mOptionPicture2);
+
+            Glide.with(this).load(image1)
+                    .bitmapTransform(new BlurTransformation(getActivity()))
+                    .into(blurredPicture1);
+
+            Glide.with(this).load(image2)
+                    .bitmapTransform(new BlurTransformation(getActivity()))
+                    .into(blurredPicture2);
         }
-
-        Glide.with(this).load(mCurItem.avatar)
-                .bitmapTransform(new CropCircleTransformation(getActivity()))
-                .into(mAvatar);
-
-        ImageView blurredPicture1 = (ImageView) fragmentView.findViewById(R.id.blurred_picture_1);
-        ImageView blurredPicture2 = (ImageView) fragmentView.findViewById(R.id.blurred_picture_2);
-
-        mOptionPicture1 = (ImageView) fragmentView.findViewById(R.id.option_picture_1);
-        mOptionPicture2 = (ImageView) fragmentView.findViewById(R.id.option_picture_2);
-        mOptionPicture1.setOnClickListener(this);
-        mOptionPicture2.setOnClickListener(this);
-
-        Uri image1 = mCurItem.photo1;
-        Uri image2 = mCurItem.photo2;
-
-        Glide.with(this).load(image1).into(mOptionPicture1);
-        Glide.with(this).load(image2).into(mOptionPicture2);
-
-        Glide.with(this).load(image1)
-                .bitmapTransform(new BlurTransformation(getActivity()))
-                .into(blurredPicture1);
-
-        Glide.with(this).load(image2)
-                .bitmapTransform(new BlurTransformation(getActivity()))
-                .into(blurredPicture2);
 
     }
 
@@ -245,6 +247,7 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
             intent.putExtra("dopeId", mCurItem.id);
             intent.putExtra("question", mCurItem.question);
             intent.putExtra("votesCnt", mCurItem.votesAll);
+            intent.putExtra("publisherId", mCurItem.userId);
             intent.putExtra("type", 0);
             startActivity(intent);
         }

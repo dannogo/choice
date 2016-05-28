@@ -27,7 +27,7 @@ public class FragmentNoMessage extends Fragment {
 
 
         buttonsAppearanceHandling();
-
+        ((MessageActivity)getActivity()).toolbarTitle.setText(R.string.message_title_1);
         return fragmentView;
     }
 
@@ -38,7 +38,7 @@ public class FragmentNoMessage extends Fragment {
         sendNewMessageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                messageActivity.switchPageHandler(MessageActivity.DirectMessages.NewMessage1, R.string.message_title_2);
+                messageActivity.switchPageHandler(MessageActivity.DirectMessages.NewMessage1, 2);
             }
         });
     }

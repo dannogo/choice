@@ -130,6 +130,7 @@ public class AdapterComments extends RecyclerView.Adapter<AdapterComments.Commen
                     // Http here
                     HttpKit http = new HttpKit(mContext);
                     http.deleteComment(Utilities.sToken, item.id, null, String.valueOf(position));
+                    DopeStatisticsActivity.sNumOfComments--;
                 }
             };
             handler.postDelayed(pendingRemovalRunnable, PENDING_REMOVAL_TIMEOUT);

@@ -31,7 +31,6 @@ public class FragmentLogOutConfirmation extends DialogFragment{
 //                http.logOut(Utilities.sToken);
 
                 Utilities.sFragmentHistory.clear();
-
                 Utilities.sToken = null;
                 Utilities.sUid = null;
                 SharedPreferences preferences = getActivity().getSharedPreferences(Utilities.MY_PREFS_NAME, getActivity().MODE_PRIVATE);

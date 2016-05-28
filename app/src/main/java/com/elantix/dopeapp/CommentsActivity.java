@@ -48,6 +48,7 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
     private ChatType mType;
     public ProgressDialog mProgressDialog;
     private String mDopeId;
+    private String mPublisherId;
 
     // endless list support stuff
     private HttpKit http;
@@ -76,6 +77,7 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
 
         Intent intent = getIntent();
         mDopeId = intent.getStringExtra("dopeId");
+        mPublisherId = intent.getStringExtra("publisherId");
         String question = intent.getStringExtra("question");
         int votesCnt = intent.getIntExtra("votesCnt", 0);
 
@@ -299,9 +301,13 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
                 if (Utilities.sUid == null){
                     return 0;
                 }
-                if (!testAdapter.mCommentsList.get(position).user_id.equals(Utilities.sUid)) {
+
+                if (mPublisherId.equals(Utilities.sUid)){
+                    return super.getSwipeDirs(recyclerView, viewHolder);
+                }else if (!testAdapter.mCommentsList.get(position).user_id.equals(Utilities.sUid)) {
                     return 0;
                 }
+
                 return super.getSwipeDirs(recyclerView, viewHolder);
             }
 

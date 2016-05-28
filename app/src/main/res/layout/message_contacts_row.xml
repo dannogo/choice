@@ -46,11 +46,12 @@
                 android:textColor="@color/main_screen_question_font_color"
                 />
 
-            <ImageButton
+            <ImageView
                 android:id="@+id/list_online_status"
                 android:src="@drawable/online_status"
                 android:layout_width="@dimen/message_list_online_status_size"
                 android:layout_height="@dimen/message_list_online_status_size"
+                android:scaleType="centerInside"
                 android:layout_marginLeft="@dimen/message_list_contact_name_online_status_margin"
                 />
         </LinearLayout>

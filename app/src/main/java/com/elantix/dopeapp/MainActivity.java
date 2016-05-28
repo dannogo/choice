@@ -480,7 +480,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mCurrentFragment = fragmentTo;
     }
 
-
+    private void launchCommentsActivity(){
+        Intent intent = new Intent(MainActivity.this, MessageActivity.class);
+        startActivity(intent);
+    }
 
     protected void toolbarTitleAndButtonChangesHandler(Page page){
         switch (page){
@@ -492,7 +495,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mRightToolbarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        launchCommentsActivity();
                     }
                 });
                 break;
@@ -504,7 +507,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mRightToolbarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        launchCommentsActivity();
                     }
                 });
                 break;
@@ -516,7 +519,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mRightToolbarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
+                        launchCommentsActivity();
                     }
                 });
                 break;
@@ -543,6 +546,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mLeftToolbarButton.setVisibility(View.VISIBLE);
                 mRightToolbarButton.setVisibility(View.VISIBLE);
                 mRightToolbarButton.setImageResource(R.drawable.dir_message);
+                mRightToolbarButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        launchCommentsActivity();
+                    }
+                });
                 mLeftToolbarButton.setImageResource(R.drawable.toolbar_magnifier_icon);
                 mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
                     @Override

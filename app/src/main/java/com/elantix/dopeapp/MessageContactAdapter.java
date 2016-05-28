@@ -1,16 +1,22 @@
 package com.elantix.dopeapp;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
 /**
  * Created by oleh on 3/19/16.
@@ -19,25 +25,7 @@ public class MessageContactAdapter extends RecyclerView.Adapter<MessageContactAd
 
     private LayoutInflater inflater;
     private Context context;
-
-
-
-    String[] contactNames = {"Yana Sheleykis", "Nikolay Maletskiy", "Voktoria Colt", "Alisa Parker", "Nataliya Trush", "Maria Tkachik",
-            "Yana Sheleykis", "Nikolay Maletskiy", "Voktoria Colt", "Alisa Parker", "Nataliya Trush", "Maria Tkachik",
-            "Yana Sheleykis", "Nikolay Maletskiy", "Voktoria Colt", "Alisa Parker", "Nataliya Trush", "Maria Tkachik"
-            };
-    String[] descriptions = {"Posted a new card", "Posted a new card", "I like your photo", "dance",
-            "Posted a new card", "Posted a new card", "I like your photo", "dance",
-            "Posted a new card", "Posted a new card", "I like your photo", "dance",
-            "Posted a new card", "Posted a new card", "I like your photo", "dance",
-            "Posted a new card", "I like your photo"};
-    String[] occupation ={
-            "Specialist", "Designer", "M.Style", "dance",
-            "Management", "schastie", "free", "busy",
-            "Specialist", "Designer", "M.Style", "dance",
-            "Management", "schastie", "free", "busy",
-            "Specialist", "Designer"
-    };
+    HttpKit http;
 
     String[] dates = {
             "13:23", "14:22", "Yesterday", "00:12", "11:23",
@@ -47,19 +35,15 @@ public class MessageContactAdapter extends RecyclerView.Adapter<MessageContactAd
 
     };
 
-    int[] avatars = {
-            R.drawable.fr1, R.drawable.fr2, R.drawable.fr3, R.drawable.fr4,
-            R.drawable.fr5, R.drawable.fr6, R.drawable.fr7,
-            R.drawable.fr1, R.drawable.fr2, R.drawable.fr3, R.drawable.fr4,
-            R.drawable.fr5, R.drawable.fr6, R.drawable.fr7,
-            R.drawable.fr1, R.drawable.fr2, R.drawable.fr3, R.drawable.fr4,
-    };
-
     Integer checkedItem = null;
-    ArrayList<Integer> checkedItems = new ArrayList<>();
+//    ArrayList<Integer> checkedItems = new ArrayList<>();
+    public static ArrayList<Integer> selectedIds = new ArrayList<>();
     ArrayList<Integer> online = new ArrayList<>();
+    ArrayList<ProfileInfo> mUsers;
+    public FragmentNewMessage.ListType listType;
 
-    public MessageContactAdapter(Context context) {
+
+    public MessageContactAdapter(Context context, ProfileInfo[] users, FragmentNewMessage.ListType type) {
         this.inflater = LayoutInflater.from(context);
         this.context = context;
         online.add(1);
@@ -68,12 +52,11 @@ public class MessageContactAdapter extends RecyclerView.Adapter<MessageContactAd
         online.add(11);
         online.add(16);
         online.add(17);
-    }
 
-//    public enum ListType{
-//        First, Second, Third
-//    }
-    protected FragmentNewMessage.ListType listType = FragmentNewMessage.ListType.First;
+        mUsers = new ArrayList<ProfileInfo>(Arrays.asList(users));
+        listType = type;
+        http = new HttpKit(this.context);
+    }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -97,7 +80,10 @@ public class MessageContactAdapter extends RecyclerView.Adapter<MessageContactAd
                 }else{
                     holder.onlineStatus.setVisibility(View.GONE);
                 }
-                holder.description.setText(descriptions[position]);
+
+                holder.description.setText(mUsers.get(position).bio);
+
+//                holder.description.setText(descriptions[position])
                 holder.date.setText(dates[position]);
                 holder.date.setVisibility(View.VISIBLE);
                 holder.checkmark.setVisibility(View.GONE);
@@ -108,29 +94,39 @@ public class MessageContactAdapter extends RecyclerView.Adapter<MessageContactAd
                 holder.onlineStatus.setVisibility(View.GONE);
                 holder.date.setVisibility(View.GONE);
                 holder.checkmark.setVisibility(View.GONE);
-                holder.description.setText(occupation[position]);
+                holder.description.setText(mUsers.get(position).bio);
                 break;
             case Third:
                 holder.onlineStatus.setVisibility(View.GONE);
                 holder.date.setVisibility(View.GONE);
-                if (checkedItems.contains(position)){
+
+                if (selectedIds.contains(Integer.parseInt(mUsers.get(position).id))){
                     holder.checkmark.setImageResource(R.drawable.list_checkmark_full);
                 }else{
                     holder.checkmark.setImageResource(R.drawable.list_checkmark_empty);
                 }
+
+                // Deprecated approach
+//                if (checkedItems.contains(position)){
+//                    holder.checkmark.setImageResource(R.drawable.list_checkmark_full);
+//                }else{
+//                    holder.checkmark.setImageResource(R.drawable.list_checkmark_empty);
+//                }
+
                 holder.checkmark.setVisibility(View.VISIBLE);
-                holder.description.setText(occupation[position]);
+                holder.description.setText(mUsers.get(position).bio);
                 break;
         }
 
-        holder.contactName.setText(contactNames[position]);
-        holder.avatar.setImageResource(avatars[position]);
+        holder.contactName.setText(mUsers.get(position).fullname);
+        Glide.with(context).load(Uri.parse(mUsers.get(position).avatar))
+                .bitmapTransform(new CropCircleTransformation(context)).into(holder.avatar);
 
     }
 
     @Override
     public int getItemCount() {
-        return contactNames.length;
+        return mUsers.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -171,15 +167,27 @@ public class MessageContactAdapter extends RecyclerView.Adapter<MessageContactAd
                     }
                     break;
                 case Second:
+                    Log.e("MessageContactAdapter","Selected user`s id: "+mUsers.get(getAdapterPosition()).id);
+                    http.createConversation(Utilities.sToken, mUsers.get(getAdapterPosition()).id);
                     break;
                 case Third:
-                    if (!checkedItems.contains(getAdapterPosition())){
-                        checkedItems.add(getAdapterPosition());
+
+                    if (!selectedIds.contains(Integer.parseInt(mUsers.get(getAdapterPosition()).id))){
+                        selectedIds.add(Integer.parseInt(mUsers.get(getAdapterPosition()).id));
                         checkmark.setImageResource(R.drawable.list_checkmark_full);
                     }else{
-                        checkedItems.remove(Integer.valueOf(getAdapterPosition()));
+                        selectedIds.remove(new Integer(Integer.parseInt(mUsers.get(getAdapterPosition()).id)));
                         checkmark.setImageResource(R.drawable.list_checkmark_empty);
                     }
+
+                    // Deprecated approach
+//                    if (!checkedItems.contains(getAdapterPosition())){
+//                        checkedItems.add(getAdapterPosition());
+//                        checkmark.setImageResource(R.drawable.list_checkmark_full);
+//                    }else{
+//                        checkedItems.remove(Integer.valueOf(getAdapterPosition()));
+//                        checkmark.setImageResource(R.drawable.list_checkmark_empty);
+//                    }
                     break;
 
             }

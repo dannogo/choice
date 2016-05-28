@@ -50,6 +50,7 @@ public class FragmentProfileOverview extends Fragment implements View.OnClickLis
     private RecyclerView mRecyclerView;
     private TextView mNumberOfDopesView;
     private String uid;
+    private AdapterProfileOverview adapter;
 
     // TODO:
     // rename variable for Following/Edit_Profile buttons
@@ -143,11 +144,18 @@ public class FragmentProfileOverview extends Fragment implements View.OnClickLis
     private void configurateRecyclerView(DopeInfo[] dopes){
         mRecyclerView.setFocusable(false);
 
-        AdapterProfileOverview adapter = new AdapterProfileOverview(getActivity(), dopes, mIsOwn);
+        adapter = new AdapterProfileOverview(getActivity(), dopes, mIsOwn);
         mRecyclerView.setAdapter(adapter);
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getActivity(), 3, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(gridLayoutManager);
+    }
+
+    public void handleDopeDeleting(int dopePosition){
+        Log.e("ProfileOverview", "DopeDeleting. Position: " + dopePosition);
+        adapter.mDopes.remove(dopePosition);
+        adapter.notifyItemRemoved(dopePosition);
+        mNumberOfDopesView.setText(String.valueOf(--Utilities.sCurProfile.dopes));
     }
 
     public void setInfo(ProfileInfo info){
