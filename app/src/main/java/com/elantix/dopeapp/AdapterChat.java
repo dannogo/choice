@@ -16,67 +16,70 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.elantix.dopeapp.entities.ChatMessage;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import jp.wasabeef.glide.transformations.CropCircleTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
  * Created by oleh on 4/16/16.
  */
 public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
-//        implements AdapterChat.AsyncResponse
 
     private LayoutInflater mInflater;
     private Context mContext;
-    private ViewTreeObserver.OnGlobalLayoutListener mGlobalLayoutListener;
 
-    private List<Object> items;
+    public ArrayList<ChatMessage> mMessages;
+    public List<Object> items;
     private final int DATELINE = 0, OTHERS_MSG = 1, MY_MSG = 2, OTHERS_PROPOSAL = 3, MY_PROPOSAL = 4;
 
-    private int[] avatars = {R.drawable.fr3, R.drawable.fr4, R.drawable.fr5
-            , R.drawable.fr3, R.drawable.fr4, R.drawable.fr5
+    // TODO:
+    // Do not forget about dateline
 
-    };
+    private String replaceFullnameIfNecessary(ChatMessage messageObj){
+        String result = (messageObj.fullname.isEmpty() || messageObj.fullname.equals("null") || messageObj.fullname == null) ? messageObj.username : messageObj.fullname;
+        return result;
+    }
 
+    public void sortMessage(ChatMessage item){
+        String fullname = replaceFullnameIfNecessary(item);
+        String time = Utilities.convertDate(item.date_send, true);
+        String message = item.message.replaceAll("(\\r|\\n)", "");
 
+        if (item.sender.equals(Utilities.sUid)){
+            if (item.photo1.isEmpty()){
+                items.add(new MyMsg(item.avatar, fullname, time, message));
+            }else{
+                items.add(new MyDopeProposal(fullname, item.avatar,
+                        item.photoSoc, item.photo1, item.photo2, message, time));
+            }
+        }else{
+            if (item.photo1.isEmpty()){
+                items.add(new OthersMsg(fullname, item.avatar, message, time));
+            }else{
+                items.add(new OthersDopeProposal(fullname, item.avatar, time, message,
+                        item.photoSoc, item.photo1, item.photo2));
+            }
+        }
+    }
 
-    public AdapterChat(Context context) {
+    public AdapterChat(Context context, ArrayList<ChatMessage> messages) {
         mInflater = LayoutInflater.from(context);
         mContext = context;
 
+        mMessages = new ArrayList<>(messages);
         items = new ArrayList<>();
-        items.add(new DateLine("Yesterday"));
-        items.add(new OthersMsg("Yana Sheleykis", "1.15pm", "Hello!", R.drawable.fr3));
-        items.add(new MyMsg("1.17pm", "Hi :)"));
-        items.add(new OthersMsg("Yana Sheleykis", "1.18pm", "How are you doing?", R.drawable.fr3));
-        items.add(new MyMsg("1.18pm", "I am fine!"));
-        items.add(new OthersMsg("Barbra Streisand", "1.18pm", "Sorry. I don`t want to interrupt you, but could you help me with one choice? I can not decide!", R.drawable.fr4));
-        items.add(new OthersMsg("Yana Sheleykis", "1.19pm", "Ok, honey, what is it?", R.drawable.fr3));
-        items.add(new MyMsg("1.19pm", "No no... I don`t want to make any decisions.. Not today!"));
-        items.add(new OthersMsg("Barbra Streisand", "1.20pm", "Why? What happened, sweety?", R.drawable.fr4));
-        items.add(new MyMsg("1.20pm", "I just want to relax.."));
-        items.add(new OthersMsg("Yana Sheleykis", "1.20pm", "Never mind, I`ll help you. Where is your dope?", R.drawable.fr3));
-        items.add(new OthersDopeProposal("Barbra Streisand", "1:21pm", R.drawable.fr4, "Some of the girls more beautiful?", R.drawable.girl3, R.drawable.girl4));
-        items.add(new MyMsg("1.21pm", "What the hell?!"));
-        items.add(new MyMsg("1.21pm", "You want us to help you compare two girls??"));
-        items.add(new MyMsg("1.22pm", "Why do you need this??"));
-        items.add(new MyMsg("1.22pm", "Why do you need this??"));
-        items.add(new MyMsg("1.22pm", "Why do you need this??"));
-        items.add(new MyMsg("1.22pm", "Why do you need this??"));
-        items.add(new MyMsg("1.22pm", "Why do you need this??"));
-        items.add(new MyMsg("1.22pm", "Why do you need this??"));
-        items.add(new MyMsg("1.22pm", "Why do you need this??"));
-        items.add(new MyMsg("1.22pm", "Why do you need this??"));
-        items.add(new MyMsg("1.22pm", "Why do you need this??"));
-        items.add(new MyMsg("1.22pm", "Why do you need this??"));
-        items.add(new MyMsg("1.22pm", "Why do you need this??"));
-        items.add(new MyMsg("1.22pm", "Why do you need this??"));
-        items.add(new MyMsg("1.22pm", "Why do you need this??"));
-        items.add(new MyMsg("1.22pm", "Why do you need this??"));
-        items.add(new MyMsg("1.22pm", "Why do you need this??"));
+
+        for (int i=0; i<mMessages.size(); i++){
+            ChatMessage item = mMessages.get(i);
+            sortMessage(item);
+        }
+
     }
 
     @Override
@@ -120,15 +123,17 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             case OTHERS_MSG:
                 OthersMsgVH omvh = (OthersMsgVH) holder;
                 OthersMsg om = (OthersMsg) items.get(position);
-                Glide.with(mContext).load(om.avatar).into(omvh.avatarView);
-                omvh.usernameView.setText(om.username);
+                Glide.with(mContext).load(om.avatar)
+                        .bitmapTransform(new CropCircleTransformation(mContext))
+                        .into(omvh.avatarView);
+                omvh.usernameView.setText(om.fullname);
                 omvh.messageView.setText(om.message);
                 omvh.timeView.setText(om.time);
                 break;
             case MY_MSG:
                 MyMsgVH mmvh = (MyMsgVH) holder;
                 MyMsg mm = (MyMsg) items.get(position);
-                mmvh.messageView.setText(mm.msg);
+                mmvh.messageView.setText(mm.message);
                 mmvh.timeView.setText(mm.time);
                 break;
             case DATELINE:
@@ -139,17 +144,30 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             case OTHERS_PROPOSAL:
                 final OthersDopeProposalVH odpvh = (OthersDopeProposalVH) holder;
                 final OthersDopeProposal odp = (OthersDopeProposal) items.get(position);
-                Glide.with(mContext).load(odp.avatar).into(odpvh.avatarView);
-                odpvh.usernameView.setText(odp.username);
+                Glide.with(mContext).load(odp.avatar)
+                        .bitmapTransform(new CropCircleTransformation(mContext))
+                        .into(odpvh.avatarView);
+                odpvh.usernameView.setText(odp.fullname);
                 odpvh.timeView.setText(odp.time);
-                odpvh.questionView.setText(odp.question);
+                odpvh.questionView.setText(odp.message);
 
-                Object[] params = {odp.leftPic, odp.rightPic, odpvh.leftPicView, odpvh.rightPicView};
-                ImageTransformationComputations task = new ImageTransformationComputations();
-                task.execute(params);
+                Object[] paramsOth = {odp.photo1, odp.photo2, odpvh.leftPicView, odpvh.rightPicView};
+                ImageTransformationComputations taskOth = new ImageTransformationComputations();
+                taskOth.execute(paramsOth);
                 break;
             case MY_PROPOSAL:
                 MyDopeProposalVH mdpvh = (MyDopeProposalVH) holder;
+                final MyDopeProposal mp = (MyDopeProposal) items.get(position);
+                Glide.with(mContext).load(mp.avatar)
+                        .bitmapTransform(new CropCircleTransformation(mContext))
+                        .into(mdpvh.avatarView);
+                mdpvh.usernameView.setText(mp.fullname);
+                mdpvh.timeView.setText(mp.time);
+                mdpvh.questionView.setText(mp.message);
+
+                Object[] paramsMy = {mp.photo1, mp.photo2, mdpvh.leftPicView, mdpvh.rightPicView};
+                ImageTransformationComputations taskMy = new ImageTransformationComputations();
+                taskMy.execute(paramsMy);
                 break;
             default:
 
@@ -225,8 +243,30 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         private TextView questionView;
         private ImageView leftPicView;
         private ImageView rightPicView;
+//        private ImageView photoSoc;
 
         public OthersDopeProposalVH(View itemView) {
+            super(itemView);
+            avatarView = (ImageView) itemView.findViewById(R.id.chat_others_dope_proposal_avatar);
+            usernameView = (TextView) itemView.findViewById(R.id.chat_others_dope_proposal_username);
+            timeView = (TextView) itemView.findViewById(R.id.chat_others_dope_proposal_time);
+            questionView = (TextView) itemView.findViewById(R.id.chat_others_dope_proposal_question);
+            leftPicView = (ImageView) itemView.findViewById(R.id.option_picture_1);
+            rightPicView = (ImageView) itemView.findViewById(R.id.option_picture_2);
+//            photoSoc = (ImageView) itemView.findViewById(R.id.chat_photoSoc);
+        }
+    }
+
+    class MyDopeProposalVH extends RecyclerView.ViewHolder{
+
+        private ImageView avatarView;
+        private TextView usernameView;
+        private TextView timeView;
+        private TextView questionView;
+        private ImageView leftPicView;
+        private ImageView rightPicView;
+
+        public MyDopeProposalVH(View itemView) {
             super(itemView);
             avatarView = (ImageView) itemView.findViewById(R.id.chat_others_dope_proposal_avatar);
             usernameView = (TextView) itemView.findViewById(R.id.chat_others_dope_proposal_username);
@@ -237,59 +277,70 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         }
     }
 
-    class MyDopeProposalVH extends RecyclerView.ViewHolder{
-
-        public MyDopeProposalVH(View itemView) {
-            super(itemView);
-        }
-    }
-
     class OthersMsg{
-        private String username;
-        private String time;
+        private String fullname;
+        private String avatar;
         private String message;
-        private int avatar;
+        private String time;
 
-        public OthersMsg(String username, String time, String message, int avatar) {
-            this.username = username;
-            this.time = time;
-            this.message = message;
+        public OthersMsg(String fullname, String avatar, String message, String time) {
+            this.fullname = fullname;
             this.avatar = avatar;
+            this.message = message;
+            this.time = time;
         }
     }
 
     class MyMsg{
         private String time;
-        private String msg;
+        private String message;
+        private String avatar;
+        private String fullname;
 
-        public MyMsg(String time, String msg) {
+        public MyMsg(String avatar, String fullname, String time, String message) {
             this.time = time;
-            this.msg = msg;
+            this.message = message;
+            this.avatar = avatar;
+            this.fullname = fullname;
         }
     }
 
     class OthersDopeProposal{
-        private String username;
+        private String fullname;
+        private String avatar;
         private String time;
-//        private int dopeNumber;
-        private int avatar;
-        private String question;
-        private int leftPic;
-        private int rightPic;
+        private String message;
+        private String photo1;
+        private String photo2;
 
-        public OthersDopeProposal(String username, String time, int avatar, String question, int leftPic, int rightPic) {
-            this.username = username;
-            this.time = time;
+        public OthersDopeProposal(String fullname, String avatar, String time, String message, String photoSoc, String photo1, String photo2) {
+            this.fullname = fullname;
             this.avatar = avatar;
-            this.question = question;
-            this.leftPic = leftPic;
-            this.rightPic = rightPic;
+            this.message = message;
+            this.time = time;
+            this.photo1 = photo1;
+            this.photo2 = photo2;
         }
     }
 
     class MyDopeProposal{
+        private String fullname;
+        private String avatar;
+        private String photoSoc;
+        private String photo1;
+        private String photo2;
+        private String message;
         private String time;
-        private int dopeNumber;
+
+        public MyDopeProposal(String fullname, String avatar, String photoSoc, String photo1, String photo2, String message, String time) {
+            this.fullname = fullname;
+            this.avatar = avatar;
+            this.message = message;
+            this.time = time;
+            this.photoSoc = photoSoc;
+            this.photo1 = photo1;
+            this.photo2 = photo2;
+        }
     }
 
     class DateLine{
@@ -304,24 +355,14 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private class ImageTransformationComputations extends AsyncTask<Object, Void, Object[]> {
 
         @Override
-        protected void onPreExecute() {
-
-        }
-
-        @Override
         protected Object[] doInBackground(Object... params) {
 
-            Bitmap leftPic = BitmapFactory.decodeResource(mContext.getResources(),
-                    (Integer)params[0]);
+            Bitmap leftPic = Utilities.getBitmapFromURL((String)params[0]);
             Bitmap resultLeft = Utilities.getOneSideRoundedBitmap(mContext, leftPic, true, 35);
-//            ((ImageView)params[2]).setImageBitmap(resultLeft);
 
-            Bitmap rightPic = BitmapFactory.decodeResource(mContext.getResources(),
-                    (Integer)params[1]);
+            Bitmap rightPic = Utilities.getBitmapFromURL((String) params[1]);
             Bitmap resultRight = Utilities.getOneSideRoundedBitmap(mContext, rightPic, false, 35);
-//            ((ImageView)params[3]).setImageBitmap(resultRight);
 
-//            Bitmap[] bitmaps = {resultLeft, resultRight};
             Object[] objects = {params[2], params[3], resultLeft, resultRight};
 
             return objects;
@@ -329,9 +370,8 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
         @Override
         protected void onPostExecute(Object[] res) {
-            // Runs on the UI thread
             ((ImageView)res[0]).setImageBitmap((Bitmap)res[2]);
-            ((ImageView)res[1]).setImageBitmap((Bitmap)res[3]);
+            ((ImageView)res[1]).setImageBitmap((Bitmap) res[3]);
 
         }
 

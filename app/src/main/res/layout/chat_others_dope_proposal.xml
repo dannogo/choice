@@ -78,15 +78,17 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
 
+                <!--<ImageView-->
+                    <!--android:id="@+id/chat_photoSoc"-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="match_parent" />-->
+
                 <ImageView
                     android:id="@+id/option_picture_1"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
                     />
-                    <!--android:background="#F0F"-->
-                    <!--android:scaleType="centerCrop"-->
-                    <!--android:src="@drawable/girl3"-->
 
                 <ImageView
                     android:id="@+id/option_picture_2"
@@ -94,9 +96,6 @@
                     android:layout_height="match_parent"
                     android:layout_weight="0.5"
                     />
-                    <!--android:background="#0FF"-->
-                    <!--android:scaleType="centerCrop"-->
-                    <!--android:src="@drawable/girl4"-->
 
             </LinearLayout>
             <!--Rate bar-->

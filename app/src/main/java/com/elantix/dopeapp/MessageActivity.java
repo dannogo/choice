@@ -13,6 +13,8 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.elantix.dopeapp.entities.ConversationInfo;
+
 import mehdi.sakout.fancybuttons.FancyButton;
 
 /**
@@ -30,6 +32,8 @@ public class MessageActivity extends AppCompatActivity {
     RelativeLayout bottomArea;
     FancyButton fancyButton;
     private HttpChat http;
+    public int convCount;
+    public ConversationInfo[] conversations;
 
     public Fragment mCurrentFragment;
 

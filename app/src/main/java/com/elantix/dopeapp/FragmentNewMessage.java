@@ -1,6 +1,8 @@
 package com.elantix.dopeapp;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +25,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.elantix.dopeapp.entities.ConversationInfo;
+
 import java.util.ArrayList;
 
 import mehdi.sakout.fancybuttons.FancyButton;
@@ -36,8 +40,9 @@ public class FragmentNewMessage extends Fragment {
     private FancyButton fancyButton;
     private RelativeLayout bottomArea;
     private EditText mSearch;
+    private RelativeLayout mSearchContainer;
     private RecyclerView list;
-    private MessageContactAdapter adapter;
+    public MessageContactAdapter adapter;
     private MessageActivity activity;
 
     public enum ListType{
@@ -54,6 +59,7 @@ public class FragmentNewMessage extends Fragment {
     public boolean isNewFetch = true;
     private boolean loading = true;
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,6 +69,7 @@ public class FragmentNewMessage extends Fragment {
 
         fancyButton = (FancyButton) fragmentView.findViewById(R.id.fancy_button);
         mSearch = (EditText) fragmentView.findViewById(R.id.search);
+        mSearchContainer = (RelativeLayout) fragmentView.findViewById(R.id.searchContainer);
         bottomArea = (RelativeLayout) fragmentView.findViewById(R.id.bottom_area);
         list = (RecyclerView) fragmentView.findViewById(R.id.list);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
@@ -161,15 +168,19 @@ public class FragmentNewMessage extends Fragment {
         Bundle bundle = getArguments();
         int type = bundle.getInt("type", -1);
 
+        http = new HttpChat(getActivity());
+
         switch (type){
             case 1:
                 currentListType = ListType.First;
                 break;
             case 2:
                 currentListType = ListType.Second;
+                http.getCrossFollowingFriends(Utilities.sToken, null, null, null, null);
                 break;
             case 3:
                 currentListType = ListType.Third;
+                http.getCrossFollowingFriends(Utilities.sToken, null, null, null, null);
                 break;
             default:
                 currentListType = ListType.First;
@@ -177,15 +188,18 @@ public class FragmentNewMessage extends Fragment {
 
         setProperFragmentAppearance();
 
-        http = new HttpChat(getActivity());
-        http.getCrossFollowingFriends(Utilities.sToken, null, null, null, null);
 
         activity.rightToolbarButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 currentListType = ListType.Second;
-                adapter.listType = ListType.Second;
-                adapter.notifyDataSetChanged();
+                mPageNum = 1;
+                mQuery = null;
+                isNewFetch = true;
+                http.getCrossFollowingFriends(Utilities.sToken, mQuery, mPageNum, mPageCount, null);
+                currentListType = ListType.Second;
+//                adapter.listType = ListType.Second;
+//                adapter.notifyDataSetChanged();
 
                 setProperFragmentAppearance();
             }
@@ -195,12 +209,16 @@ public class FragmentNewMessage extends Fragment {
             public void onClick(View v) {
                 switch (currentListType) {
                     case First:
-                        activity.switchPageHandler(MessageActivity.DirectMessages.NoMessage, R.string.message_title_1);
+                        activity.finish();
                         break;
                     case Second:
                         currentListType = ListType.First;
-                        adapter.listType = ListType.First;
-                        adapter.notifyDataSetChanged();
+                        mPageNum = 1;
+                        mQuery = null;
+                        http.getConversationList(Utilities.sToken, Utilities.sUid, String.valueOf(mPageNum), String.valueOf(mPageCount));
+
+//                        adapter.listType = ListType.First;
+//                        adapter.notifyDataSetChanged();
                         break;
                     case Third:
                         currentListType = ListType.Second;
@@ -216,6 +234,11 @@ public class FragmentNewMessage extends Fragment {
         });
 
         buttonsAppearanceHandling();
+
+        if (currentListType == ListType.First){
+            setDataToAdapter(((MessageActivity) getActivity()).convCount, ((MessageActivity) getActivity()).conversations);
+        }
+
         return fragmentView;
     }
 
@@ -224,8 +247,23 @@ public class FragmentNewMessage extends Fragment {
         http.getCrossFollowingFriends(Utilities.sToken, query, page, count, exlude_ids);
     }
 
-    public void setDataToAdapter(int count, ProfileInfo[] users){
+    public void setDataToAdapter(int count, ConversationInfo[] conversations){
+        loading = true;
+        mTotalItemCount = count;
+        if (isNewFetch) {
+            adapter = new MessageContactAdapter(getActivity(), conversations, currentListType);
+            list.setAdapter(adapter);
+        }else{
+            int positionStart = adapter.mConvs.size()-1;
+            for (int i=0; i<conversations.length; i++){
+                adapter.mConvs.add(conversations[i]);
+            }
+            adapter.notifyItemRangeInserted(positionStart, conversations.length);
+        }
+    }
 
+    public void setDataToAdapter(int count, ProfileInfo[] users){
+        Log.e("NewMessage", "setDataToAdapter Profile");
         loading = true;
         mTotalItemCount = count;
         if (isNewFetch) {
@@ -278,15 +316,25 @@ public class FragmentNewMessage extends Fragment {
         });
     }
 
+    public void removeConversation(int position){
+        if (adapter != null && currentListType == ListType.First) {
+            adapter.mConvs.remove(position);
+            adapter.notifyItemRemoved(position);
+        }
+    }
+
     private void setProperFragmentAppearance(){
         switch (currentListType){
             case First:
+                mSearchContainer.setVisibility(View.GONE);
                 bottomArea.setVisibility(View.GONE);
                 activity.toolbarTitle.setText(R.string.message_title_2);
                 activity.rightToolbarButton.setVisibility(View.VISIBLE);
                 activity.leftToolbarButton.setImageResource(R.drawable.toolbar_left_arrow);
+                activity.rightToolbarButton.setImageResource(R.drawable.edit_icon);
                 break;
             case Second:
+                mSearchContainer.setVisibility(View.VISIBLE);
                 bottomArea.setVisibility(View.VISIBLE);
                 activity.rightToolbarButton.setVisibility(View.GONE);
                 activity.leftToolbarButton.setImageResource(R.drawable.toolbar_cross_icon);
@@ -295,6 +343,7 @@ public class FragmentNewMessage extends Fragment {
                 fancyButton.setText(getString(R.string.create_group));
                 break;
             case Third:
+                mSearchContainer.setVisibility(View.VISIBLE);
                 activity.leftToolbarButton.setImageResource(R.drawable.toolbar_left_arrow);
                 activity.toolbarTitle.setText(R.string.message_title_4);
                 fancyButton.setIconResource(R.drawable.paper_plane);

@@ -14,6 +14,7 @@
         android:orientation="vertical">
 
         <RelativeLayout
+            android:id="@+id/searchContainer"
             android:layout_width="match_parent"
             android:layout_height="@dimen/message_edittext_container_height"
             android:background="@drawable/bottom_border_for_search_container"

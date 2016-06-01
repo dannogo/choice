@@ -30,11 +30,14 @@ public class TabPlusActivity extends AppCompatActivity {
     public String uploadedPicture1;
     public String uploadedPicture2;
     public String dopeQuestion;
+    public int mDialogId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tab_plus);
+
+        mDialogId = getIntent().getIntExtra("dialog_id", -1);
 
         launchFragment(page);
 

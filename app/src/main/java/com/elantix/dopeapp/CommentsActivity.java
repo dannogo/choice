@@ -16,21 +16,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.bumptech.glide.util.Util;
 
 /**
  * Created by oleh on 4/3/16.
@@ -134,9 +126,9 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
                 getCommentsRequest(mPageNum, mPageCount);
                 break;
             case Chat:
-                mAdapter = new AdapterChat(this);
-                mRecyclerView.setAdapter(mAdapter);
-                mInfoBar.setVisibility(View.GONE);
+//                mAdapter = new AdapterChat(this);
+//                mRecyclerView.setAdapter(mAdapter);
+//                mInfoBar.setVisibility(View.GONE);
                 break;
             case GroupChat:
                 mInfoBar.setVisibility(View.GONE);

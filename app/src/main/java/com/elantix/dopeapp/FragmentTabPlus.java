@@ -430,11 +430,12 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
         private Bitmap leftBitmap;
         private Bitmap rightBitmap;
         private String TAG = "FragmentTabPlus Task";
+        TabPlusActivity activity = ((TabPlusActivity)getActivity());
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            ((TabPlusActivity)getActivity()).mProgressDialog = ProgressDialog.show(getActivity(), null, "Preparing to upload...", true);
+            activity.mProgressDialog = ProgressDialog.show(getActivity(), null, "Preparing to upload...", true);
             imageLeft.destroyDrawingCache();
             imageRight.destroyDrawingCache();
             imageLeft.buildDrawingCache();
@@ -505,26 +506,21 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
             super.onPostExecute(result);
             Log.w(TAG, "left: "+ result[0]+"\nright: "+ result[1]);
 
-            ((TabPlusActivity)getActivity()).uploadedPicture1 = null;
-            ((TabPlusActivity)getActivity()).uploadedPicture2 = null;
-
-//            final HttpKit http = new HttpKit(getActivity());
-//            http.upload(Utilities.sToken, result[0], "left");
-//            http.upload(Utilities.sToken, result[1], "right");
-
-            HttpKit http = new HttpKit(getActivity());
-            http.createDope(Utilities.sToken, usersQuestion.getText().toString(), result[0], result[1]);
+            activity.uploadedPicture1 = null;
+            activity.uploadedPicture2 = null;
 
 
-//            Handler handler = new Handler();
-//            handler.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                }
-//            }, 1000);
+            if (activity.mDialogId == -1){
+                HttpKit http = new HttpKit(getActivity());
+                http.createDope(Utilities.sToken, usersQuestion.getText().toString(), result[0], result[1]);
+            }else{
+                HttpChat http = new HttpChat(getActivity());
+                http.sendDopeToChat(Utilities.sToken, String.valueOf(activity.mDialogId), usersQuestion.getText().toString(), result[0], result[1]);
+            }
 
 
-//            ((TabPlusActivity)getActivity()).mProgressDialog.dismiss();
+
+
         }
     }
 

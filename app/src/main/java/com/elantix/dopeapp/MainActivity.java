@@ -537,7 +537,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             Log.w("MainActivity", "record "+i+": "+Utilities.sFragmentHistory.get(i).fragment);
                         }
                         Utilities.sFragmentHistory.remove(Utilities.sFragmentHistory.size() - 1);
-                        switchPageHandler(Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size()-1).fragment, true);
+                        if(Utilities.sFragmentHistory.size() > 0) {
+                            switchPageHandler(Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size() - 1).fragment, true);
+                        }else{
+
+                        }
                     }
                 });
                 break;

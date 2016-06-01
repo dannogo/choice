@@ -1,9 +1,11 @@
 package com.elantix.dopeapp.entities;
 
+import java.io.Serializable;
+
 /**
  * Created by oleh on 5/28/16.
  */
-public class ChatMessage {
+public class ChatMessage implements Serializable{
 
     public String id;
     public String dialog_id;

@@ -8,6 +8,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -29,6 +30,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.desarrollodroide.libraryfragmenttransactionextended.FragmentTransactionExtended;
+import com.elantix.dopeapp.entities.ConversationInfo;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -39,7 +41,10 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -150,6 +155,50 @@ public class Utilities {
 
         Log.w("StartLogin", response.toString());
         return response.toString();
+    }
+
+    public static String convertDate(String in){
+        return convertDate(in, false);
+    }
+
+    public static String convertDate(String in, boolean justAmPm){
+
+        if (in.equals("null") || in.isEmpty() || in == null){
+            return "";
+        }else {
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date = null;
+            try {
+                date = format.parse(in);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            SimpleDateFormat formatOut;
+            if (justAmPm){
+                formatOut = new SimpleDateFormat("h:mma");
+                return formatOut.format(date).toLowerCase();
+            }else {
+                formatOut = new SimpleDateFormat("HH:mm MMM dd");
+            }
+
+            return formatOut.format(date);
+        }
+    }
+
+    public static Bitmap getBitmapFromURL(String src) {
+        try {
+            URL url = new URL(src);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setDoInput(true);
+            connection.connect();
+            InputStream input = connection.getInputStream();
+            Bitmap myBitmap = BitmapFactory.decodeStream(input);
+            return myBitmap;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public static String requestToServerPOST(String urlStr, String paramsStr){

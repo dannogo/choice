@@ -19,12 +19,19 @@ public class FragmentNoMessage extends Fragment {
     private FancyButton sendNewMessageButton;
     MessageActivity messageActivity;
 
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         fragmentView = inflater.inflate(R.layout.fragment_dir_mess_nomessage, container, false);
         sendNewMessageButton = (FancyButton) fragmentView.findViewById(R.id.send_new_message);
 
+        ((MessageActivity)getActivity()).leftToolbarButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().finish();
+            }
+        });
 
         buttonsAppearanceHandling();
         ((MessageActivity)getActivity()).toolbarTitle.setText(R.string.message_title_1);

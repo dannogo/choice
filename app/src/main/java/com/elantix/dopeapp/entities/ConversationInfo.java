@@ -9,6 +9,7 @@ public class ConversationInfo {
     public String id;
     public String dialogs_id;
     public String users_id;
+    public String creator_id;
     public String is_read;
     public String is_group;
     public String fullname;
@@ -27,6 +28,7 @@ public class ConversationInfo {
         this.id = another.id;
         this.dialogs_id = another.dialogs_id;
         this.users_id = another.users_id;
+        this.creator_id = another.creator_id;
         this.is_read = another.is_read;
         this.is_group = another.is_group;
         this.fullname = another.fullname;

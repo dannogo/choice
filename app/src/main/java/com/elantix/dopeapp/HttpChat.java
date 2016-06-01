@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -63,14 +64,14 @@ public class HttpChat {
         task.execute(params);
     }
 
-    public void deleteConversation(String token, String dialog_id){
-        String[] params = {token, dialog_id};
+    public void deleteConversation(String token, String dialog_id, String dialog_position){
+        String[] params = {token, dialog_id, dialog_position};
         DeleteConversationTask task = new DeleteConversationTask();
         task.execute(params);
     }
 
-    public void leaveConversation(String token, String dialog_id){
-        String[] params = {token, dialog_id};
+    public void leaveConversation(String token, String dialog_id, String convPosition){
+        String[] params = {token, dialog_id, convPosition};
         LeaveConversationTask task = new LeaveConversationTask();
         task.execute(params);
     }
@@ -115,16 +116,21 @@ public class HttpChat {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            ((MessageActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+            if (mContext instanceof ChatActivity) {
+                ((ChatActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+            }else if (mContext instanceof MessageActivity){
+                ((MessageActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+            }
         }
 
         @Override
         protected Object[] doInBackground(String... params) {
 
+            Log.e("HttpChat GetDialog", "Dialog id: "+params[1]);
             String urlStr = "http://dopeapi.elantix.net/im.dialog";
-            String paramStr = "token="+params[0]+"&dialog_id="+params[1];
-            if (params[2] != null) paramStr += "p="+params[2];
-            if (params[3] != null) paramStr += "count="+params[3];
+            String paramStr = "token="+params[0]+"&dialog="+params[1];
+            if (params[2] != null) paramStr += "&p="+params[2];
+            if (params[3] != null) paramStr += "&count="+params[3];
 
             String response = Utilities.requestToServerPOST(urlStr, paramStr);
 
@@ -174,11 +180,16 @@ public class HttpChat {
         @Override
         protected void onPostExecute(Object[] result) {
             super.onPostExecute(result);
-            ((MessageActivity) mContext).mProgressDialog.dismiss();
+            if (mContext instanceof ChatActivity) {
+                ((ChatActivity) mContext).mProgressDialog.dismiss();
+            }else if (mContext instanceof MessageActivity){
+                ((MessageActivity) mContext).mProgressDialog.dismiss();
+            }
 
             if (result != null){
                 if ((boolean)result[0]){
                     // Do stuff with result[2] which contains ArrayList of ChatMessage-s
+                    ((ChatActivity)mContext).setDataToAdapter((ArrayList<ChatMessage>)result[2]);
                 }else {
                     Toast.makeText(mContext, ""+result[1], Toast.LENGTH_SHORT).show();
                 }
@@ -229,24 +240,29 @@ public class HttpChat {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            ((MessageActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+//            ((TabPlusActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+            if (mContext instanceof TabPlusActivity) {
+                ((TabPlusActivity) mContext).mProgressDialog.setMessage("Sending dope to server...");
+            }else{
+                ((ChatActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+            }
         }
 
         @Override
         protected Object[] doInBackground(String... params) {
             String charset = "UTF-8";
             String requestURL = "http://dopeapi.elantix.net/im.send";
+            Log.e("HttpChat", "sendDopeToChat Dialog id: "+params[1]);
             try {
                 MultipartUtility multipart = new MultipartUtility(requestURL, charset);
                 multipart.addFormField("token", params[0]);
-                multipart.addFormField("dialog_id", params[1]);
-                String replacedSpaces = params[2].replaceAll(" ", "%20");
-                multipart.addFormField("message", replacedSpaces);
-                multipart.addFilePart("photo1", new File(params[3]));
-                multipart.addFilePart("photo2", new File(params[4]));
+                multipart.addFormField("dialog", params[1]);
+                multipart.addFormField("message", params[2]);
+                if (params[3] != null) multipart.addFilePart("photo1", new File(params[3]));
+                if (params[4] != null) multipart.addFilePart("photo2", new File(params[4]));
 
                 List<String> response = multipart.finish();
-                Log.e("HttpChat SendDopeToChat", "" + response.get(0));
+                Log.w("HttpChat SendDopeToChat", "" + response.get(0));
 
                 try {
                     JSONObject json = new JSONObject(response.get(0));
@@ -277,7 +293,7 @@ public class HttpChat {
 
                     }
 
-                    Object[] result = {success, response_text, messageInfo};
+                    Object[] result = {success, response_text, messageInfo, params[1]};
                     return result;
 
                 } catch (JSONException e) {
@@ -294,11 +310,28 @@ public class HttpChat {
         @Override
         protected void onPostExecute(Object[] result) {
             super.onPostExecute(result);
-            ((MessageActivity) mContext).mProgressDialog.dismiss();
+            if (mContext instanceof TabPlusActivity){
+                ((TabPlusActivity) mContext).mProgressDialog.dismiss();
+            }else{
+                ((ChatActivity) mContext).mProgressDialog.dismiss();
+            }
 
             if (result != null){
                 if ((boolean)result[0]){
                     // Do stuff with result[2] that contains ChatMessage object
+
+                    if (mContext instanceof TabPlusActivity) {
+                        TabPlusActivity tabPlusActivity = (TabPlusActivity) mContext;
+                        Intent intent = new Intent(tabPlusActivity, ChatActivity.class);
+                        intent.putExtra("dialog_id", "" + result[3]);
+//                    intent.putExtra("messageObj", serializedObject);
+                        tabPlusActivity.startActivity(intent);
+                        tabPlusActivity.finish();
+                    }else {
+                        ChatMessage messageInfo = (ChatMessage)result[2];
+                        ((ChatActivity) mContext).showNewMessage(messageInfo);
+                    }
+
                 }else{
                     Toast.makeText(mContext, ""+result[1], Toast.LENGTH_SHORT).show();
                 }
@@ -424,7 +457,7 @@ public class HttpChat {
                 boolean success = json.getBoolean("success");
                 String response_text = json.getString("response_text");
 
-                Object[] result = {success, response_text};
+                Object[] result = {success, response_text, params[2]};
                 return result;
 
             } catch (JSONException e) {
@@ -443,6 +476,11 @@ public class HttpChat {
                 if ((boolean)result[0]){
                     Utilities.showExtremelyShortToast(mContext, (String)result[1], 500);
                     // Do stuff
+                    if (mContext instanceof MessageActivity){
+                        FragmentNewMessage fragment = ((FragmentNewMessage) ((MessageActivity) mContext).mCurrentFragment);
+                        int position = Integer.parseInt((String)result[2]);
+                        fragment.removeConversation(position);
+                    }
                 }else{
                     Toast.makeText(mContext, ""+result[1], Toast.LENGTH_SHORT).show();
                 }
@@ -471,7 +509,7 @@ public class HttpChat {
                 boolean success = json.getBoolean("success");
                 String response_text = json.getString("response_text");
 
-                Object[] result = {success, response_text};
+                Object[] result = {success, response_text, params[2]};
                 return result;
 
             } catch (JSONException e) {
@@ -484,11 +522,18 @@ public class HttpChat {
         @Override
         protected void onPostExecute(Object[] result) {
             super.onPostExecute(result);
-            ((MessageActivity) mContext).mProgressDialog.dismiss();
+            MessageActivity activity = ((MessageActivity) mContext);
+            activity.mProgressDialog.dismiss();
             if (result != null){
                 if ((boolean)result[0]){
                     Utilities.showExtremelyShortToast(mContext, (String)result[1], 500);
                     // Do stuff
+                    if (activity.mCurrentFragment instanceof FragmentNewMessage){
+                        FragmentNewMessage myFrag = ((FragmentNewMessage) activity.mCurrentFragment);
+                        int position = Integer.parseInt((String) result[2]);
+                        myFrag.adapter.mConvs.remove(position);
+                        myFrag.adapter.notifyItemRemoved(position);
+                    }
                 }else {
                     Toast.makeText(mContext, ""+result[1], Toast.LENGTH_SHORT).show();
                 }
@@ -573,6 +618,7 @@ public class HttpChat {
                     ConversationInfo convInfo = new ConversationInfo();
                     convInfo.id = data.getString("id");
                     convInfo.dialogs_id = data.getString("dialogs_id");
+                    Log.e("HttpChat", "CreateConversation Dialog_id: "+convInfo.dialogs_id);
                     convInfo.users_id = data.getString("users_id");
                     convInfo.fullname = data.getString("fullname");
                     convInfo.username = data.getString("username");
@@ -615,9 +661,12 @@ public class HttpChat {
             activity.mProgressDialog.dismiss();
             if (result != null){
                 if ((Boolean)result[0]){
+                    // Save this convInfo somewhere
                     Log.e("HttpKit", "new conversation created. Id: " + result[1]);
                     Intent intent = new Intent(activity, TabPlusActivity.class);
+                    intent.putExtra("dialog_id", (int)result[1]);
                     mContext.startActivity(intent);
+                    ((MessageActivity) mContext).finish();
                 }else {
                     Toast.makeText(mContext, "" + result[1], Toast.LENGTH_SHORT).show();
                 }
@@ -658,6 +707,7 @@ public class HttpChat {
                         conversation.id = item.getString("id");
                         conversation.dialogs_id = item.getString("dialogs_id");
                         conversation.users_id = item.getString("users_id");
+                        conversation.creator_id = item.getString("creator_id");
                         conversation.is_read = item.getString("is_read");
                         conversation.is_group = item.getString("is_group");
                         conversation.fullname = item.getString("fullname");
@@ -667,25 +717,47 @@ public class HttpChat {
                         conversation.last_message = item.getString("last_message");
                         conversation.unreads = item.getInt("unreads");
 
-                        JSONArray members = item.getJSONArray("members");
-//                        ConversationMemberInfo[] memberInfos = new ConversationMemberInfo[members.length()];
-//                        Arrays.fill(memberInfos, null);
-                        for (int j=0; j<members.length(); j++){
-                            JSONObject memberItem = members.getJSONObject(j);
-                            ConversationMemberInfo member = new ConversationMemberInfo();
+                        if (item.get("members") instanceof JSONObject) {
 
-                            member.id = memberItem.getString("id");
-                            member.username = memberItem.getString("username");
-                            member.fullname = memberItem.getString("fullname");
-                            member.email = memberItem.getString("email");
-                            member.avatar = memberItem.getString("avatar");
+                            JSONObject members = item.getJSONObject("members");
+
+                            Iterator<?> keys = members.keys();
+                            while (keys.hasNext()) {
+                                String key = (String) keys.next();
+                                if (members.get(key) instanceof JSONObject) {
+                                    JSONObject memberItem = members.getJSONObject(key);
+                                    ConversationMemberInfo member = new ConversationMemberInfo();
+
+                                    member.id = memberItem.getString("id");
+                                    member.username = memberItem.getString("username");
+                                    member.fullname = memberItem.getString("fullname");
+                                    member.email = memberItem.getString("email");
+                                    member.avatar = memberItem.getString("avatar");
+                                    conversation.members.add(member);
+                                }
+                            }
+                        }else if (item.get("members") instanceof JSONArray) {
+
+                            JSONArray members = item.getJSONArray("members");
+                            ConversationMemberInfo[] memberInfos = new ConversationMemberInfo[members.length()];
+                            Arrays.fill(memberInfos, null);
+                            for (int j = 0; j < members.length(); j++) {
+                                JSONObject memberItem = members.getJSONObject(j);
+                                ConversationMemberInfo member = new ConversationMemberInfo();
+
+                                member.id = memberItem.getString("id");
+                                member.username = memberItem.getString("username");
+                                member.fullname = memberItem.getString("fullname");
+                                member.email = memberItem.getString("email");
+                                member.avatar = memberItem.getString("avatar");
 //                            memberInfos[j] = member;
-                            conversation.members.add(member);
-                        }
+                                conversation.members.add(member);
+                            }
 
-//                        for (int j=0; j<memberInfos.length; j++) {
-//                            conversation.members.add(memberInfos[j]);
-//                        }
+                            for (int j = 0; j < memberInfos.length; j++) {
+                                conversation.members.add(memberInfos[j]);
+                            }
+                        }
 
                         conversations[i] = conversation;
                     }
@@ -714,6 +786,9 @@ public class HttpChat {
                     Log.e("HttpKit Conversation", "Count: " + result[1] + "\nnumber of items: " + ((ConversationInfo[]) result[2]).length);
                     if (((ConversationInfo[])result[2]).length > 0){
                         activity.switchPageHandler(MessageActivity.DirectMessages.NewMessage1, 1);
+                        activity.convCount = (int) result[1];
+                        activity.conversations = (ConversationInfo[])result[2];
+//                        ((FragmentNewMessage)activity.mCurrentFragment).setDataToAdapter((int) result[1], (ConversationInfo[]) result[2]);
                     }else{
                         activity.switchPageHandler(MessageActivity.DirectMessages.NoMessage);
                     }
