@@ -1,9 +1,6 @@
 package com.elantix.dopeapp;
 
-import android.app.Activity;
 import android.app.Fragment;
-import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -66,6 +63,7 @@ public class FragmentNewMessage extends Fragment {
 
         fragmentView = inflater.inflate(R.layout.fragment_new_message, container, false);
         activity = ((MessageActivity)getActivity());
+
 
         fancyButton = (FancyButton) fragmentView.findViewById(R.id.fancy_button);
         mSearch = (EditText) fragmentView.findViewById(R.id.search);

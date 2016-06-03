@@ -7,10 +7,12 @@ package com.elantix.dopeapp;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -32,6 +34,21 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     public AdapterChat mAdapter;
     private ImageButton mPlusButton;
     private String mDialogId;
+    private int mInterval = 20000;
+    private Handler mHandler;
+
+    private Runnable mDialogUpdater = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                Log.e("ChatActivity", "updateChat()");
+                updateChat();
+            } finally {
+                mHandler.postDelayed(mDialogUpdater, mInterval);
+            }
+        }
+    };
+
 
     // endless list support stuff
     private HttpChat http;
@@ -53,14 +70,40 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         findViews();
         http = new HttpChat(ChatActivity.this);
-        http.getDialogHistory(Utilities.sToken, mDialogId, String.valueOf(mPageNum), String.valueOf(mPageCount));
+//        http.getDialogHistory(Utilities.sToken, mDialogId, String.valueOf(mPageNum), String.valueOf(mPageCount));
+//        updateChat();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
+
+        mHandler = new Handler();
+    }
+
+
+
+    void startRepeatingTask() {
+        mDialogUpdater.run();
+    }
+
+    void stopRepeatingTask() {
+        mHandler.removeCallbacks(mDialogUpdater);
     }
 
     public void setDataToAdapter(ArrayList<ChatMessage> messages){
+        if (mAdapter != null){
+            if (mAdapter.mMessages != null){
+                if (mAdapter.mMessages.size() == messages.size()){
+                    for(int i=0; i<mAdapter.items.size(); i++){
+                        if (messages.get(i).votes != mAdapter.mMessages.get(i).votes){
+                            mAdapter.mMessages.add(i, messages.get(i));
+                        }
+                    }
+                    return;
+                }
+            }
+        }
         mAdapter = new AdapterChat(ChatActivity.this, messages);
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.scrollToPosition(mAdapter.getItemCount() - 1);
     }
 
     private void findViews(){
@@ -91,7 +134,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     public void showNewMessage(ChatMessage messageInfo){
         mAdapter.sortMessage(messageInfo);
         mAdapter.notifyItemInserted(mAdapter.items.size());
-        mRecyclerView.scrollToPosition(mAdapter.items.size()-1);
+        mRecyclerView.scrollToPosition(mAdapter.items.size() - 1);
     }
 
     private void sendMessage(){
@@ -104,6 +147,26 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    private void updateChat(){
+        http.getDialogHistory(Utilities.sToken, mDialogId, String.valueOf(mPageNum), String.valueOf(mPageCount));
+    }
+
+    @Override
+    protected void onResume() {
+        if (mDialogId != null){
+            startRepeatingTask();
+//            updateChat();
+//            mRecyclerView.scrollToPosition(mAdapter.getItemCount()-1);
+        }
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        stopRepeatingTask();
+        super.onPause();
+    }
+
     @Override
     public void onClick(View v) {
         int id = v.getId();
@@ -112,7 +175,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         }else if (id == mSendButton.getId()){
             sendMessage();
         }else if (id == mPlusButton.getId()){
-
+            Intent intent = new Intent(ChatActivity.this, TabPlusActivity.class);
+            intent.putExtra("dialog_id", Integer.parseInt(mDialogId));
+            intent.putExtra("chatExists", true);
+            startActivity(intent);
         }
     }
 }

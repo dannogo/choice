@@ -87,6 +87,9 @@ public class ChoiceAnimationHelper {
 
     }
 
+//    public void setParameters(ChoiceSide chosenSide, int leftRate, Boolean directionInside){
+//        setParameters(chosenSide, leftRate, directionInside);
+//    }
     public void setParameters(ChoiceSide chosenSide, int leftRate, Boolean directionInside){
         mChosenSide = chosenSide;
         mDirectionInside= directionInside;

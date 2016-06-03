@@ -120,10 +120,10 @@ public class MessageActivity extends AppCompatActivity {
 //            case GroupChatSettings:
 //
 //                break;
-            case TabPlus:
-                mCurrentFragment = new FragmentTabPlus();
-                fragmentTAG = "FragmentTabPlus";
-                break;
+//            case TabPlus:
+//                mCurrentFragment = new FragmentTabPlus();
+//                fragmentTAG = "FragmentTabPlus";
+//                break;
             default:
                 mCurrentFragment = new FragmentNoMessage();
                 fragmentTAG = "FragmentNoMessage";

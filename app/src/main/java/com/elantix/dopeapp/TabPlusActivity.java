@@ -31,6 +31,7 @@ public class TabPlusActivity extends AppCompatActivity {
     public String uploadedPicture2;
     public String dopeQuestion;
     public int mDialogId;
+    public boolean mChatExists;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class TabPlusActivity extends AppCompatActivity {
         setContentView(R.layout.activity_tab_plus);
 
         mDialogId = getIntent().getIntExtra("dialog_id", -1);
+        mChatExists = getIntent().getBooleanExtra("chatExists", false);
 
         launchFragment(page);
 

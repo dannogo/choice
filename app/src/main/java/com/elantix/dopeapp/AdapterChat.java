@@ -37,6 +37,9 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     public ArrayList<ChatMessage> mMessages;
     public List<Object> items;
     private final int DATELINE = 0, OTHERS_MSG = 1, MY_MSG = 2, OTHERS_PROPOSAL = 3, MY_PROPOSAL = 4;
+    private HttpChat http;
+    private ChoiceAnimationHelper mAnimHelper = null;
+    private int mProposalNum = 1;
 
     // TODO:
     // Do not forget about dateline
@@ -47,23 +50,23 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     }
 
     public void sortMessage(ChatMessage item){
-        String fullname = replaceFullnameIfNecessary(item);
-        String time = Utilities.convertDate(item.date_send, true);
-        String message = item.message.replaceAll("(\\r|\\n)", "");
+        item.fullname = replaceFullnameIfNecessary(item);
+        item.date_send = Utilities.convertDate(item.date_send, true);
+        item.message = item.message.replaceAll("(\\r|\\n)", "");
 
         if (item.sender.equals(Utilities.sUid)){
             if (item.photo1.isEmpty()){
-                items.add(new MyMsg(item.avatar, fullname, time, message));
+                items.add(new MyMsg(item));
             }else{
-                items.add(new MyDopeProposal(fullname, item.avatar,
-                        item.photoSoc, item.photo1, item.photo2, message, time));
+                item.proposalNum = mProposalNum++;
+                items.add(new MyDopeProposal(item));
             }
         }else{
             if (item.photo1.isEmpty()){
-                items.add(new OthersMsg(fullname, item.avatar, message, time));
+                items.add(new OthersMsg(item));
             }else{
-                items.add(new OthersDopeProposal(fullname, item.avatar, time, message,
-                        item.photoSoc, item.photo1, item.photo2));
+                item.proposalNum = mProposalNum++;
+                items.add(new OthersDopeProposal(item));
             }
         }
     }
@@ -74,6 +77,7 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
         mMessages = new ArrayList<>(messages);
         items = new ArrayList<>();
+        http = new HttpChat(mContext);
 
         for (int i=0; i<mMessages.size(); i++){
             ChatMessage item = mMessages.get(i);
@@ -123,18 +127,20 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             case OTHERS_MSG:
                 OthersMsgVH omvh = (OthersMsgVH) holder;
                 OthersMsg om = (OthersMsg) items.get(position);
-                Glide.with(mContext).load(om.avatar)
+                ChatMessage ommo = om.messageObj;
+                Glide.with(mContext).load(ommo.avatar)
                         .bitmapTransform(new CropCircleTransformation(mContext))
                         .into(omvh.avatarView);
-                omvh.usernameView.setText(om.fullname);
-                omvh.messageView.setText(om.message);
-                omvh.timeView.setText(om.time);
+                omvh.usernameView.setText(ommo.fullname);
+                omvh.messageView.setText(ommo.message);
+                omvh.timeView.setText(ommo.date_send);
                 break;
             case MY_MSG:
                 MyMsgVH mmvh = (MyMsgVH) holder;
                 MyMsg mm = (MyMsg) items.get(position);
-                mmvh.messageView.setText(mm.message);
-                mmvh.timeView.setText(mm.time);
+                ChatMessage mmmo = mm.messageObj;
+                mmvh.messageView.setText(mmmo.message);
+                mmvh.timeView.setText(mmmo.date_send);
                 break;
             case DATELINE:
                 DateLineVH dlvh = (DateLineVH) holder;
@@ -144,30 +150,40 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             case OTHERS_PROPOSAL:
                 final OthersDopeProposalVH odpvh = (OthersDopeProposalVH) holder;
                 final OthersDopeProposal odp = (OthersDopeProposal) items.get(position);
-                Glide.with(mContext).load(odp.avatar)
+                ChatMessage odpmo = odp.messageObj;
+                Glide.with(mContext).load(odpmo.avatar)
                         .bitmapTransform(new CropCircleTransformation(mContext))
                         .into(odpvh.avatarView);
-                odpvh.usernameView.setText(odp.fullname);
-                odpvh.timeView.setText(odp.time);
-                odpvh.questionView.setText(odp.message);
+                odpvh.usernameView.setText(odpmo.fullname);
+                odpvh.timeView.setText(odpmo.date_send);
+                odpvh.questionView.setText(odpmo.message);
 
-                Object[] paramsOth = {odp.photo1, odp.photo2, odpvh.leftPicView, odpvh.rightPicView};
+                odpvh.leftPicView.setImageDrawable(null);
+                odpvh.rightPicView.setImageDrawable(null);
+                Object[] paramsOth = {odpmo.photo1, odpmo.photo2, odpvh.leftPicView, odpvh.rightPicView};
                 ImageTransformationComputations taskOth = new ImageTransformationComputations();
                 taskOth.execute(paramsOth);
+
+                launchRateAnimation(odpvh.itemView, odpmo, false);
                 break;
             case MY_PROPOSAL:
                 MyDopeProposalVH mdpvh = (MyDopeProposalVH) holder;
                 final MyDopeProposal mp = (MyDopeProposal) items.get(position);
-                Glide.with(mContext).load(mp.avatar)
+                ChatMessage mpmo = mp.messageObj;
+                Glide.with(mContext).load(mpmo.avatar)
                         .bitmapTransform(new CropCircleTransformation(mContext))
                         .into(mdpvh.avatarView);
-                mdpvh.usernameView.setText(mp.fullname);
-                mdpvh.timeView.setText(mp.time);
-                mdpvh.questionView.setText(mp.message);
+                mdpvh.usernameView.setText(mpmo.fullname);
+                mdpvh.timeView.setText(mpmo.date_send);
+                mdpvh.questionView.setText(mpmo.message);
 
-                Object[] paramsMy = {mp.photo1, mp.photo2, mdpvh.leftPicView, mdpvh.rightPicView};
+                mdpvh.leftPicView.setImageDrawable(null);
+                mdpvh.rightPicView.setImageDrawable(null);
+                Object[] paramsMy = {mpmo.photo1, mpmo.photo2, mdpvh.leftPicView, mdpvh.rightPicView};
                 ImageTransformationComputations taskMy = new ImageTransformationComputations();
                 taskMy.execute(paramsMy);
+
+                launchRateAnimation(mdpvh.itemView, mpmo, false);
                 break;
             default:
 
@@ -235,7 +251,7 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         }
     }
 
-    class OthersDopeProposalVH extends RecyclerView.ViewHolder{
+    class OthersDopeProposalVH extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private ImageView avatarView;
         private TextView usernameView;
@@ -243,7 +259,6 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         private TextView questionView;
         private ImageView leftPicView;
         private ImageView rightPicView;
-//        private ImageView photoSoc;
 
         public OthersDopeProposalVH(View itemView) {
             super(itemView);
@@ -253,11 +268,59 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             questionView = (TextView) itemView.findViewById(R.id.chat_others_dope_proposal_question);
             leftPicView = (ImageView) itemView.findViewById(R.id.option_picture_1);
             rightPicView = (ImageView) itemView.findViewById(R.id.option_picture_2);
-//            photoSoc = (ImageView) itemView.findViewById(R.id.chat_photoSoc);
+            leftPicView.setOnClickListener(this);
+            rightPicView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int id = v.getId();
+            ChatMessage myDopeInfo = ((OthersDopeProposal) items.get(getAdapterPosition())).messageObj;
+            if (myDopeInfo.myVote > 0) {
+                Utilities.showExtremelyShortToast(mContext, "You have already voted this dope", 500);
+                return;
+            }else if (id == leftPicView.getId()){
+                // vote and animate
+                Log.e("AdapterChat", "left pic");
+                myDopeInfo.myVote = 1;
+                myDopeInfo.leftVote++;
+            }else if (id == rightPicView.getId()){
+                // vote and animate
+                myDopeInfo.myVote = 2;
+                myDopeInfo.rightVote++;
+                Log.e("AdapterChat", "right pic");
+            }
+            // DEPRECATED
+//            recalculatePercentage(myDopeInfo);
+
+            http.chatVote(Utilities.sToken, myDopeInfo.id, String.valueOf(myDopeInfo.myVote), itemView, myDopeInfo);
+//            launchRateAnimation(itemView, myDopeInfo, true);
         }
     }
 
-    class MyDopeProposalVH extends RecyclerView.ViewHolder{
+    public void launchRateAnimation(View itemView, ChatMessage messageObj, boolean animatedDraw){
+
+        int leftRate = messageObj.leftPercent;
+        if (leftRate == 0 && leftRate == messageObj.rightPercent){
+            return;
+        }else {
+            ChoiceAnimationHelper.ChoiceSide side = (messageObj.myVote == 1) ? ChoiceAnimationHelper.ChoiceSide.Left : ChoiceAnimationHelper.ChoiceSide.Right;
+
+            boolean direction = (messageObj.proposalNum % 2 == 0) ? false : true;
+            mAnimHelper = new ChoiceAnimationHelper(((ChatActivity) mContext), itemView);
+            mAnimHelper.setParameters(side, leftRate, direction);
+            mAnimHelper.draw(animatedDraw);
+        }
+    }
+        // DEPRECATED
+    private void recalculatePercentage(ChatMessage info){
+        info.votes++;
+        info.leftPercent = info.leftVote * 100 / info.votes;
+        info.rightPercent = 100 - info.leftPercent;
+
+    }
+
+    class MyDopeProposalVH extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         private ImageView avatarView;
         private TextView usernameView;
@@ -274,72 +337,67 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             questionView = (TextView) itemView.findViewById(R.id.chat_others_dope_proposal_question);
             leftPicView = (ImageView) itemView.findViewById(R.id.option_picture_1);
             rightPicView = (ImageView) itemView.findViewById(R.id.option_picture_2);
+            leftPicView.setOnClickListener(this);
+            rightPicView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            int id = v.getId();
+            ChatMessage myDopeInfo = ((MyDopeProposal) items.get(getAdapterPosition())).messageObj;
+            if (myDopeInfo.myVote > 0) {
+                Utilities.showExtremelyShortToast(mContext, "You have already voted this dope", 500);
+                return;
+            }else if (id == leftPicView.getId()){
+                // vote and animate
+                Log.e("AdapterChat", "left pic");
+                myDopeInfo.myVote = 1;
+                myDopeInfo.leftVote++;
+            }else if (id == rightPicView.getId()){
+                // vote and animate
+                myDopeInfo.myVote = 2;
+                myDopeInfo.rightVote++;
+                Log.e("AdapterChat", "right pic");
+            }
+            // DEPRECATED
+//            recalculatePercentage(myDopeInfo);
+
+            http.chatVote(Utilities.sToken, myDopeInfo.id, String.valueOf(myDopeInfo.myVote), itemView, myDopeInfo);
+//            launchRateAnimation(itemView, myDopeInfo, true);
         }
     }
 
-    class OthersMsg{
-        private String fullname;
-        private String avatar;
-        private String message;
-        private String time;
 
-        public OthersMsg(String fullname, String avatar, String message, String time) {
-            this.fullname = fullname;
-            this.avatar = avatar;
-            this.message = message;
-            this.time = time;
+
+    class OthersMsg{
+        private ChatMessage messageObj;
+
+        public OthersMsg(ChatMessage messageObj){
+            this.messageObj = messageObj;
         }
     }
 
     class MyMsg{
-        private String time;
-        private String message;
-        private String avatar;
-        private String fullname;
+        private ChatMessage messageObj;
 
-        public MyMsg(String avatar, String fullname, String time, String message) {
-            this.time = time;
-            this.message = message;
-            this.avatar = avatar;
-            this.fullname = fullname;
+        public MyMsg(ChatMessage messageObj){
+            this.messageObj = messageObj;
         }
     }
 
     class OthersDopeProposal{
-        private String fullname;
-        private String avatar;
-        private String time;
-        private String message;
-        private String photo1;
-        private String photo2;
+        private ChatMessage messageObj;
 
-        public OthersDopeProposal(String fullname, String avatar, String time, String message, String photoSoc, String photo1, String photo2) {
-            this.fullname = fullname;
-            this.avatar = avatar;
-            this.message = message;
-            this.time = time;
-            this.photo1 = photo1;
-            this.photo2 = photo2;
+        public OthersDopeProposal(ChatMessage messageObj){
+            this.messageObj = messageObj;
         }
     }
 
     class MyDopeProposal{
-        private String fullname;
-        private String avatar;
-        private String photoSoc;
-        private String photo1;
-        private String photo2;
-        private String message;
-        private String time;
+        private ChatMessage messageObj;
 
-        public MyDopeProposal(String fullname, String avatar, String photoSoc, String photo1, String photo2, String message, String time) {
-            this.fullname = fullname;
-            this.avatar = avatar;
-            this.message = message;
-            this.time = time;
-            this.photoSoc = photoSoc;
-            this.photo1 = photo1;
-            this.photo2 = photo2;
+        public MyDopeProposal(ChatMessage messageObj){
+            this.messageObj = messageObj;
         }
     }
 

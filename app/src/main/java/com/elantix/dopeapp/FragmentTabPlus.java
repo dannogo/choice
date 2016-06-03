@@ -515,7 +515,7 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
                 http.createDope(Utilities.sToken, usersQuestion.getText().toString(), result[0], result[1]);
             }else{
                 HttpChat http = new HttpChat(getActivity());
-                http.sendDopeToChat(Utilities.sToken, String.valueOf(activity.mDialogId), usersQuestion.getText().toString(), result[0], result[1]);
+                http.sendDopeToChat(Utilities.sToken, String.valueOf(activity.mDialogId), usersQuestion.getText().toString(), result[0], result[1], String.valueOf(activity.mChatExists));
             }
 
 

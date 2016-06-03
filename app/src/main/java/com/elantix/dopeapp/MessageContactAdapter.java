@@ -44,6 +44,8 @@ public class MessageContactAdapter extends RecyclerView.Adapter<MessageContactAd
     public MessageContactAdapter(Context context, ProfileInfo[] users, FragmentNewMessage.ListType type) {
         this.inflater = LayoutInflater.from(context);
         this.context = context;
+        selectedIds.clear();
+
 //        online.add(1);
 //        online.add(4);
 //        online.add(5);
@@ -271,11 +273,20 @@ public class MessageContactAdapter extends RecyclerView.Adapter<MessageContactAd
                 AlertDialog.Builder builder = new AlertDialog.Builder(context);
                 String title;
                 String message;
+                String negativeButtonText;
                 Log.e("ContactAdapter", "user_id: "+mConvs.get(getAdapterPosition()).creator_id+"\nmy id: "+Utilities.sUid);
                 if (mConvs.get(getAdapterPosition()).creator_id.equals(Utilities.sUid)){
-                    title = "Deleting Conversation";
-                    message = "Are you sure you want to delete this conversation?";
-                    builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                    title = "Deleting/Leaving Conversation";
+                    message = "Are you sure you want to delete/leave this conversation?";
+                    negativeButtonText = "Cancel";
+
+                    builder.setNeutralButton("Leave", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            http.leaveConversation(Utilities.sToken, mConvs.get(getAdapterPosition()).dialogs_id, String.valueOf(getAdapterPosition()));
+                        }
+                    });
+                    builder.setPositiveButton("Delete", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             http.deleteConversation(Utilities.sToken, mConvs.get(getAdapterPosition()).dialogs_id, String.valueOf(getAdapterPosition()));
@@ -284,6 +295,7 @@ public class MessageContactAdapter extends RecyclerView.Adapter<MessageContactAd
                 }else{
                     title = "Leaving Conversation";
                     message = "Are you sure you want to leave this conversation?";
+                    negativeButtonText = "No";
                     builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -295,7 +307,7 @@ public class MessageContactAdapter extends RecyclerView.Adapter<MessageContactAd
                 }
                 builder.setTitle(title);
                 builder.setMessage(message);
-                builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                builder.setNegativeButton(negativeButtonText, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 

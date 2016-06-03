@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.elantix.dopeapp.entities.ChatMessage;
@@ -87,10 +88,15 @@ public class HttpChat {
         task.execute(params);
     }
 
-    public void sendDopeToChat(String token, String dialog_id, String message, String photo1, String photo2){
-        String[] params = {token, dialog_id, message, photo1, photo2};
+    public void sendDopeToChat(String token, String dialog_id, String message, String photo1, String photo2, String chatExists){
+        Log.e("sendDopeToChat", "chatExists: " + chatExists);
+        String[] params = {token, dialog_id, message, photo1, photo2, chatExists};
         SendDopeToChatTask task = new SendDopeToChatTask();
         task.execute(params);
+    }
+
+    public void sendDopeToChat(String token, String dialog_id, String message, String photo1, String photo2){
+        sendDopeToChat(token, dialog_id, message, photo1, photo2, "false");
     }
 
     /**
@@ -99,8 +105,8 @@ public class HttpChat {
      * @param message_id
      * @param vote  - 1 for left, and 2 for right
      */
-    public void chatVote(String token, String message_id, String vote){
-        String[] params = {token, message_id, vote};
+    public void chatVote(String token, String message_id, String vote, View itemView, ChatMessage messageObj){
+        Object[] params = {token, message_id, vote, itemView, messageObj};
         ChatVoteTask task = new ChatVoteTask();
         task.execute(params);
     }
@@ -117,7 +123,9 @@ public class HttpChat {
         protected void onPreExecute() {
             super.onPreExecute();
             if (mContext instanceof ChatActivity) {
-                ((ChatActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+                if (((ChatActivity) mContext).mProgressDialog == null) {
+                    ((ChatActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+                }
             }else if (mContext instanceof MessageActivity){
                 ((MessageActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
             }
@@ -161,6 +169,18 @@ public class HttpChat {
                         messageInfo.fullname = item.getString("fullname");
                         messageInfo.avatar = item.getString("avatar");
 
+                        if (!messageInfo.photo1.isEmpty()){
+                            JSONObject votes = item.getJSONObject("votes");
+                            messageInfo.votes = votes.getInt("all");
+                            JSONObject quantity = votes.getJSONObject("quantity");
+                            messageInfo.leftVote = Integer.parseInt(quantity.getString("1"));
+                            messageInfo.rightVote = Integer.parseInt(quantity.getString("2"));
+                            JSONObject percent = votes.getJSONObject("percent");
+                            messageInfo.leftPercent = percent.getInt("1");
+                            messageInfo.rightPercent = percent.getInt("2");
+                            messageInfo.myVote = item.getInt("my_vote");
+                        }
+
                         messages.add(messageInfo);
                     }
                     Object[] result = {success, count, messages};
@@ -188,7 +208,6 @@ public class HttpChat {
 
             if (result != null){
                 if ((boolean)result[0]){
-                    // Do stuff with result[2] which contains ArrayList of ChatMessage-s
                     ((ChatActivity)mContext).setDataToAdapter((ArrayList<ChatMessage>)result[2]);
                 }else {
                     Toast.makeText(mContext, ""+result[1], Toast.LENGTH_SHORT).show();
@@ -199,16 +218,16 @@ public class HttpChat {
 
 
     // NOT COMPLETED
-    public class ChatVoteTask extends AsyncTask<String, Void, Object[]>{
+    public class ChatVoteTask extends AsyncTask<Object, Void, Object[]>{
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            ((MessageActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+            ((ChatActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
         }
 
         @Override
-        protected Object[] doInBackground(String... params) {
+        protected Object[] doInBackground(Object... params) {
 
             String urlStr = "http://dopeapi.elantix.net/im.vote";
             String paramStr = "token="+params[0]+"&message_id="+params[1]+"&vote="+params[2];
@@ -216,10 +235,24 @@ public class HttpChat {
             String response = Utilities.requestToServerPOST(urlStr, paramStr);
             try{
                 JSONObject json = new JSONObject(response);
-//                String
-                boolean success = json.getBoolean("success");
-
-
+                boolean error = json.getBoolean("error");
+                String responseText = json.getString("response");
+                ChatMessage messageInfo = null;
+                if (!error){
+                    messageInfo = new ChatMessage();
+                    JSONObject votes = json.getJSONObject("votes");
+                    messageInfo.votes = votes.getInt("all");
+                    JSONObject quantity = votes.getJSONObject("quantity");
+                    messageInfo.leftVote = Integer.parseInt(quantity.getString("1"));
+                    messageInfo.rightVote = Integer.parseInt(quantity.getString("2"));
+                    JSONObject percent = votes.getJSONObject("percent");
+                    messageInfo.leftPercent = percent.getInt("1");
+                    messageInfo.rightPercent = percent.getInt("2");
+                    messageInfo.myVote = Integer.parseInt(json.getString("my_vote"));
+                }
+//                Object[] params = {token, message_id, vote, itemView, messageObj};
+                Object[] result = {!error, responseText, messageInfo, params[3], params[4]};
+                return result;
 
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -229,9 +262,18 @@ public class HttpChat {
         }
 
         @Override
-        protected void onPostExecute(Object[] objects) {
-            super.onPostExecute(objects);
-            ((MessageActivity) mContext).mProgressDialog.dismiss();
+        protected void onPostExecute(Object[] result) {
+            super.onPostExecute(result);
+            ChatActivity activity = ((ChatActivity) mContext);
+            activity.mProgressDialog.dismiss();
+            if (result != null){
+                if ((boolean)result[0]){
+//                    Log.e("HttpChat", "VoteTask: "+result[3]+" & "+result[4]);
+                    activity.mAdapter.launchRateAnimation((View)result[3], (ChatMessage)result[4], true);
+                }else{
+                    Toast.makeText(mContext, ""+result[1], Toast.LENGTH_SHORT).show();
+                }
+            }
         }
     }
 
@@ -293,7 +335,7 @@ public class HttpChat {
 
                     }
 
-                    Object[] result = {success, response_text, messageInfo, params[1]};
+                    Object[] result = {success, response_text, messageInfo, params[1], params[5]};
                     return result;
 
                 } catch (JSONException e) {
@@ -319,8 +361,10 @@ public class HttpChat {
             if (result != null){
                 if ((boolean)result[0]){
                     // Do stuff with result[2] that contains ChatMessage object
+                    if (result[4].equals("true")) {
+                        ((TabPlusActivity)mContext).finish();
 
-                    if (mContext instanceof TabPlusActivity) {
+                    }else if (mContext instanceof TabPlusActivity) {
                         TabPlusActivity tabPlusActivity = (TabPlusActivity) mContext;
                         Intent intent = new Intent(tabPlusActivity, ChatActivity.class);
                         intent.putExtra("dialog_id", "" + result[3]);
@@ -478,7 +522,7 @@ public class HttpChat {
                     // Do stuff
                     if (mContext instanceof MessageActivity){
                         FragmentNewMessage fragment = ((FragmentNewMessage) ((MessageActivity) mContext).mCurrentFragment);
-                        int position = Integer.parseInt((String)result[2]);
+                        int position = Integer.parseInt((String) result[2]);
                         fragment.removeConversation(position);
                     }
                 }else{

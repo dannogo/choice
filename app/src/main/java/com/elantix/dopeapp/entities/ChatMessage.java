@@ -21,4 +21,13 @@ public class ChatMessage implements Serializable{
     public String avatar;
     public String username;
     public String fullname;
+
+    public int votes;
+    public int leftVote;
+    public int rightVote;
+    public int leftPercent;
+    public int rightPercent;
+    public int myVote;
+
+    public int proposalNum; // for choosing direction of animation
 }
