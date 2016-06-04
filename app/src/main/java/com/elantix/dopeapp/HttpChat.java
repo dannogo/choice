@@ -269,7 +269,7 @@ public class HttpChat {
             if (result != null){
                 if ((boolean)result[0]){
 //                    Log.e("HttpChat", "VoteTask: "+result[3]+" & "+result[4]);
-                    activity.mAdapter.launchRateAnimation((View)result[3], (ChatMessage)result[4], true);
+//                    activity.mAdapter.launchRateAnimation((View)result[3], (ChatMessage)result[4], true);
                 }else{
                     Toast.makeText(mContext, ""+result[1], Toast.LENGTH_SHORT).show();
                 }

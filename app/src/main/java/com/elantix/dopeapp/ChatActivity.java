@@ -89,14 +89,31 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void setDataToAdapter(ArrayList<ChatMessage> messages){
+        ArrayList<Integer> changedItems = new ArrayList<>();
         if (mAdapter != null){
             if (mAdapter.mMessages != null){
                 if (mAdapter.mMessages.size() == messages.size()){
-                    for(int i=0; i<mAdapter.items.size(); i++){
+                    for(int i=0; i<mAdapter.mMessages.size(); i++){
                         if (messages.get(i).votes != mAdapter.mMessages.get(i).votes){
-                            mAdapter.mMessages.add(i, messages.get(i));
+//                            mAdapter.mMessages.set(i, mAdapter.sortMessage(messages.get(i)));
+//                            mAdapter.mMessages.set(messages.get(i));
+
+                            Log.e("ChatActivity", "VOTES NOT EQUALS");
+                            int proposalNum = mAdapter.mMessages.get(i).proposalNum;
+                            int viewType = mAdapter.mMessages.get(i).viewType;
+                            mAdapter.mMessages.set(i, new ChatMessage(messages.get(i)));
+                            mAdapter.mMessages.get(i).proposalNum = proposalNum;
+                            mAdapter.mMessages.get(i).viewType = viewType;
+
+                            changedItems.add(i);
                         }
                     }
+                    if (!changedItems.isEmpty()){
+                        for (int i=0; i<changedItems.size(); i++){
+                            mAdapter.notifyItemChanged(i);
+                        }
+                    }
+
                     return;
                 }
             }
@@ -132,9 +149,10 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void showNewMessage(ChatMessage messageInfo){
-        mAdapter.sortMessage(messageInfo);
-        mAdapter.notifyItemInserted(mAdapter.items.size());
-        mRecyclerView.scrollToPosition(mAdapter.items.size() - 1);
+//        mAdapter.sortMessage(messageInfo);
+        mAdapter.mMessages.add(mAdapter.sortMessage(messageInfo));
+        mAdapter.notifyItemInserted(mAdapter.mMessages.size());
+        mRecyclerView.scrollToPosition(mAdapter.mMessages.size() - 1);
     }
 
     private void sendMessage(){

@@ -2,16 +2,12 @@ package com.elantix.dopeapp;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.AsyncTask;
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,12 +15,9 @@ import com.bumptech.glide.Glide;
 import com.elantix.dopeapp.entities.ChatMessage;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
-import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 
 /**
  * Created by oleh on 4/16/16.
@@ -49,26 +42,30 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         return result;
     }
 
-    public void sortMessage(ChatMessage item){
+    public ChatMessage sortMessage(ChatMessage item){
+        Log.e("AdapterChat", "sortMessage");
+
         item.fullname = replaceFullnameIfNecessary(item);
         item.date_send = Utilities.convertDate(item.date_send, true);
         item.message = item.message.replaceAll("(\\r|\\n)", "");
 
         if (item.sender.equals(Utilities.sUid)){
             if (item.photo1.isEmpty()){
-                items.add(new MyMsg(item));
+                item.viewType = MY_MSG;
             }else{
                 item.proposalNum = mProposalNum++;
-                items.add(new MyDopeProposal(item));
+                item.viewType = MY_PROPOSAL;
             }
         }else{
             if (item.photo1.isEmpty()){
-                items.add(new OthersMsg(item));
+                item.viewType = OTHERS_MSG;
             }else{
                 item.proposalNum = mProposalNum++;
-                items.add(new OthersDopeProposal(item));
+                item.viewType = OTHERS_PROPOSAL;
             }
         }
+
+        return item;
     }
 
     public AdapterChat(Context context, ArrayList<ChatMessage> messages) {
@@ -81,9 +78,10 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
         for (int i=0; i<mMessages.size(); i++){
             ChatMessage item = mMessages.get(i);
-            sortMessage(item);
+            mMessages.set(i, sortMessage(item));
         }
 
+        Log.e("AdapterChat", "Constructor");
     }
 
     @Override
@@ -91,6 +89,7 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
         RecyclerView.ViewHolder holder;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        Log.e("AdapterChat", "onCreateViewHolder");
 
         switch (viewType){
             case OTHERS_MSG:
@@ -123,24 +122,22 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        Log.e("AdapterChat", "onBindViewHolder");
+        ChatMessage item = mMessages.get(position);
         switch (holder.getItemViewType()){
             case OTHERS_MSG:
                 OthersMsgVH omvh = (OthersMsgVH) holder;
-                OthersMsg om = (OthersMsg) items.get(position);
-                ChatMessage ommo = om.messageObj;
-                Glide.with(mContext).load(ommo.avatar)
+                Glide.with(mContext).load(item.avatar)
                         .bitmapTransform(new CropCircleTransformation(mContext))
                         .into(omvh.avatarView);
-                omvh.usernameView.setText(ommo.fullname);
-                omvh.messageView.setText(ommo.message);
-                omvh.timeView.setText(ommo.date_send);
+                omvh.usernameView.setText(item.fullname);
+                omvh.messageView.setText(item.message);
+                omvh.timeView.setText(item.date_send);
                 break;
             case MY_MSG:
                 MyMsgVH mmvh = (MyMsgVH) holder;
-                MyMsg mm = (MyMsg) items.get(position);
-                ChatMessage mmmo = mm.messageObj;
-                mmvh.messageView.setText(mmmo.message);
-                mmvh.timeView.setText(mmmo.date_send);
+                mmvh.messageView.setText(item.message);
+                mmvh.timeView.setText(item.date_send);
                 break;
             case DATELINE:
                 DateLineVH dlvh = (DateLineVH) holder;
@@ -149,41 +146,41 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 break;
             case OTHERS_PROPOSAL:
                 final OthersDopeProposalVH odpvh = (OthersDopeProposalVH) holder;
-                final OthersDopeProposal odp = (OthersDopeProposal) items.get(position);
-                ChatMessage odpmo = odp.messageObj;
-                Glide.with(mContext).load(odpmo.avatar)
+                Glide.with(mContext).load(item.avatar)
                         .bitmapTransform(new CropCircleTransformation(mContext))
                         .into(odpvh.avatarView);
-                odpvh.usernameView.setText(odpmo.fullname);
-                odpvh.timeView.setText(odpmo.date_send);
-                odpvh.questionView.setText(odpmo.message);
+                odpvh.usernameView.setText(item.fullname);
+                odpvh.timeView.setText(item.date_send);
+                odpvh.questionView.setText(item.message);
 
                 odpvh.leftPicView.setImageDrawable(null);
                 odpvh.rightPicView.setImageDrawable(null);
-                Object[] paramsOth = {odpmo.photo1, odpmo.photo2, odpvh.leftPicView, odpvh.rightPicView};
+                Object[] paramsOth = {item.photo1, item.photo2, odpvh.leftPicView, odpvh.rightPicView};
                 ImageTransformationComputations taskOth = new ImageTransformationComputations();
                 taskOth.execute(paramsOth);
 
-                launchRateAnimation(odpvh.itemView, odpmo, false);
+                if (item.myVote > 0) {
+                    launchRateAnimation(odpvh.itemView, item, false);
+                }
                 break;
             case MY_PROPOSAL:
                 MyDopeProposalVH mdpvh = (MyDopeProposalVH) holder;
-                final MyDopeProposal mp = (MyDopeProposal) items.get(position);
-                ChatMessage mpmo = mp.messageObj;
-                Glide.with(mContext).load(mpmo.avatar)
+                Glide.with(mContext).load(item.avatar)
                         .bitmapTransform(new CropCircleTransformation(mContext))
                         .into(mdpvh.avatarView);
-                mdpvh.usernameView.setText(mpmo.fullname);
-                mdpvh.timeView.setText(mpmo.date_send);
-                mdpvh.questionView.setText(mpmo.message);
+                mdpvh.usernameView.setText(item.fullname);
+                mdpvh.timeView.setText(item.date_send);
+                mdpvh.questionView.setText(item.message);
 
                 mdpvh.leftPicView.setImageDrawable(null);
                 mdpvh.rightPicView.setImageDrawable(null);
-                Object[] paramsMy = {mpmo.photo1, mpmo.photo2, mdpvh.leftPicView, mdpvh.rightPicView};
+                Object[] paramsMy = {item.photo1, item.photo2, mdpvh.leftPicView, mdpvh.rightPicView};
                 ImageTransformationComputations taskMy = new ImageTransformationComputations();
                 taskMy.execute(paramsMy);
 
-                launchRateAnimation(mdpvh.itemView, mpmo, false);
+                if (item.myVote > 0) {
+                    launchRateAnimation(mdpvh.itemView, item, false);
+                }
                 break;
             default:
 
@@ -192,23 +189,12 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     @Override
     public int getItemViewType(int position) {
-        if (items.get(position) instanceof OthersMsg){
-            return OTHERS_MSG;
-        }else if(items.get(position) instanceof MyMsg){
-            return MY_MSG;
-        }else if(items.get(position) instanceof DateLine){
-            return DATELINE;
-        }else if(items.get(position) instanceof OthersDopeProposal){
-            return OTHERS_PROPOSAL;
-        }else if (items.get(position) instanceof MyDopeProposal){
-            return MY_PROPOSAL;
-        }
-        return -1;
+        return mMessages.get(position).viewType;
     }
 
     @Override
     public int getItemCount() {
-        return items.size();
+        return mMessages.size();
     }
 
     class OthersMsgVH extends RecyclerView.ViewHolder{
@@ -262,6 +248,7 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
         public OthersDopeProposalVH(View itemView) {
             super(itemView);
+            Log.e("AdapterChat", "OthersDopeProposalVH");
             avatarView = (ImageView) itemView.findViewById(R.id.chat_others_dope_proposal_avatar);
             usernameView = (TextView) itemView.findViewById(R.id.chat_others_dope_proposal_username);
             timeView = (TextView) itemView.findViewById(R.id.chat_others_dope_proposal_time);
@@ -275,30 +262,27 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         @Override
         public void onClick(View v) {
             int id = v.getId();
-            ChatMessage myDopeInfo = ((OthersDopeProposal) items.get(getAdapterPosition())).messageObj;
+            ChatMessage myDopeInfo = mMessages.get(getAdapterPosition());
+
             if (myDopeInfo.myVote > 0) {
                 Utilities.showExtremelyShortToast(mContext, "You have already voted this dope", 500);
                 return;
             }else if (id == leftPicView.getId()){
-                // vote and animate
-                Log.e("AdapterChat", "left pic");
                 myDopeInfo.myVote = 1;
                 myDopeInfo.leftVote++;
             }else if (id == rightPicView.getId()){
-                // vote and animate
                 myDopeInfo.myVote = 2;
                 myDopeInfo.rightVote++;
-                Log.e("AdapterChat", "right pic");
             }
-            // DEPRECATED
-//            recalculatePercentage(myDopeInfo);
+            recalculatePercentage(myDopeInfo);
 
             http.chatVote(Utilities.sToken, myDopeInfo.id, String.valueOf(myDopeInfo.myVote), itemView, myDopeInfo);
-//            launchRateAnimation(itemView, myDopeInfo, true);
+            launchRateAnimation(itemView, myDopeInfo, true);
         }
     }
 
     public void launchRateAnimation(View itemView, ChatMessage messageObj, boolean animatedDraw){
+        Log.e("AdapterChat", "launchRateAnimation");
 
         int leftRate = messageObj.leftPercent;
         if (leftRate == 0 && leftRate == messageObj.rightPercent){
@@ -308,11 +292,11 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
             boolean direction = (messageObj.proposalNum % 2 == 0) ? false : true;
             mAnimHelper = new ChoiceAnimationHelper(((ChatActivity) mContext), itemView);
-            mAnimHelper.setParameters(side, leftRate, direction);
+            mAnimHelper.setParameters(side, leftRate, direction, true);
             mAnimHelper.draw(animatedDraw);
         }
     }
-        // DEPRECATED
+
     private void recalculatePercentage(ChatMessage info){
         info.votes++;
         info.leftPercent = info.leftVote * 100 / info.votes;
@@ -331,6 +315,7 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
         public MyDopeProposalVH(View itemView) {
             super(itemView);
+            Log.e("AdapterChat", "MyDopeProposalVH");
             avatarView = (ImageView) itemView.findViewById(R.id.chat_others_dope_proposal_avatar);
             usernameView = (TextView) itemView.findViewById(R.id.chat_others_dope_proposal_username);
             timeView = (TextView) itemView.findViewById(R.id.chat_others_dope_proposal_time);
@@ -344,62 +329,58 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         @Override
         public void onClick(View v) {
             int id = v.getId();
-            ChatMessage myDopeInfo = ((MyDopeProposal) items.get(getAdapterPosition())).messageObj;
+            ChatMessage myDopeInfo = mMessages.get(getAdapterPosition());
             if (myDopeInfo.myVote > 0) {
                 Utilities.showExtremelyShortToast(mContext, "You have already voted this dope", 500);
                 return;
             }else if (id == leftPicView.getId()){
-                // vote and animate
-                Log.e("AdapterChat", "left pic");
                 myDopeInfo.myVote = 1;
                 myDopeInfo.leftVote++;
             }else if (id == rightPicView.getId()){
-                // vote and animate
                 myDopeInfo.myVote = 2;
                 myDopeInfo.rightVote++;
-                Log.e("AdapterChat", "right pic");
             }
-            // DEPRECATED
-//            recalculatePercentage(myDopeInfo);
+
+            recalculatePercentage(myDopeInfo);
 
             http.chatVote(Utilities.sToken, myDopeInfo.id, String.valueOf(myDopeInfo.myVote), itemView, myDopeInfo);
-//            launchRateAnimation(itemView, myDopeInfo, true);
+            launchRateAnimation(itemView, myDopeInfo, true);
         }
     }
 
 
 
-    class OthersMsg{
-        private ChatMessage messageObj;
-
-        public OthersMsg(ChatMessage messageObj){
-            this.messageObj = messageObj;
-        }
-    }
-
-    class MyMsg{
-        private ChatMessage messageObj;
-
-        public MyMsg(ChatMessage messageObj){
-            this.messageObj = messageObj;
-        }
-    }
-
-    class OthersDopeProposal{
-        private ChatMessage messageObj;
-
-        public OthersDopeProposal(ChatMessage messageObj){
-            this.messageObj = messageObj;
-        }
-    }
-
-    class MyDopeProposal{
-        private ChatMessage messageObj;
-
-        public MyDopeProposal(ChatMessage messageObj){
-            this.messageObj = messageObj;
-        }
-    }
+//    class OthersMsg{
+//        private ChatMessage messageObj;
+//
+//        public OthersMsg(ChatMessage messageObj){
+//            this.messageObj = messageObj;
+//        }
+//    }
+//
+//    class MyMsg{
+//        private ChatMessage messageObj;
+//
+//        public MyMsg(ChatMessage messageObj){
+//            this.messageObj = messageObj;
+//        }
+//    }
+//
+//    class OthersDopeProposal{
+//        private ChatMessage messageObj;
+//
+//        public OthersDopeProposal(ChatMessage messageObj){
+//            this.messageObj = messageObj;
+//        }
+//    }
+//
+//    class MyDopeProposal{
+//        private ChatMessage messageObj;
+//
+//        public MyDopeProposal(ChatMessage messageObj){
+//            this.messageObj = messageObj;
+//        }
+//    }
 
     class DateLine{
         public DateLine(String date) {
@@ -415,11 +396,11 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         @Override
         protected Object[] doInBackground(Object... params) {
 
+            int radius = mContext.getResources().getDimensionPixelSize(R.dimen.chat_radius);
             Bitmap leftPic = Utilities.getBitmapFromURL((String)params[0]);
-            Bitmap resultLeft = Utilities.getOneSideRoundedBitmap(mContext, leftPic, true, 35);
-
+            Bitmap resultLeft = Utilities.getOneSideRoundedBitmap(mContext, leftPic, true, radius);
             Bitmap rightPic = Utilities.getBitmapFromURL((String) params[1]);
-            Bitmap resultRight = Utilities.getOneSideRoundedBitmap(mContext, rightPic, false, 35);
+            Bitmap resultRight = Utilities.getOneSideRoundedBitmap(mContext, rightPic, false, radius);
 
             Object[] objects = {params[2], params[3], resultLeft, resultRight};
 

@@ -4,7 +4,10 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.ShapeDrawable;
+import android.graphics.drawable.shapes.RoundRectShape;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.util.TypedValue;
@@ -52,6 +55,8 @@ public class ChoiceAnimationHelper {
     private int mSmallCircleSize;
     private float mSmallTextSize;
 
+    private boolean mIsChat;
+
 //    private int m
 
     public enum ChoiceSide{
@@ -87,14 +92,16 @@ public class ChoiceAnimationHelper {
 
     }
 
-//    public void setParameters(ChoiceSide chosenSide, int leftRate, Boolean directionInside){
-//        setParameters(chosenSide, leftRate, directionInside);
-//    }
     public void setParameters(ChoiceSide chosenSide, int leftRate, Boolean directionInside){
+        setParameters(chosenSide, leftRate, directionInside, false);
+    }
+
+    public void setParameters(ChoiceSide chosenSide, int leftRate, Boolean directionInside, boolean isChat){
         mChosenSide = chosenSide;
         mDirectionInside= directionInside;
         mLeftRateValue = leftRate;
         mRightRateValue = 100-leftRate;
+        mIsChat = isChat;
 
         mLeftText.setText(""+mLeftRateValue+"%");
         mRightText.setText("" + mRightRateValue + "%");
@@ -106,6 +113,29 @@ public class ChoiceAnimationHelper {
         }else{
             mWiningSide = WiningSide.Equal;
         }
+    }
+
+    private ShapeDrawable createRoundedDrawable(boolean isLeft, int colorRes){
+
+        ShapeDrawable background = new ShapeDrawable();
+        int radius = mActivity.getResources().getDimensionPixelSize(R.dimen.chat_radius);
+        float[] radii = new float[8];
+        if (isLeft) {
+            radii[0] = radius;
+            radii[1] = radius;
+            radii[6] = radius;
+            radii[7] = radius;
+        }else{
+            radii[2] = radius;
+            radii[3] = radius;
+            radii[4] = radius;
+            radii[5] = radius;
+        }
+        background.setShape(new RoundRectShape(radii, null, null));
+        int color = ContextCompat.getColor(mActivity, colorRes);
+        background.getPaint().setColor(color);
+
+        return background;
     }
 
     public void draw(Boolean animate){
@@ -152,18 +182,34 @@ public class ChoiceAnimationHelper {
         if (mWiningSide == WiningSide.Left){
             leftRingColor = mWiningLineColor;
             rightRingColor = mLosingLineColor;
-            mLeftColoredCoverView.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.dope_rate_wining_semi_transparent_background));
-            mRightColoredCoverView.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.dope_rate_losing_semi_transparent_background));
+            if (mIsChat){
+                mLeftColoredCoverView.setBackground(createRoundedDrawable(true, R.color.dope_rate_wining_semi_transparent_background));
+                mRightColoredCoverView.setBackground(createRoundedDrawable(false, R.color.dope_rate_losing_semi_transparent_background));
+            }else {
+                mLeftColoredCoverView.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.dope_rate_wining_semi_transparent_background));
+                mRightColoredCoverView.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.dope_rate_losing_semi_transparent_background));
+            }
         }else if (mWiningSide == WiningSide.Right){
             leftRingColor = mLosingLineColor;
             rightRingColor = mWiningLineColor;
-            mLeftColoredCoverView.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.dope_rate_losing_semi_transparent_background));
-            mRightColoredCoverView.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.dope_rate_wining_semi_transparent_background));
+            if (mIsChat) {
+                mLeftColoredCoverView.setBackground(createRoundedDrawable(true, R.color.dope_rate_losing_semi_transparent_background));
+                mRightColoredCoverView.setBackground(createRoundedDrawable(false, R.color.dope_rate_wining_semi_transparent_background));
+            }else{
+                mLeftColoredCoverView.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.dope_rate_losing_semi_transparent_background));
+                mRightColoredCoverView.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.dope_rate_wining_semi_transparent_background));
+            }
         }else{
             leftRingColor = mEqualLineColor;
             rightRingColor = mEqualLineColor;
-            mLeftColoredCoverView.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.dope_rate_equal_semi_transparent_background));
-            mRightColoredCoverView.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.dope_rate_equal_semi_transparent_background));
+            if (mIsChat) {
+                mLeftColoredCoverView.setBackground(createRoundedDrawable(true, R.color.dope_rate_equal_semi_transparent_background));
+                mRightColoredCoverView.setBackground(createRoundedDrawable(false, R.color.dope_rate_equal_semi_transparent_background));
+            }else{
+                mLeftColoredCoverView.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.dope_rate_equal_semi_transparent_background));
+                mRightColoredCoverView.setBackgroundColor(ContextCompat.getColor(mActivity, R.color.dope_rate_equal_semi_transparent_background));
+            }
+
         }
 
         CircularProgressDrawable leftRingDrawable =  new CircularProgressDrawable.Builder()

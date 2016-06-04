@@ -44,7 +44,9 @@ public class FragmentViewPager extends Fragment {
         numItems = bundle.getInt("num", 10);
         int itemPosition = bundle.getInt("position", 0);
         if (itemPosition == 0){
-            Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size() - 1).bundleData.put("position", 0);
+            if (Utilities.sFragmentHistory != null) {
+                Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size() - 1).bundleData.put("position", 0);
+            }
         }
         Log.w("FragmentViewPager", "itemPosition: "+itemPosition);
         Utilities.sRateStateBackups = new RateStateBackup[numItems];
