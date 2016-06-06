@@ -245,7 +245,7 @@ public class FragmentNewMessage extends Fragment {
         http.getCrossFollowingFriends(Utilities.sToken, query, page, count, exlude_ids);
     }
 
-    public void setDataToAdapter(int count, ConversationInfo[] conversations){
+    public void setDataToAdapter(int count, ArrayList<ConversationInfo> conversations){
         loading = true;
         mTotalItemCount = count;
         if (isNewFetch) {
@@ -253,10 +253,10 @@ public class FragmentNewMessage extends Fragment {
             list.setAdapter(adapter);
         }else{
             int positionStart = adapter.mConvs.size()-1;
-            for (int i=0; i<conversations.length; i++){
-                adapter.mConvs.add(conversations[i]);
+            for (int i=0; i<conversations.size(); i++){
+                adapter.mConvs.add(conversations.get(i));
             }
-            adapter.notifyItemRangeInserted(positionStart, conversations.length);
+            adapter.notifyItemRangeInserted(positionStart, conversations.size());
         }
     }
 

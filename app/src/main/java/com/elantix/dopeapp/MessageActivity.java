@@ -15,6 +15,8 @@ import android.widget.TextView;
 
 import com.elantix.dopeapp.entities.ConversationInfo;
 
+import java.util.ArrayList;
+
 import mehdi.sakout.fancybuttons.FancyButton;
 
 /**
@@ -33,7 +35,8 @@ public class MessageActivity extends AppCompatActivity {
     FancyButton fancyButton;
     private HttpChat http;
     public int convCount;
-    public ConversationInfo[] conversations;
+//    public ConversationInfo[] conversations;
+    public ArrayList<ConversationInfo> conversations;
 
     public Fragment mCurrentFragment;
 

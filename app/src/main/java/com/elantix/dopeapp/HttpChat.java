@@ -1,9 +1,11 @@
 package com.elantix.dopeapp;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -82,8 +84,8 @@ public class HttpChat {
         task.execute(token);
     }
 
-    public void removeMember(String token, String dialogId, String userId){
-        String[] params = {token, dialogId, userId};
+    public void removeMember(String token, String dialogId, String userId, String userPosition){
+        String[] params = {token, dialogId, userId, userPosition};
         RemoveMemberTask task = new RemoveMemberTask();
         task.execute(params);
     }
@@ -367,6 +369,7 @@ public class HttpChat {
                     }else if (mContext instanceof TabPlusActivity) {
                         TabPlusActivity tabPlusActivity = (TabPlusActivity) mContext;
                         Intent intent = new Intent(tabPlusActivity, ChatActivity.class);
+                        Log.e("HttpChat", "dialog_id: "+result[3]);
                         intent.putExtra("dialog_id", "" + result[3]);
 //                    intent.putExtra("messageObj", serializedObject);
                         tabPlusActivity.startActivity(intent);
@@ -388,7 +391,7 @@ public class HttpChat {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            ((MessageActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+            ((GroupSettingsActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
         }
 
         @Override
@@ -404,7 +407,7 @@ public class HttpChat {
                 boolean success = json.getBoolean("success");
                 String response_text = json.getString("response_text");
 
-                Object[] result = {success, response_text};
+                Object[] result = {success, response_text, params[3]};
                 return result;
 
             } catch (JSONException e) {
@@ -417,12 +420,14 @@ public class HttpChat {
         @Override
         protected void onPostExecute(Object[] result) {
             super.onPostExecute(result);
-            ((MessageActivity) mContext).mProgressDialog.dismiss();
+            ((GroupSettingsActivity) mContext).mProgressDialog.dismiss();
+            GroupSettingsActivity activity = ((GroupSettingsActivity) mContext);
 
             if (result != null){
                 if ((boolean)result[0]){
-                    Utilities.showExtremelyShortToast(mContext, (String)result[1], 500);
+                    Utilities.showExtremelyShortToast(mContext, (String)result[1], 700);
                     // Do stuff
+                    activity.removeMemberFromAdapter((String)result[3]);
                 }else{
                     Toast.makeText(mContext, ""+result[1], Toast.LENGTH_SHORT).show();
                 }
@@ -485,7 +490,11 @@ public class HttpChat {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            ((MessageActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+            if (mContext instanceof MessageActivity) {
+                ((MessageActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+            }else if (mContext instanceof GroupSettingsActivity){
+                ((GroupSettingsActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+            }
         }
 
         @Override
@@ -514,13 +523,19 @@ public class HttpChat {
         @Override
         protected void onPostExecute(Object[] result) {
             super.onPostExecute(result);
-            ((MessageActivity) mContext).mProgressDialog.dismiss();
+            if (mContext instanceof MessageActivity) {
+                ((MessageActivity) mContext).mProgressDialog.dismiss();
+            }else if (mContext instanceof GroupSettingsActivity){
+                ((GroupSettingsActivity) mContext).mProgressDialog.dismiss();
+            }
 
             if (result != null){
                 if ((boolean)result[0]){
                     Utilities.showExtremelyShortToast(mContext, (String)result[1], 500);
                     // Do stuff
-                    if (mContext instanceof MessageActivity){
+                    if (mContext instanceof GroupSettingsActivity) {
+                        ((GroupSettingsActivity)mContext).finishActivityWithResult();
+                    }else if (mContext instanceof MessageActivity){
                         FragmentNewMessage fragment = ((FragmentNewMessage) ((MessageActivity) mContext).mCurrentFragment);
                         int position = Integer.parseInt((String) result[2]);
                         fragment.removeConversation(position);
@@ -706,6 +721,7 @@ public class HttpChat {
             if (result != null){
                 if ((Boolean)result[0]){
                     // Save this convInfo somewhere
+                    Utilities.sConversations.add((ConversationInfo)result[2]);
                     Log.e("HttpKit", "new conversation created. Id: " + result[1]);
                     Intent intent = new Intent(activity, TabPlusActivity.class);
                     intent.putExtra("dialog_id", (int)result[1]);
@@ -723,7 +739,11 @@ public class HttpChat {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            ((MessageActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+            if (mContext instanceof MessageActivity) {
+                ((MessageActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+            }else if (mContext instanceof GroupSettingsActivity){
+                ((GroupSettingsActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+            }
         }
 
         @Override
@@ -776,6 +796,7 @@ public class HttpChat {
                                     member.username = memberItem.getString("username");
                                     member.fullname = memberItem.getString("fullname");
                                     member.email = memberItem.getString("email");
+                                    member.bio = memberItem.getString("bio");
                                     member.avatar = memberItem.getString("avatar");
                                     conversation.members.add(member);
                                 }
@@ -824,23 +845,40 @@ public class HttpChat {
         @Override
         protected void onPostExecute(Object[] result) {
             super.onPostExecute(result);
-            MessageActivity activity = ((MessageActivity) mContext);
+            if (mContext instanceof MessageActivity) {
+                ((MessageActivity) mContext).mProgressDialog.dismiss();
+            }else if (mContext instanceof GroupSettingsActivity){
+                ((GroupSettingsActivity) mContext).mProgressDialog.dismiss();
+            }
+
             if (result != null){
                 if ((Boolean)result[0]){
-                    Log.e("HttpKit Conversation", "Count: " + result[1] + "\nnumber of items: " + ((ConversationInfo[]) result[2]).length);
-                    if (((ConversationInfo[])result[2]).length > 0){
-                        activity.switchPageHandler(MessageActivity.DirectMessages.NewMessage1, 1);
-                        activity.convCount = (int) result[1];
-                        activity.conversations = (ConversationInfo[])result[2];
+                    if (mContext instanceof MessageActivity) {
+                        MessageActivity activity = ((MessageActivity) mContext);
+                        activity.mProgressDialog.dismiss();
+                        Log.e("HttpKit Conversation", "Count: " + result[1] + "\nnumber of items: " + ((ConversationInfo[]) result[2]).length);
+                        if (((ConversationInfo[]) result[2]).length > 0) {
+                            activity.switchPageHandler(MessageActivity.DirectMessages.NewMessage1, 1);
+                            activity.convCount = (int) result[1];
+                            activity.conversations = new ArrayList<>(Arrays.asList((ConversationInfo[]) result[2]));
 //                        ((FragmentNewMessage)activity.mCurrentFragment).setDataToAdapter((int) result[1], (ConversationInfo[]) result[2]);
-                    }else{
-                        activity.switchPageHandler(MessageActivity.DirectMessages.NoMessage);
+                        } else {
+                            activity.switchPageHandler(MessageActivity.DirectMessages.NoMessage);
+                        }
+                    }else if (mContext instanceof GroupSettingsActivity){
+                        GroupSettingsActivity activity = (GroupSettingsActivity)mContext;
+                        activity.mProgressDialog.dismiss();
+
+
+                        activity.bringDataToActivity(new ArrayList<>(Arrays.asList((ConversationInfo[]) result[2])));
+
                     }
+                    Utilities.sConversations = new ArrayList<>(Arrays.asList((ConversationInfo[]) result[2]));
                 }else{
                     Toast.makeText(mContext, ""+result[1], Toast.LENGTH_SHORT).show();
                 }
             }
-            activity.mProgressDialog.dismiss();
+
         }
     }
 

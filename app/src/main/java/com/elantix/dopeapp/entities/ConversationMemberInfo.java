@@ -8,6 +8,7 @@ public class ConversationMemberInfo{
     public String username;
     public String fullname;
     public String email;
+    public String bio;
     public String avatar;
 
     public ConversationMemberInfo(){}
@@ -17,6 +18,7 @@ public class ConversationMemberInfo{
         this.username = another.username;
         this.fullname = another.fullname;
         this.email = another.email;
+        this.bio = another.bio;
         this.avatar = another.avatar;
     }
 }

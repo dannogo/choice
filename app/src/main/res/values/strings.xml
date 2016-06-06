@@ -235,6 +235,13 @@
     <string name="profile_gender_action_not_indicated">Not indicated</string>
     <string name="profile_gender_action_change_gender">Change</string>
     <string name="button_undo">undo</string>
+
+    <string name="group_settings_first_section_title">GROUP NAME</string>
+    <string name="group_settings_second_section_title">MEMBERS</string>
+    <string name="group_settings_leave_group">Leave Group</string>
+    <string name="group_settings_toolbar_title">Group Settings</string>
+    <string name="group_settings_add_member">Add Member</string>
+
 </resources>
 
 

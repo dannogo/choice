@@ -58,7 +58,7 @@ public class MessageContactAdapter extends RecyclerView.Adapter<MessageContactAd
         http = new HttpChat(this.context);
     }
 
-    public MessageContactAdapter(Context context, ConversationInfo[] conversations, FragmentNewMessage.ListType type) {
+    public MessageContactAdapter(Context context, ArrayList<ConversationInfo> conversations, FragmentNewMessage.ListType type) {
         Log.e("MessageContactAdapter", "context: " + context);
         this.inflater = LayoutInflater.from(context);
         this.context = context;
@@ -69,7 +69,7 @@ public class MessageContactAdapter extends RecyclerView.Adapter<MessageContactAd
         online.add(16);
         online.add(17);
 
-        mConvs = new ArrayList<>(Arrays.asList(conversations));
+        mConvs = new ArrayList<>(conversations);
         listType = type;
         http = new HttpChat(this.context);
     }

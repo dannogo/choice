@@ -4,6 +4,7 @@ package com.elantix.dopeapp;
  * Created by oleh on 5/31/16.
  */
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.elantix.dopeapp.entities.ChatMessage;
 
@@ -30,6 +32,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private Toolbar mToolbar;
     private ImageButton mSendButton;
     private ImageButton mLeftToolbarButton;
+    private ImageButton mRightToolbarButton;
     private EditText mNewCommentField;
     public AdapterChat mAdapter;
     private ImageButton mPlusButton;
@@ -133,8 +136,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         mNewCommentField = (EditText) findViewById(R.id.comments_new_comment_field);
         mNewCommentField.setHint("Write Message...");
         mLeftToolbarButton = (ImageButton) mToolbar.findViewById(R.id.left_button);
-        ImageButton rightToolbarButton = (ImageButton) mToolbar.findViewById(R.id.right_button);
-        rightToolbarButton.setVisibility(View.GONE);
+        mRightToolbarButton = (ImageButton) mToolbar.findViewById(R.id.right_button);
+        mRightToolbarButton.setOnClickListener(this);
         mLeftToolbarButton.setImageResource(R.drawable.toolbar_left_arrow);
         mLeftToolbarButton.setOnClickListener(this);
 
@@ -186,10 +189,30 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Utilities.LEAVE_GROUP){
+            if (resultCode == Activity.RESULT_OK) {
+//                if leave - finish this activity
+                finish();
+            }else if (resultCode == Activity.RESULT_CANCELED){
+
+            }
+        }
+
+    }
+
+    @Override
     public void onClick(View v) {
         int id = v.getId();
         if (id == mLeftToolbarButton.getId()){
             finish();
+        }else if(id == mRightToolbarButton.getId()){
+            Intent intent = new Intent(ChatActivity.this, GroupSettingsActivity.class);
+            Log.d("ChatActivity", "onClick mDialogId: "+mDialogId);
+            intent.putExtra("dialog_id", mDialogId);
+            startActivityForResult(intent, Utilities.LEAVE_GROUP);
         }else if (id == mSendButton.getId()){
             sendMessage();
         }else if (id == mPlusButton.getId()){

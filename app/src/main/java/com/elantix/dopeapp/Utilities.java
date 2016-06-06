@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -25,6 +26,7 @@ import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -54,23 +56,13 @@ import java.util.regex.Pattern;
  */
 public class Utilities {
 
-    // Save chain of fragments
-    // Save data and settings of each fragment
-    // Recognize
-
-    // ArrayList with enums for fragments in chain
-    // ArrayList with settings and data of fragments in chain
-    // Four Base Fragments related to buttons in the lower bar
-    // When user click on one of the tabs, chain clears
-    // Back navigation in chain with button in toolbar and back navigation button
-    //
-
     public static final int CAPTURE_IMAGE_WITH_CAMERA = 1888;
     public static final int PICK_IMAGE_FROM_GALLERY = 1887;
     public static final int PICK_IMAGE_FROM_WEB = 1886;
     public static final int EDIT_PROFILE = 1885;
     public static final int SIGN_IN_UP = 1884;
     public static final int SIGN_IN = 1883;
+    public static final int LEAVE_GROUP = 1882;
 
     public static final String MY_PREFS_NAME = "DopePrefs";
     public static String sToken = null;
@@ -84,6 +76,8 @@ public class Utilities {
     public static ProfileInfo sMyProfile;
     public static String[] sMyFollowings;
     public static ArrayList<ChainLink> sFragmentHistory = new ArrayList<>();
+//    public static ConversationInfo[] sConversations;
+    public static ArrayList<ConversationInfo> sConversations;
 
     public static RateStateBackup sRateStateBackups[] = new RateStateBackup[10];
     public static DopeListType sDopeListType;
@@ -127,6 +121,25 @@ public class Utilities {
         return bmp;
     }
 
+//    public static ConversationInfo findConversationById(ConversationInfo[] conversations, String dialogId){
+    public static ConversationInfo findConversationById(ArrayList<ConversationInfo> conversations, String dialogId){
+        if (dialogId == null){
+            Log.e("findConversationById", "dialogId is NULL");
+            return null;
+        }
+        if (conversations == null || conversations.isEmpty()){
+            Log.e("findConversationById", "Utilities.sConversations is NULL or isEmpty");
+            return null;
+        }else{
+            for (int i=0; i<conversations.size(); i++){
+                if (conversations.get(i).dialogs_id.equals(dialogId)){
+                    return conversations.get(i);
+                }
+            }
+            return null;
+        }
+    }
+
     public static String RequestToServerGET(String urlStr) {
 
         StringBuffer response = new StringBuffer();
@@ -155,6 +168,13 @@ public class Utilities {
 
         Log.w("StartLogin", response.toString());
         return response.toString();
+    }
+
+    public static float convertDpToPixel(float dp, Context context){
+        Resources resources = context.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
+        float px = dp * ((float)metrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT);
+        return px;
     }
 
     public static String convertDate(String in){
