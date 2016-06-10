@@ -11,6 +11,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.util.Util;
+import com.jirbo.adcolony.AdColonyVideoAd;
+
 import java.util.Arrays;
 
 /**
@@ -21,6 +24,7 @@ public class FragmentViewPager extends Fragment {
     private View mFragmentView;
     ViewPager mViewPager;
     private static int numItems;
+    private int dopeCounterForAd = 1;
 
     interface CommunicatorOne{
         public void respond();
@@ -44,7 +48,7 @@ public class FragmentViewPager extends Fragment {
         numItems = bundle.getInt("num", 10);
         int itemPosition = bundle.getInt("position", 0);
         if (itemPosition == 0){
-            if (Utilities.sFragmentHistory != null) {
+            if (Utilities.sFragmentHistory != null && Utilities.sFragmentHistory.size() > 0) {
                 Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size() - 1).bundleData.put("position", 0);
             }
         }
@@ -65,6 +69,21 @@ public class FragmentViewPager extends Fragment {
             public void onPageSelected(int position) {
                 ((MainActivity) getActivity()).toolbarTitle.setText((position + 1) + "/"+numItems);
                 Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size() - 1).bundleData.put("position", position);
+
+                dopeCounterForAd++;
+                int valueToCompare;
+                switch (numItems){
+                    case 100:
+                        valueToCompare = 11;
+                        break;
+                    default:
+                        valueToCompare = 9;
+                }
+                if (dopeCounterForAd >= valueToCompare){
+                    AdColonyVideoAd ad = new AdColonyVideoAd(Utilities.ADCOLONY_ZONE_ID).withListener((MainActivity)getActivity());
+                    ad.show();
+                    dopeCounterForAd = 1;
+                }
 
             }
 

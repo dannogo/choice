@@ -27,8 +27,9 @@ public class FragmentLogOutConfirmation extends DialogFragment{
         builder.setPositiveButton(R.string.logout_confirmation_dialog_positive_button_text, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-//                HttpKit http = new HttpKit(getActivity());
-//                http.logOut(Utilities.sToken);
+
+                HttpKit http = new HttpKit(getActivity());
+                http.logOut(Utilities.sToken);
 
                 Utilities.sFragmentHistory.clear();
                 Utilities.sToken = null;

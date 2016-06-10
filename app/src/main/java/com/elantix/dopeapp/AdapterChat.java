@@ -81,7 +81,6 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             mMessages.set(i, sortMessage(item));
         }
 
-        Log.e("AdapterChat", "Constructor");
     }
 
     @Override
@@ -89,7 +88,6 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
         RecyclerView.ViewHolder holder;
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        Log.e("AdapterChat", "onCreateViewHolder");
 
         switch (viewType){
             case OTHERS_MSG:
@@ -122,7 +120,6 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        Log.e("AdapterChat", "onBindViewHolder");
         ChatMessage item = mMessages.get(position);
         switch (holder.getItemViewType()){
             case OTHERS_MSG:
@@ -248,7 +245,6 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
         public OthersDopeProposalVH(View itemView) {
             super(itemView);
-            Log.e("AdapterChat", "OthersDopeProposalVH");
             avatarView = (ImageView) itemView.findViewById(R.id.chat_others_dope_proposal_avatar);
             usernameView = (TextView) itemView.findViewById(R.id.chat_others_dope_proposal_username);
             timeView = (TextView) itemView.findViewById(R.id.chat_others_dope_proposal_time);
@@ -282,7 +278,6 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     }
 
     public void launchRateAnimation(View itemView, ChatMessage messageObj, boolean animatedDraw){
-        Log.e("AdapterChat", "launchRateAnimation");
 
         int leftRate = messageObj.leftPercent;
         if (leftRate == 0 && leftRate == messageObj.rightPercent){
@@ -315,7 +310,6 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
         public MyDopeProposalVH(View itemView) {
             super(itemView);
-            Log.e("AdapterChat", "MyDopeProposalVH");
             avatarView = (ImageView) itemView.findViewById(R.id.chat_others_dope_proposal_avatar);
             usernameView = (TextView) itemView.findViewById(R.id.chat_others_dope_proposal_username);
             timeView = (TextView) itemView.findViewById(R.id.chat_others_dope_proposal_time);

@@ -29,11 +29,12 @@ public class GroupSettingsActivity extends AppCompatActivity implements View.OnC
     ProgressDialog mProgressDialog;
     HttpChat http;
     AdapterGroupSettings mAdapter;
-    RecyclerView mRecyclerView;
+    RecyclerViewWithMaxHeight mRecyclerView;
     public ConversationInfo mConversation;
     String mDialogId;
     private LinearLayout mAddMemberField;
     private LinearLayout mLeaveGroup;
+    public TextView mGroupName;
 
     // Replace these two vars with regular ones
     String page = "1";
@@ -47,12 +48,17 @@ public class GroupSettingsActivity extends AppCompatActivity implements View.OnC
 
         mDialogId = getIntent().getStringExtra("dialog_id");
 
+
+
         http = new HttpChat(GroupSettingsActivity.this);
         mAddMemberField = (LinearLayout) findViewById(R.id.profile_settings_fragment_contact_us);
         mAddMemberField.setOnClickListener(this);
         mLeaveGroup = (LinearLayout) findViewById(R.id.leave_group_container);
         mLeaveGroup.setOnClickListener(this);
-        mRecyclerView = (RecyclerView) findViewById(R.id.group_settings_members_list);
+        mGroupName = (TextView) findViewById(R.id.group_settings_group_name);
+        mRecyclerView = (RecyclerViewWithMaxHeight) findViewById(R.id.group_settings_members_list);
+        float maxHeight = getResources().getDimension(R.dimen.message_list_row_height);
+        mRecyclerView.setMaxHeight((int) (maxHeight*3));
         final LinearLayoutManager layoutManager = new LinearLayoutManager(GroupSettingsActivity.this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
@@ -77,6 +83,7 @@ public class GroupSettingsActivity extends AppCompatActivity implements View.OnC
         Log.d("Group Settings", "mConversation: "+mConversation);
         if (mConversation != null) {
             setDataToAdapter(mConversation);
+
         }else{
             http.getConversationList(Utilities.sToken, Utilities.sUid, page, count);
         }
@@ -144,6 +151,7 @@ public class GroupSettingsActivity extends AppCompatActivity implements View.OnC
         mAdapter.mMembers.remove(adapterPosition);
         mAdapter.notifyItemRemoved(adapterPosition);
         mConversation.members.remove(adapterPosition);
+        mAdapter.setGroupName();
 //        Utilities.sConversations
         if (Utilities.sConversations != null) {
             for (int i = 0; i < Utilities.sConversations.size(); i++) {

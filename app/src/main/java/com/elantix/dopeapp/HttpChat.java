@@ -424,10 +424,10 @@ public class HttpChat {
             GroupSettingsActivity activity = ((GroupSettingsActivity) mContext);
 
             if (result != null){
-                if ((boolean)result[0]){
-                    Utilities.showExtremelyShortToast(mContext, (String)result[1], 700);
-                    // Do stuff
-                    activity.removeMemberFromAdapter((String)result[3]);
+//                if ((boolean)result[0]){ Do not delete just yet
+                if (((String)result[1]).equals("User removed from dialog")){
+//                    Utilities.showExtremelyShortToast(mContext, (String)result[1], 700);
+                    activity.removeMemberFromAdapter((String)result[2]);
                 }else{
                     Toast.makeText(mContext, ""+result[1], Toast.LENGTH_SHORT).show();
                 }

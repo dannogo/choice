@@ -43,7 +43,6 @@
             android:background="@drawable/bottom_border_1_px"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/profile_settings_only_text_item_left_padding"
-            android:text="@string/profile_settings_fragment_restore_purchases"
             android:textColor="@color/black_text_color"
             android:textSize="@dimen/profile_settings_section_item_text_size" />
 
@@ -77,17 +76,17 @@
         android:background="@drawable/bottom_border_1_px_white_background"
         android:orientation="vertical">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/group_settings_members_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
-
-        <!--<com.elantix.dopeapp.RecyclerViewWithMaxHeight-->
+        <!--<android.support.v7.widget.RecyclerView-->
             <!--android:id="@+id/group_settings_members_list"-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="wrap_content"-->
             <!--/>-->
+
+        <com.elantix.dopeapp.RecyclerViewWithMaxHeight
+            android:id="@+id/group_settings_members_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
 
         <LinearLayout
             android:id="@+id/profile_settings_fragment_contact_us"

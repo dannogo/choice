@@ -158,7 +158,6 @@ public class HttpKit {
         task.execute(params);
     }
 
-    // Not in use currently
     public void logOut(String token) {
         LogOutTask task = new LogOutTask();
         task.execute(token);
@@ -246,11 +245,13 @@ public class HttpKit {
             } else if (params[0].equals("connected_email")) {
                 paramsStr += "username=" + params[2] + "&password=" + params[3];
             }
+            paramsStr += "&android_id="+Utilities.ANDROID_ID;
         } else if (purpose == POSTRequestPurpose.ChangePassword){
             paramsStr += "token=" + params[0] + "&oldpass=" + params[1] + "&password=" + params[2] + "&confirm=" + params[3];
         }else{
             paramsStr += "username=" + params[0];
         }
+
         Log.w("HttpKit POST", "url: "+urlStr);
         Log.w("HttpKit POST", "params: "+paramsStr);
         URL url;
@@ -1005,13 +1006,13 @@ public class HttpKit {
         }
     }
 
-    // Not in use currently
     public class LogOutTask extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... params) {
-            String urlStr = "http://api.svcontact.ru/users.logout?token=" + params[0];
-            String response = Utilities.RequestToServerGET(urlStr);
+            String urlStr = "http://dopeapi.elantix.net/";
+            String paramStr = "token=" + params[0]+"&android_id="+Utilities.ANDROID_ID;
+            String response = Utilities.requestToServerPOST(urlStr, paramStr);
 
             try {
                 JSONObject json = new JSONObject(response);

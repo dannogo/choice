@@ -2,16 +2,11 @@ package com.elantix.dopeapp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
-import android.util.Log;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import com.elantix.dopeapp.services.RegistrationService;
 
 /**
  * Created by oleh on 4/19/16.
@@ -36,6 +31,9 @@ public class AuthorizationRecognitionHiddenActivity extends AppCompatActivity {
 //        } catch (NoSuchAlgorithmException e) {
 //
 //        }
+        Utilities.ANDROID_ID = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
+        Intent i = new Intent(this, RegistrationService.class);
+        startService(i);
 
         SharedPreferences prefs = getSharedPreferences(Utilities.MY_PREFS_NAME, MODE_PRIVATE);
         String restoredToken = prefs.getString("token", null);

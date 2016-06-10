@@ -15,3 +15,12 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+buildTypes {
+     release {
+         runProguard false
+         proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+         -dontwarn android.webkit.**
+         -dontwarn com.immersion.**
+         -dontnote com.immersion.**
+     }
+ }

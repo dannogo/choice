@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -26,15 +27,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.desarrollodroide.libraryfragmenttransactionextended.FragmentTransactionExtended;
+import com.jirbo.adcolony.AdColony;
+import com.jirbo.adcolony.AdColonyAd;
+import com.jirbo.adcolony.AdColonyAdAvailabilityListener;
+import com.jirbo.adcolony.AdColonyAdListener;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
  * Created by oleh on 3/14/16.
  */
-public class MainActivity extends AppCompatActivity implements View.OnClickListener, FragmentViewPager.CommunicatorOne{
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,
+        FragmentViewPager.CommunicatorOne, AdColonyAdAvailabilityListener,
+        AdColonyAdListener{
 
     private Toolbar toolbar;
     private ImageView mLeftToolbarButton;
@@ -95,6 +101,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Utilities.sDopeListType = null;
         findViews();
         switchPageHandler(page);
+        AdColony.configure( this, "version:1.0,store:google", Utilities.ADCOLONY_APP_ID, Utilities.ADCOLONY_ZONE_ID);
+        AdColony.addAdAvailabilityListener(this);
 
     }
 
@@ -108,6 +116,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }else if (page == Page.FriendsDope){
             Utilities.sDopesFriendsFeed = dopes;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AdColony.resume(this);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        AdColony.pause();
     }
 
     @Override
@@ -825,6 +845,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             AlertDialog alertDialog = builder.create();
             alertDialog.show();
         }
+    }
+
+    @Override
+    public void onAdColonyAdAvailabilityChange(boolean b, String s) {
+
+    }
+
+    @Override
+    public void onAdColonyAdAttemptFinished(AdColonyAd adColonyAd) {
+
+    }
+
+    @Override
+    public void onAdColonyAdStarted(AdColonyAd adColonyAd) {
+
     }
 
     public enum Page{

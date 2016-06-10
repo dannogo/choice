@@ -25,6 +25,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -81,6 +82,11 @@ public class Utilities {
 
     public static RateStateBackup sRateStateBackups[] = new RateStateBackup[10];
     public static DopeListType sDopeListType;
+
+    public static final String ADCOLONY_APP_ID = "appfe8d7cd82e6d4e8f80";
+    public static final String ADCOLONY_ZONE_ID = "vzadc01d03c0db434790";
+    public static String ANDROID_ID;
+
 
     public enum DopeListType{
         Ten, Hundred, Friends
@@ -149,6 +155,7 @@ public class Utilities {
 
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setRequestMethod("GET");
+            con.setConnectTimeout(7000);
             int responseCode = con.getResponseCode();
             Log.w("StartLogin", "Sending 'GET' request to URL : " + url);
             Log.w("StartLogin", "Response Code : " + responseCode);
@@ -234,6 +241,7 @@ public class Utilities {
             connection.setUseCaches(false);
             connection.setDoInput(true);
             connection.setDoOutput(true);
+            connection.setConnectTimeout(7000);
 
             DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
             wr.writeBytes(paramsStr);

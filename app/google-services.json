@@ -1,0 +1,35 @@
+{
+  "project_info": {
+    "project_number": "651125322105",
+    "project_id": "dopeapp-15487"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:651125322105:android:3c635ea6c3d33323",
+        "android_client_info": {
+          "package_name": "com.elantix.dopeapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDq9UoHjPDHZi0XLPJAKUYf9A3cXdahdn4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -22,6 +22,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.elantix.dopeapp.entities.ChatMessage;
+import com.elantix.dopeapp.entities.ConversationInfo;
 
 import java.util.ArrayList;
 
@@ -39,6 +40,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
     private String mDialogId;
     private int mInterval = 20000;
     private Handler mHandler;
+    TextView mToolbarTitle;
 
     private Runnable mDialogUpdater = new Runnable() {
         @Override
@@ -73,12 +75,37 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
 
         findViews();
         http = new HttpChat(ChatActivity.this);
+        setGroupName();
 //        http.getDialogHistory(Utilities.sToken, mDialogId, String.valueOf(mPageNum), String.valueOf(mPageCount));
 //        updateChat();
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
         mHandler = new Handler();
+    }
+
+    public void setGroupName(){
+        if (Utilities.sConversations != null && !Utilities.sConversations.isEmpty() && mToolbarTitle != null){
+            for (int i=0; i<Utilities.sConversations.size(); i++){
+                if (Utilities.sConversations.get(i).dialogs_id.equals(mDialogId)){
+                    ConversationInfo conversation = Utilities.sConversations.get(i);
+                    String fullnameToshow = conversation.members.get(0).fullname;
+                    if (fullnameToshow.isEmpty() || fullnameToshow == null || fullnameToshow.equals("null")){
+                        fullnameToshow = conversation.members.get(0).username;
+                    }
+                    if (conversation.members.size() > 1){
+                        fullnameToshow += " + "+ (conversation.members.size()-1)+" Friend";
+                    }
+                    if(conversation.members.size() > 2){
+                        fullnameToshow += "s";
+                    }
+                    // set to toolbar
+                    mToolbarTitle.setText(fullnameToshow);
+                }
+            }
+
+        }
+
     }
 
 
@@ -141,8 +168,8 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         mLeftToolbarButton.setImageResource(R.drawable.toolbar_left_arrow);
         mLeftToolbarButton.setOnClickListener(this);
 
-        TextView toolbarTitle = (TextView) mToolbar.findViewById(R.id.toolbar_title);
-        toolbarTitle.setText("Name of friend(s)");
+        mToolbarTitle = (TextView) mToolbar.findViewById(R.id.toolbar_title);
+//        toolbarTitle.setText("Name of friend(s)");
 
         LinearLayout infoBar = (LinearLayout) findViewById(R.id.comments_info_bar);
         infoBar.setVisibility(View.GONE);
@@ -172,10 +199,14 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         http.getDialogHistory(Utilities.sToken, mDialogId, String.valueOf(mPageNum), String.valueOf(mPageCount));
     }
 
+
+
     @Override
     protected void onResume() {
         if (mDialogId != null){
             startRepeatingTask();
+//            setGroupName();
+
 //            updateChat();
 //            mRecyclerView.scrollToPosition(mAdapter.getItemCount()-1);
         }
@@ -193,6 +224,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == Utilities.LEAVE_GROUP){
+            setGroupName();
             if (resultCode == Activity.RESULT_OK) {
 //                if leave - finish this activity
                 finish();

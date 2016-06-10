@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.jirbo.adcolony.AdColonyVideoAd;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -29,6 +30,7 @@ public class AdapterProfileOverview extends RecyclerView.Adapter<AdapterProfileO
     private Context context;
     public ArrayList<DopeInfo> mDopes;
     private boolean mIsOwn;
+    private static int dopeCounterForAd = 1;
 
     public AdapterProfileOverview(Context context, DopeInfo[] dopes, boolean isOwn) {
         this.inflater = LayoutInflater.from(context);
@@ -95,6 +97,13 @@ public class AdapterProfileOverview extends RecyclerView.Adapter<AdapterProfileO
         @Override
         public void onClick(View v) {
             if (v.getId() == itemView.getId()) {
+                dopeCounterForAd++;
+                Log.e("AdapterProfileOverview", "dopeCounterForAd: "+dopeCounterForAd);
+                if (dopeCounterForAd >= 9){
+                    AdColonyVideoAd ad = new AdColonyVideoAd(Utilities.ADCOLONY_ZONE_ID).withListener((MainActivity)context);
+                    ad.show();
+                    dopeCounterForAd = 1;
+                }
                 Intent intent = new Intent(context, DopeStatisticsActivity.class);
 
                 int position = getAdapterPosition();

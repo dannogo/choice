@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +37,8 @@ public class AdapterGroupSettings extends RecyclerView.Adapter<AdapterGroupSetti
         this.context = context;
         http = new HttpChat(context);
 
-
         mMembers = new ArrayList<>(conversation.members);
+        setGroupName();
     }
 
     @Override
@@ -49,11 +50,27 @@ public class AdapterGroupSettings extends RecyclerView.Adapter<AdapterGroupSetti
 
     @Override
     public void onBindViewHolder(GroupViewHolder holder, int position) {
-        Glide.with(context).load(Uri.parse(mMembers.get(position).avatar))
-                .bitmapTransform(new CropCircleTransformation(context)).into(holder.avatar);
+        if (!mMembers.get(position).avatar.isEmpty() && mMembers.get(position).avatar != null && !mMembers.get(position).avatar.equals("null")) {
+            Glide.with(context).load(Uri.parse(mMembers.get(position).avatar))
+                    .bitmapTransform(new CropCircleTransformation(context)).into(holder.avatar);
+        }
         String fullname = (mMembers.get(position).fullname == null || mMembers.get(position).fullname.isEmpty()) ? mMembers.get(position).username : mMembers.get(position).fullname;
         holder.contactName.setText(fullname);
         holder.description.setText(mMembers.get(position).bio);
+    }
+
+    public void setGroupName(){
+        String fullnameToshow = mMembers.get(0).fullname;
+        if (fullnameToshow.isEmpty() || fullnameToshow == null || fullnameToshow.equals("null")){
+            fullnameToshow = mMembers.get(0).username;
+        }
+        if ( mMembers.size() > 1){
+            fullnameToshow += " + "+ (mMembers.size()-1)+" Friend";
+        }
+        if (mMembers.size() > 2){
+            fullnameToshow += "s";
+        }
+        ((GroupSettingsActivity)context).mGroupName.setText(fullnameToshow);
     }
 
     @Override
@@ -86,6 +103,8 @@ public class AdapterGroupSettings extends RecyclerView.Adapter<AdapterGroupSetti
             if (id == itemView.getId()){
                 // Show dialog with proposal to remove user from conversation
                 final GroupSettingsActivity activity = ((GroupSettingsActivity)context);
+                Log.e("AdapterGroupSettings", "creator_id: "+activity.mConversation.creator_id);
+                Log.e("AdapterGroupSettings", "Utilities.sUid: "+Utilities.sUid);
                 if (activity.mConversation.creator_id.equals(Utilities.sUid)){
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
                     builder.setTitle("Removing member");
