@@ -238,7 +238,13 @@ public class HttpKit {
             } else if (params[0].equals("twitter")) {
                 paramsStr += "tw_id=" + params[1] + "&email=" + params[2];
             } else if (params[0].equals("username")) {
-                paramsStr += "username=" + params[1] + "&password=" + params[2];
+                if (params[1].contains("@")){
+                    paramsStr += "email";
+                }else{
+                    paramsStr += "username";
+                }
+                paramsStr += "=" + params[1] + "&password=" + params[2];
+                Log.e("paramsStr", paramsStr);
             } else if (params[0].equals("connected_facebook") ||
                     params[0].equals("connected_twitter")) {
                 paramsStr += "username=" + params[3] + "&password=" + params[4];

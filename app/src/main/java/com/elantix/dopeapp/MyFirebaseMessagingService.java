@@ -5,14 +5,10 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.media.RingtoneManager;
 import android.net.Uri;
-//import android.support.v7.util.ThreadUtil;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import java.util.Map;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.support.v4.app.NotificationCompat;
@@ -54,7 +50,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                 .setContentText(notification.getBody());
         NotificationManager mNotificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
-//        mNotificationManager.cancel(MESSAGE_NOTIFICATION_ID);
+        mNotificationManager.cancel(MESSAGE_NOTIFICATION_ID);
 
         Notification noti = mBuilder.build();
 //        noti.flags |= Notification.FLAG_AUTO_CANCEL;
