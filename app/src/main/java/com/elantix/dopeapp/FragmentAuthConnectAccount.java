@@ -55,7 +55,7 @@ public class FragmentAuthConnectAccount extends Fragment implements View.OnClick
 
         mFacebookBtn.getIconImageObject().setLayoutParams(lp1);
         mTwitterBtn.getIconImageObject().setLayoutParams(lp2);
-        mEmailBtn.getIconImageObject().setLayoutParams(lp2);
+        mEmailBtn.getIconImageObject().setLayoutParams(lp1);
     }
 
     @Override

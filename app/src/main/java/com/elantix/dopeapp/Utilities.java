@@ -86,6 +86,7 @@ public class Utilities {
     public static final String ADCOLONY_APP_ID = "appfe8d7cd82e6d4e8f80";
     public static final String ADCOLONY_ZONE_ID = "vzadc01d03c0db434790";
     public static String ANDROID_ID;
+    public static String FirebaseCloudToken;
 
 
     public enum DopeListType{

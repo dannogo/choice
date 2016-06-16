@@ -5,6 +5,7 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -13,6 +14,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
+import com.elantix.dopeapp.services.MyFirebaseInstanceIDService;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -73,6 +75,16 @@ public class AuthActivity extends AppCompatActivity {
             mPage = AuthPage.SignInDope;
         }else{
             mPage = AuthPage.SetUsername;
+        }
+
+        if (Utilities.FirebaseCloudToken == null){
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    MyFirebaseInstanceIDService service = new MyFirebaseInstanceIDService();
+                    service.onTokenRefresh();
+                }
+            });
         }
 
         mArrowBtn = (ImageView) findViewById(R.id.auth_arrow);

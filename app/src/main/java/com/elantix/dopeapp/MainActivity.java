@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.desarrollodroide.libraryfragmenttransactionextended.FragmentTransactionExtended;
+import com.elantix.dopeapp.services.MyFirebaseInstanceIDService;
 import com.jirbo.adcolony.AdColony;
 import com.jirbo.adcolony.AdColonyAd;
 import com.jirbo.adcolony.AdColonyAdAvailabilityListener;
@@ -122,6 +123,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onResume() {
         super.onResume();
         AdColony.resume(this);
+//        MyFirebaseInstanceIDService service = new MyFirebaseInstanceIDService();
+//        service.onTokenRefresh();
     }
 
     @Override

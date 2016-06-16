@@ -99,7 +99,7 @@
                 android:layout_width="@dimen/profile_settings_section_item_height"
                 android:layout_height="@dimen/profile_settings_section_item_height"
                 android:padding="@dimen/profile_settings_section_item_icon_padding"
-                android:src="@drawable/profile_email_icon_blue" />
+                android:src="@drawable/add_member_plus_icon" />
 
             <LinearLayout
                 android:layout_width="match_parent"

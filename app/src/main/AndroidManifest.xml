@@ -25,35 +25,27 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:hardwareAccelerated="true"
-        android:name="android.support.multidex.MultiDexApplication"
         >
 
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="com.elantix.dopeapp" />
-            </intent-filter>
-        </receiver>
-
-        <service android:name=".services.RegistrationService"
-            android:exported="false" />
-
         <service
-            android:name=".services.TokenRefreshListenerService"
-            android:exported="false">
+            android:name="MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID" />
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
 
+        <!--<service-->
+            <!--android:name=".MyFirebaseMessagingService"-->
+            <!--android:exported="false" >-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.google.firebase.MESSAGING_EVENT" />-->
+            <!--</intent-filter>-->
+        <!--</service>-->
+
         <service
-            android:name=".services.NotificationsListenerService"
-            android:exported="false" >
+            android:name="services.MyFirebaseInstanceIDService">
             <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
         </service>
 
@@ -62,11 +54,7 @@
 
         <activity android:name="com.elantix.dopeapp.WelcomeActivity"
             android:screenOrientation="portrait">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
         </activity>
 
         <activity android:name="com.elantix.dopeapp.SignInActivity"
@@ -169,11 +157,7 @@
         <activity android:name=".GroupSettingsActivity"
             android:screenOrientation="portrait"
             >
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
         </activity>
 
         <activity android:name=".ChangePasswordActivity"

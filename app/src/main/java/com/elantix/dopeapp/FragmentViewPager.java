@@ -11,10 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.util.Util;
 import com.jirbo.adcolony.AdColonyVideoAd;
-
-import java.util.Arrays;
 
 /**
  * Created by oleh on 4/9/16.

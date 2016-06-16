@@ -2,16 +2,20 @@ package com.elantix.dopeapp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import com.elantix.dopeapp.services.MyFirebaseInstanceIDService;
 import com.elantix.dopeapp.services.RegistrationService;
 
 /**
  * Created by oleh on 4/19/16.
  */
 public class AuthorizationRecognitionHiddenActivity extends AppCompatActivity {
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,9 +35,19 @@ public class AuthorizationRecognitionHiddenActivity extends AppCompatActivity {
 //        } catch (NoSuchAlgorithmException e) {
 //
 //        }
+
         Utilities.ANDROID_ID = Settings.Secure.getString(getContentResolver(),Settings.Secure.ANDROID_ID);
-        Intent i = new Intent(this, RegistrationService.class);
-        startService(i);
+//        Intent i = new Intent(this, RegistrationService.class);
+//        startService(i);
+
+
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                MyFirebaseInstanceIDService service = new MyFirebaseInstanceIDService();
+                service.onTokenRefresh();
+            }
+        });
 
         SharedPreferences prefs = getSharedPreferences(Utilities.MY_PREFS_NAME, MODE_PRIVATE);
         String restoredToken = prefs.getString("token", null);

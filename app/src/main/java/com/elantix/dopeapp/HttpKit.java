@@ -245,7 +245,8 @@ public class HttpKit {
             } else if (params[0].equals("connected_email")) {
                 paramsStr += "username=" + params[2] + "&password=" + params[3];
             }
-            paramsStr += "&android_id="+Utilities.ANDROID_ID;
+//            paramsStr += "&android_id="+Utilities.ANDROID_ID;
+            paramsStr += "&android_id="+Utilities.FirebaseCloudToken;
         } else if (purpose == POSTRequestPurpose.ChangePassword){
             paramsStr += "token=" + params[0] + "&oldpass=" + params[1] + "&password=" + params[2] + "&confirm=" + params[3];
         }else{
@@ -1010,8 +1011,8 @@ public class HttpKit {
 
         @Override
         protected String doInBackground(String... params) {
-            String urlStr = "http://dopeapi.elantix.net/";
-            String paramStr = "token=" + params[0]+"&android_id="+Utilities.ANDROID_ID;
+            String urlStr = "http://dopeapi.elantix.net/users.logout";
+            String paramStr = "token=" + params[0]+"&android_id="+Utilities.FirebaseCloudToken;
             String response = Utilities.requestToServerPOST(urlStr, paramStr);
 
             try {

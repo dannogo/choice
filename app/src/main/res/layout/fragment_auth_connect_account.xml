@@ -65,7 +65,7 @@
         android:layout_marginTop="@dimen/auth_connect_account_margin_2"
         fancy:fb_defaultColor="@color/auth_connect_account_email_btn_default_color"
         fancy:fb_focusColor="@color/auth_connect_account_email_btn_focused_color"
-        fancy:fb_iconResource="@drawable/twitter"
+        fancy:fb_iconResource="@drawable/fancy_email_icon"
         fancy:fb_iconPosition="left"
         fancy:fb_radius="@dimen/buttons_corner_radius"
         fancy:fb_text="Link with Email       "

@@ -164,6 +164,7 @@ public class ChatActivity extends AppCompatActivity implements View.OnClickListe
         mNewCommentField.setHint("Write Message...");
         mLeftToolbarButton = (ImageButton) mToolbar.findViewById(R.id.left_button);
         mRightToolbarButton = (ImageButton) mToolbar.findViewById(R.id.right_button);
+        mRightToolbarButton.setImageResource(R.drawable.toolbar_info_icon);
         mRightToolbarButton.setOnClickListener(this);
         mLeftToolbarButton.setImageResource(R.drawable.toolbar_left_arrow);
         mLeftToolbarButton.setOnClickListener(this);
