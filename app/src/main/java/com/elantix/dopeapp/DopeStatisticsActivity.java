@@ -112,6 +112,8 @@ public class DopeStatisticsActivity extends AppCompatActivity implements View.On
             Intent intent = new Intent(DopeStatisticsActivity.this, CommentsActivity.class);
             intent.putExtra("dopeId", mDopeId);
             intent.putExtra("publisherId", mInfo.userId);
+            intent.putExtra("question", mInfo.question);
+            intent.putExtra("votesCnt", mInfo.votesAll);
             startActivity(intent);
         }else if (id == mShare.getId()){
 

@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -78,6 +79,8 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
         questionView.setText(question);
         votesView.setText(""+votesCnt+" Votes");
 
+
+
         mInfoBar = (LinearLayout) findViewById(R.id.comments_info_bar);
         int type = getIntent().getIntExtra("type", 0);
         switch (type){
@@ -85,6 +88,8 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
             case 1: mType = ChatType.Chat; break;
             case 2: mType = ChatType.GroupChat;
         }
+
+
 
         mRecyclerView = (RecyclerView) findViewById(R.id.comments_comment_list);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -176,6 +181,13 @@ public class CommentsActivity extends AppCompatActivity implements View.OnClickL
         mSendButton.setOnClickListener(this);
 
         mNewCommentField = (EditText) findViewById(R.id.comments_new_comment_field);
+        ImageButton plusButton = (ImageButton) findViewById(R.id.comments_plus_button);
+        plusButton.setVisibility(View.GONE);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mNewCommentField.getLayoutParams();
+        params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        mNewCommentField.setLayoutParams(params);
+
+
         mLeftToolbarButton = (ImageButton) mToolbar.findViewById(R.id.left_button);
         ImageButton rightToolbarButton = (ImageButton) mToolbar.findViewById(R.id.right_button);
         rightToolbarButton.setVisibility(View.GONE);
