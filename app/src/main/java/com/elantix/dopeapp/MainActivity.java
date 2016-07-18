@@ -10,7 +10,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -27,7 +26,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.desarrollodroide.libraryfragmenttransactionextended.FragmentTransactionExtended;
-import com.elantix.dopeapp.services.MyFirebaseInstanceIDService;
 import com.jirbo.adcolony.AdColony;
 import com.jirbo.adcolony.AdColonyAd;
 import com.jirbo.adcolony.AdColonyAdAvailabilityListener;
@@ -269,7 +267,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 ChainLink chainLinkProfile = new ChainLink(Page.Profile);
                 if (Utilities.sToken != null){
-                    mCurrentFragment = new FragmentProfileOverview();
+                    if (Utilities.decorStyle == Utilities.DecorStyle.First) {
+                        mCurrentFragment = new FragmentProfileOverview();
+                    }else {
+                        mCurrentFragment = new FragmentProfileOverview2();
+                    }
                     bundle = new Bundle();
                     bundle.putBoolean("own", true);
                     chainLinkProfile.bundleData.put("own", true);
@@ -287,7 +289,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case ProfileOverview:
                 ChainLink chainLinkProfileOverview = new ChainLink(Page.ProfileOverview);
-                mCurrentFragment = new FragmentProfileOverview();
+                if (Utilities.decorStyle == Utilities.DecorStyle.First) {
+                    mCurrentFragment = new FragmentProfileOverview();
+                }else {
+                    mCurrentFragment = new FragmentProfileOverview2();
+                }
                 bundle = new Bundle();
                 if (isRecovery){
                     HashMap<String, Object> bundleData = Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size()-1).bundleData;
@@ -457,7 +463,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case Profile:
                 if (Utilities.sToken != null){
-                    fragmentTo = new FragmentProfileOverview();
+                    if (Utilities.decorStyle == Utilities.DecorStyle.First) {
+                        fragmentTo = new FragmentProfileOverview();
+                    }else {
+                        fragmentTo = new FragmentProfileOverview2();
+                    }
                     bundle = new Bundle();
                     bundle.putBoolean("own", true);
                     fragmentTo.setArguments(bundle);
@@ -466,7 +476,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 break;
             case ProfileOverview:
-                fragmentTo = new FragmentProfileOverview();
+                if (Utilities.decorStyle == Utilities.DecorStyle.First) {
+                    fragmentTo = new FragmentProfileOverview();
+                }else {
+                    fragmentTo = new FragmentProfileOverview2();
+                }
                 bundle = new Bundle();
                 bundle.putBoolean("own", false);
                 fragmentTo.setArguments(bundle);
@@ -714,7 +728,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }else if(id == profileLL.getId()){
             if (page != Page.Profile){
-//                Utilities.sFragmentHistory.clear();
+                Utilities.sFragmentHistory.clear();
                 mListUserId = null;
                 switchPageHandler(Page.Profile);
             }
@@ -738,6 +752,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
+//    public void profileLLCLickAction(){
+//        mListUserId = null;
+//        switchPageHandler(Page.Profile);
+//    }
 
     private void checkLowertabItem(Page page){
         switch (page){

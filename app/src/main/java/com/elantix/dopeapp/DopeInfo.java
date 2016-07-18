@@ -18,6 +18,7 @@ public class DopeInfo {
     String question;
     Uri photo1;
     Uri photo2;
+    Uri photoSoc;
     String dateCreate;
     String top10;
     String top100;

@@ -34,6 +34,9 @@ import android.widget.Toast;
 
 import com.desarrollodroide.libraryfragmenttransactionextended.FragmentTransactionExtended;
 import com.elantix.dopeapp.entities.ConversationInfo;
+import com.facebook.FacebookSdk;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -87,10 +90,29 @@ public class Utilities {
     public static final String ADCOLONY_ZONE_ID = "vzadc01d03c0db434790";
 //    public static String ANDROID_ID;
     public static String FirebaseCloudToken;
+    public static DecorStyle decorStyle = DecorStyle.First;
+
+    public enum DecorStyle{
+        First, Second
+    }
 
 
     public enum DopeListType{
         Ten, Hundred, Friends
+    }
+
+//    public static void shareOnFacebook(Activity context, String link, DopeInfo dopeInfo){
+    public static void shareOnFacebook(Activity context, String link, Uri image, String description){
+        FacebookSdk.sdkInitialize(context);
+        ShareLinkContent content = new ShareLinkContent.Builder()
+                .setContentUrl(Uri.parse(link))
+                .setImageUrl(image)
+                .setContentDescription(description)
+                .setContentTitle(context.getResources().getString(R.string.app_name))
+                .build();
+
+        ShareDialog dialog = new ShareDialog(context);
+        dialog.show(content, ShareDialog.Mode.AUTOMATIC);
     }
 
     public static Bitmap createTrimmedBitmap(Bitmap bmp) {

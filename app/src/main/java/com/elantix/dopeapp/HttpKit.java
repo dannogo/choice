@@ -1,5 +1,6 @@
 package com.elantix.dopeapp;
 
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -803,9 +804,17 @@ public class HttpKit {
             }else{
 
             }
+
             if (activity.mCurrentFragment instanceof FragmentProfileOverview){
                 ((FragmentProfileOverview)activity.mCurrentFragment).drawUserDopesPanel((DopeInfo[])result);
+            }else if (activity.mCurrentFragment instanceof FragmentProfileOverview2){
+                ((FragmentProfileOverview2)activity.mCurrentFragment).drawUserDopesPanel((DopeInfo[])result);
             }
+////            if (activity.mCurrentFragment instanceof FragmentProfileOverview){
+//            if (activity.mCurrentFragment instanceof FragmentProfileOverview2){
+////                ((FragmentProfileOverview)activity.mCurrentFragment).drawUserDopesPanel((DopeInfo[])result);
+//                ((FragmentProfileOverview2)activity.mCurrentFragment).drawUserDopesPanel((DopeInfo[])result);
+//            }
             activity.mAnotherProgressDialog.dismiss();
         }
     }
@@ -910,8 +919,13 @@ public class HttpKit {
             if (result instanceof String) {
                 Toast.makeText(mContext, "" + result, Toast.LENGTH_SHORT).show();
             } else {
-                if (((MainActivity) mContext).mCurrentFragment instanceof FragmentProfileOverview) {
-                    ((FragmentProfileOverview) ((MainActivity) mContext).mCurrentFragment).setInfo((ProfileInfo) result);
+
+                Fragment curFrag = ((MainActivity) mContext).mCurrentFragment;
+                if (curFrag instanceof FragmentProfileOverview) {
+                    ((FragmentProfileOverview) curFrag).setInfo((ProfileInfo) result);
+                }else if (curFrag instanceof FragmentProfileOverview2)
+                if (curFrag instanceof FragmentProfileOverview2) {
+                    ((FragmentProfileOverview2) curFrag).setInfo((ProfileInfo) result);
                 }
             }
 
@@ -1393,9 +1407,18 @@ public class HttpKit {
 
             if (result != null){
                 if ((boolean)result[0]){
+
                     if (activity.mCurrentFragment instanceof FragmentProfileOverview){
                         ((FragmentProfileOverview) activity.mCurrentFragment).handleDopeDeleting(Integer.parseInt((String) result[2]));
+                    }else if (activity.mCurrentFragment instanceof FragmentProfileOverview2){
+                        ((FragmentProfileOverview2) activity.mCurrentFragment).handleDopeDeleting(Integer.parseInt((String) result[2]));
                     }
+
+////                    if (activity.mCurrentFragment instanceof FragmentProfileOverview){
+//                    if (activity.mCurrentFragment instanceof FragmentProfileOverview2){
+////                        ((FragmentProfileOverview) activity.mCurrentFragment).handleDopeDeleting(Integer.parseInt((String) result[2]));
+//                        ((FragmentProfileOverview2) activity.mCurrentFragment).handleDopeDeleting(Integer.parseInt((String) result[2]));
+//                    }
                     Utilities.showExtremelyShortToast(mContext, ""+result[1], 300);
                 }else {
                     Toast.makeText(mContext, "" + result[1], Toast.LENGTH_SHORT).show();
@@ -1672,7 +1695,7 @@ public class HttpKit {
             super.onPostExecute(result);
             ((MainActivity) mContext).mProgressDialog.dismiss();
 
-            if (result != null && result[0] != null) {
+            if (result != null && result.length > 0 && result[0] != null) {
                 if (result[0] instanceof String) {
                     Toast.makeText(mContext, "" + result[0], Toast.LENGTH_LONG).show();
                 } else {
@@ -1692,8 +1715,6 @@ public class HttpKit {
         }
     }
 
-
-
     public class GetDopesTask extends AsyncTask<String, Void, Object[]> {
 
         @Override
@@ -1707,6 +1728,36 @@ public class HttpKit {
 
 //            String urlStr = "http://api.svcontact.ru/dopes.day10";
             String urlStr = "http://dopeapi.elantix.net/dopes.day10";
+//            String paramStr = "";
+
+//            if (params[0].equals("100")) {
+//                urlStr += "0";
+//                if (params[1] != null) {
+//                    paramStr += "token=" + params[1];
+//                }
+//                if (params[2] != null) {
+//                    if (!isLastQuestionMark(urlStr)) {
+//                        paramStr += "&";
+//                    }
+//                    paramStr += "p=" + params[2];
+//                }
+//                if (params[3] != null) {
+//                    if (!isLastQuestionMark(urlStr)) {
+//                        paramStr += "&";
+//                    }
+//                    paramStr += "count=" + params[3];
+//                }
+//            } else {
+//                if (params[1] != null) {
+//                    paramStr += "token=" + params[1];
+//                }
+//                if (params[2] != null) {
+//                    if (!isLastQuestionMark(urlStr)) {
+//                        paramStr += "&";
+//                    }
+//                    paramStr += "timeday=" + params[2];
+//                }
+//            }
             if (params[0].equals("100")) {
                 urlStr += "0?";
                 if (params[1] != null) {
@@ -1738,6 +1789,7 @@ public class HttpKit {
             }
 
             String response = Utilities.RequestToServerGET(urlStr);
+//            String response = Utilities.requestToServerPOST(urlStr, paramStr);
 
             try {
                 JSONObject json = new JSONObject(response);
@@ -1758,6 +1810,7 @@ public class HttpKit {
                         dopeInfo.question = item.getString("question");
                         dopeInfo.photo1 = Uri.parse(item.getString("photo1"));
                         dopeInfo.photo2 = Uri.parse(item.getString("photo2"));
+                        dopeInfo.photoSoc = Uri.parse(item.getString("photoSoc"));
                         dopeInfo.dateCreate = item.getString("date_cteate");
                         dopeInfo.top10 = item.getString("top10");
                         dopeInfo.top100 = item.getString("top100");
@@ -1792,7 +1845,7 @@ public class HttpKit {
             super.onPostExecute(result);
             ((MainActivity) mContext).mProgressDialog.dismiss();
 
-            if (result != null && result[0] != null) {
+            if (result != null && result.length > 0 && (result[0] != null)) {
                 if (result[0] instanceof String) {
                     Toast.makeText(mContext, "" + result[0], Toast.LENGTH_LONG).show();
                 } else {

@@ -48,8 +48,6 @@ public class GroupSettingsActivity extends AppCompatActivity implements View.OnC
 
         mDialogId = getIntent().getStringExtra("dialog_id");
 
-
-
         http = new HttpChat(GroupSettingsActivity.this);
         mAddMemberField = (LinearLayout) findViewById(R.id.profile_settings_fragment_contact_us);
         mAddMemberField.setOnClickListener(this);

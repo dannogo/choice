@@ -103,7 +103,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
                     public void success(Result<TwitterSession> twitterSessionResult) {
                         TwitterSession sessionData = twitterSessionResult.data;
                         String uid = String.valueOf(sessionData.getUserId());
-                        Log.w("WelcomeActivity", "userId: " + uid);
+                        Log.w("WelcomeActivity", "twitter userId: " + uid);
                         String username = sessionData.getUserName();
 //                        Log.w("WelcomeActivity", "username: " + username);
                         sessionData.getAuthToken();
@@ -111,6 +111,9 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
 
                         HttpKit http = new HttpKit(WelcomeActivity.this);
                         String[] params = {"twitter", uid, null};
+                        for (int i=0; i<params.length; i++){
+                            Log.d("onTwitterLogin", "param "+i+": "+params[i]);
+                        }
                         http.checkUsername("tw_" + uid, "twitter", params);
 
 //                        TwitterAuthClient authClient = new TwitterAuthClient();

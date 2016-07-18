@@ -18,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.util.Util;
@@ -30,7 +31,7 @@ import mehdi.sakout.fancybuttons.FancyButton;
 /**
  * Created by oleh on 3/31/16.
  */
-public class FragmentProfileOverview extends Fragment implements View.OnClickListener{
+public class FragmentProfileOverview extends Fragment implements View.OnClickListener, View.OnLongClickListener{
 
     private View mFragmentView;
     private CircularImageView mAvatar;
@@ -52,9 +53,6 @@ public class FragmentProfileOverview extends Fragment implements View.OnClickLis
     private String uid;
     private AdapterProfileOverview adapter;
 
-    // TODO:
-    // rename variable for Following/Edit_Profile buttons
-    // change icon in Edit Profile button
 
     @Nullable
     @Override
@@ -80,6 +78,7 @@ public class FragmentProfileOverview extends Fragment implements View.OnClickLis
         mNoDopesButton.setOnClickListener(this);
 
         mAvatar = (CircularImageView) mFragmentView.findViewById(R.id.profile_overview_avatar);
+        mAvatar.setOnLongClickListener(this);
         mAvatarPlaceHolder = (ImageView) mFragmentView.findViewById(R.id.profile_settings_user_icon);
         mRecyclerView = (RecyclerView) mFragmentView.findViewById(R.id.profile_overview_posted_dopes_list);
 
@@ -277,5 +276,18 @@ public class FragmentProfileOverview extends Fragment implements View.OnClickLis
 
             }
         }
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+
+        for (ChainLink chainLink : Utilities.sFragmentHistory){
+            Log.e("ProfileOverview", "fragment: "+chainLink.fragment);
+        }
+
+        Utilities.decorStyle = Utilities.DecorStyle.Second;
+        Toast.makeText(getActivity(), "Switch to NEW decor style", Toast.LENGTH_SHORT).show();
+        ((MainActivity)getActivity()).switchPageHandler(Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size() - 1).fragment, true);
+        return true;
     }
 }

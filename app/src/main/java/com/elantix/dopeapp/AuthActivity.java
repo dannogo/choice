@@ -14,7 +14,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import com.elantix.dopeapp.services.MyFirebaseInstanceIDService;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
@@ -208,10 +207,25 @@ public class AuthActivity extends AppCompatActivity {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+//        Fragment fragment = getFragmentManager()
+//                .findFragmentByTag("SignInDope");
+//        if (fragment != null) {
+//            fragment.onActivityResult(requestCode, resultCode, data);
+//        }
+        if (mCurrentFragment instanceof FragmentAuthSignInDope) {
+            mCurrentFragment.onActivityResult(requestCode, resultCode, data);
+        }
+
         if (FacebookSdk.isFacebookRequestCode(requestCode)) {
             callbackManager.onActivityResult(requestCode, resultCode, data);
         }else {
 //            twitterAuthClient.onActivityResult(requestCode, resultCode, data);
+            if (resultCode == Activity.RESULT_OK) {
+                Log.e("onActivityResult", "TWITTER OK");
+            }else{
+                Log.e("onActivityResult", "TWITTER CANCEL");
+            }
         }
     }
 
@@ -232,7 +246,7 @@ public class AuthActivity extends AppCompatActivity {
             public void success(Result<TwitterSession> twitterSessionResult) {
                 TwitterSession sessionData = twitterSessionResult.data;
                 String uid = String.valueOf(sessionData.getUserId());
-                Log.w("WelcomeActivity", "userId: " + uid);
+                Log.w("AuthActivity", "twitter userId: " + uid);
                 String username = sessionData.getUserName();
 //                Log.w("WelcomeActivity", "username: " + username);
                 sessionData.getAuthToken();

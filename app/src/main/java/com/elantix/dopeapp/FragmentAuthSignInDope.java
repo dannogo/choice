@@ -66,7 +66,9 @@ public class FragmentAuthSignInDope extends Fragment implements View.OnClickList
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        twitterAuthClient= new TwitterAuthClient();
+        Log.d("AuthSignInDope", "onViewCreated");
+
+//        twitterAuthClient= new TwitterAuthClient();
 
         mTwitterBtn.setOnClickListener(new View.OnClickListener() {
 
@@ -136,6 +138,7 @@ public class FragmentAuthSignInDope extends Fragment implements View.OnClickList
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+            Log.e("FragmentAuthSignInDope", "onActivityResult");
         if (requestCode == Utilities.SIGN_IN) {
             if(resultCode == Activity.RESULT_OK){
                 ((AuthActivity)getActivity()).afterLoginAction();

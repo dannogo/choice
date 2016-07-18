@@ -32,7 +32,7 @@
         </service>
 
         <service
-            android:name="services.MyFirebaseInstanceIDService">
+            android:name=".MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
@@ -185,6 +185,10 @@
         <activity android:name="com.jirbo.adcolony.AdColonyBrowser"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" />
+
+        <provider android:authorities="com.facebook.app.FacebookContentProvider897214493734192"
+            android:name="com.facebook.FacebookContentProvider"
+            android:exported="true"/>
 
     </application>
 

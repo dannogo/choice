@@ -19,6 +19,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.facebook.FacebookSdk;
+import com.facebook.share.model.ShareLinkContent;
+import com.facebook.share.widget.ShareDialog;
 
 import java.io.File;
 
@@ -34,6 +37,7 @@ public class ShareDopeActivity extends AppCompatActivity implements View.OnClick
     public TextView mLinkField;
     public ProgressDialog mProgressDialog;
     public String mLink;
+    FancyButton mFacebookBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +99,9 @@ public class ShareDopeActivity extends AppCompatActivity implements View.OnClick
             }
         });
 
+        mFacebookBtn = (FancyButton) findViewById(R.id.share_panel_facebook_button);
+        mFacebookBtn.setOnClickListener(this);
+
 
 
     }
@@ -108,6 +115,8 @@ public class ShareDopeActivity extends AppCompatActivity implements View.OnClick
             android.content.ClipData clip = android.content.ClipData.newPlainText("dopeLink", mLink);
             clipMan.setPrimaryClip(clip);
             Toast.makeText(ShareDopeActivity.this, "Link to dope copied to clipboard", Toast.LENGTH_SHORT).show();
+        }else if (id == mFacebookBtn.getId()){
+            Utilities.shareOnFacebook(ShareDopeActivity.this, mLink, mCurItem.photoSoc, mCurItem.question);
         }
     }
 

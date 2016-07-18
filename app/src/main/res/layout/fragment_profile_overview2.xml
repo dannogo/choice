@@ -1,0 +1,504 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fancy="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/profile_settings_background_color">
+
+    <LinearLayout
+        android:id="@+id/profile_overview_main_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical"
+        android:padding="30dp"
+        >
+        <!--android:gravity="center_horizontal"-->
+        <!--android:layout_marginBottom="@dimen/profile_overview_margin_6"-->
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
+
+            <!--Avatar-->
+            <RelativeLayout
+                android:id="@+id/profile_settings_avatar_container"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/profile_settings_avatar_outer_circle"
+                android:gravity="center">
+                <!--android:layout_marginTop="@dimen/profile_overview_margin_1"-->
+
+                <RelativeLayout
+                    android:visibility="visible"
+                    android:layout_height="wrap_content"
+                    android:layout_width="wrap_content"
+                    android:background="@drawable/profile_settings_avatar_inner_circle"
+                    android:gravity="center">
+
+                    <com.mikhaellopez.circularimageview.CircularImageView
+                        android:visibility="gone"
+                        android:id="@+id/profile_overview_avatar"
+                        android:layout_width="@dimen/profile_settings_avatar_inner_circle_diameter"
+                        android:layout_height="@dimen/profile_settings_avatar_inner_circle_diameter"
+                        app:civ_border_color="#fff"
+                        app:civ_border_width="0dp"
+                        />
+
+                    <ImageView
+                        android:id="@+id/profile_settings_user_icon"
+                        android:visibility="gone"
+                        android:layout_width="@dimen/profile_settings_avatar_user_icon_size"
+                        android:layout_height="@dimen/profile_settings_avatar_user_icon_size"
+                        android:src="@drawable/profile_user_icon_white"
+                        />
+                    <!--android:layout_centerInParent="true"-->
+
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <!--Avatar above-->
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/profile_overview_numbers_panel_height"
+                android:orientation="horizontal">
+                <!--android:background="@drawable/top_bottom_type_2"-->
+                <!--android:layout_marginTop="@dimen/profile_overview_margin_5"-->
+
+                <!--Dopes-->
+                <LinearLayout
+                    android:id="@+id/profile_overview_dopes_info"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.333"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/profile_overview_number_of_dopes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="@dimen/profile_overview_number_text_size"
+                        android:textColor="@color/main_screen_question_font_color"
+                        android:layout_marginBottom="@dimen/profile_overview_distance_between_number_and_description"
+                        />
+
+                    <TextView
+                        android:id="@+id/profile_overview_number_of_dopes_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Dopes"
+                        android:textSize="@dimen/profile_overview_number_description_text_size"
+                        android:textColor="@color/friends_desription_text_color"
+                        />
+
+                </LinearLayout>
+
+                <!--Followers-->
+                <LinearLayout
+                    android:id="@+id/profile_overview_followers_info"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.333"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+                    <!--android:background="@drawable/left_right_border_1_px"-->
+
+                    <TextView
+                        android:id="@+id/profile_overview_number_of_followERS"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="@dimen/profile_overview_number_text_size"
+                        android:textColor="@color/main_screen_question_font_color"
+                        android:layout_marginBottom="@dimen/profile_overview_distance_between_number_and_description"
+                        />
+
+                    <TextView
+                        android:id="@+id/profile_overview_number_of_followERS_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Followers"
+                        android:textSize="@dimen/profile_overview_number_description_text_size"
+                        android:textColor="@color/friends_desription_text_color"
+                        />
+
+                </LinearLayout>
+
+                <!--Followings-->
+                <LinearLayout
+                    android:id="@+id/profile_overview_followings_info"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="0.333"
+                    android:clickable="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/profile_overview_number_of_followINGS"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0"
+                        android:textSize="@dimen/profile_overview_number_text_size"
+                        android:textColor="@color/main_screen_question_font_color"
+                        android:layout_marginBottom="@dimen/profile_overview_distance_between_number_and_description"
+                        />
+
+                    <TextView
+                        android:id="@+id/profile_overview_number_of_followINGS_description"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Following"
+                        android:textSize="@dimen/profile_overview_number_description_text_size"
+                        android:textColor="@color/friends_desription_text_color"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/profile_overview_margin_4"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <mehdi.sakout.fancybuttons.FancyButton
+                        android:id="@+id/profile_overview_follow_button"
+                        android:layout_width="@dimen/profile_overview_buttons_width"
+                        android:layout_height="@dimen/profile_overview_buttons_height"
+                        android:layout_centerInParent="true"
+                        android:background="#BBB"
+                        android:paddingRight="4dp"
+                        fancy:fb_defaultColor="@color/lower_bar_active_color"
+                        fancy:fb_focusColor="@color/friends_search_button_focus_color"
+                        fancy:fb_iconPosition="left"
+                        fancy:fb_iconResource="@drawable/white_plus"
+                        fancy:fb_radius="@dimen/buttons_corner_radius"
+                        fancy:fb_text="@string/profile_overview_left_button_text"
+                        fancy:fb_textColor="@color/white_text_color"
+                        fancy:fb_textSize="@dimen/profile_overview_buttons_text_size" />
+
+                    <!--<View-->
+                        <!--android:layout_width="@dimen/profile_overview_disctance_between_buttons"-->
+                        <!--android:layout_height="@dimen/profile_overview_buttons_height" />-->
+
+                    <!--<mehdi.sakout.fancybuttons.FancyButton-->
+                        <!--android:id="@+id/profile_overview_share_profile_button"-->
+                        <!--android:layout_width="@dimen/profile_overview_buttons_width"-->
+                        <!--android:layout_height="@dimen/profile_overview_buttons_height"-->
+                        <!--android:gravity="center_vertical"-->
+                        <!--fancy:fb_borderColor="@color/friends_search_button_primary_color"-->
+                        <!--fancy:fb_borderWidth="@dimen/search_friends_ghost_button_border_width"-->
+                        <!--fancy:fb_defaultColor="@color/lower_bar_active_color"-->
+                        <!--fancy:fb_focusColor="@color/friends_search_button_focus_color"-->
+                        <!--fancy:fb_ghost="true"-->
+                        <!--fancy:fb_radius="@dimen/buttons_corner_radius"-->
+                        <!--fancy:fb_text="@string/profile_overview_right_button_text"-->
+                        <!--fancy:fb_textColor="@color/main_screen_question_font_color"-->
+                        <!--fancy:fb_textSize="@dimen/profile_overview_buttons_text_size"-->
+                        <!--fancy:fb_iconPosition="left"-->
+                        <!--fancy:fb_iconResource="@drawable/white_plus"-->
+                        <!--/>-->
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!--&lt;!&ndash;Avatar&ndash;&gt;-->
+        <!--<RelativeLayout-->
+            <!--android:id="@+id/profile_settings_avatar_container"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="@dimen/profile_overview_margin_1"-->
+            <!--android:background="@drawable/profile_settings_avatar_outer_circle"-->
+            <!--android:gravity="center">-->
+
+            <!--<RelativeLayout-->
+                <!--android:visibility="visible"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:background="@drawable/profile_settings_avatar_inner_circle"-->
+                <!--android:gravity="center">-->
+
+                <!--<com.mikhaellopez.circularimageview.CircularImageView-->
+                    <!--android:visibility="gone"-->
+                    <!--android:id="@+id/profile_overview_avatar"-->
+                    <!--android:layout_width="@dimen/profile_settings_avatar_inner_circle_diameter"-->
+                    <!--android:layout_height="@dimen/profile_settings_avatar_inner_circle_diameter"-->
+                    <!--app:civ_border_color="#fff"-->
+                    <!--app:civ_border_width="0dp"-->
+                    <!--/>-->
+
+                <!--<ImageView-->
+                    <!--android:id="@+id/profile_settings_user_icon"-->
+                    <!--android:visibility="gone"-->
+                    <!--android:layout_width="@dimen/profile_settings_avatar_user_icon_size"-->
+                    <!--android:layout_height="@dimen/profile_settings_avatar_user_icon_size"-->
+                    <!--android:src="@drawable/profile_user_icon_white"-->
+                    <!--/>-->
+                <!--&lt;!&ndash;android:layout_centerInParent="true"&ndash;&gt;-->
+
+            <!--</RelativeLayout>-->
+        <!--</RelativeLayout>-->
+
+        <!--&lt;!&ndash;Avatar above&ndash;&gt;-->
+
+        <TextView
+            android:id="@+id/profile_overview_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/profile_overview_margin_2"
+            android:textSize="@dimen/profile_overview_user_name_text_size"
+            android:textColor="@color/main_screen_question_font_color"
+            android:textStyle="bold"
+            />
+
+        <TextView
+            android:id="@+id/profile_overview_user_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/profile_overview_margin_3"
+            android:textSize="@dimen/profile_overview_user_name_description_text_size"
+            android:textColor="@color/friends_desription_text_color"
+            />
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginTop="@dimen/profile_overview_margin_4"-->
+            <!--android:gravity="center"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--<mehdi.sakout.fancybuttons.FancyButton-->
+                <!--android:id="@+id/profile_overview_follow_button"-->
+                <!--android:layout_width="@dimen/profile_overview_buttons_width"-->
+                <!--android:layout_height="@dimen/profile_overview_buttons_height"-->
+                <!--android:layout_centerInParent="true"-->
+                <!--android:background="#BBB"-->
+                <!--android:paddingRight="4dp"-->
+                <!--fancy:fb_defaultColor="@color/lower_bar_active_color"-->
+                <!--fancy:fb_focusColor="@color/friends_search_button_focus_color"-->
+                <!--fancy:fb_iconPosition="left"-->
+                <!--fancy:fb_iconResource="@drawable/white_plus"-->
+                <!--fancy:fb_radius="@dimen/buttons_corner_radius"-->
+                <!--fancy:fb_text="@string/profile_overview_left_button_text"-->
+                <!--fancy:fb_textColor="@color/white_text_color"-->
+                <!--fancy:fb_textSize="@dimen/profile_overview_buttons_text_size" />-->
+
+            <!--<View-->
+                <!--android:layout_width="@dimen/profile_overview_disctance_between_buttons"-->
+                <!--android:layout_height="@dimen/profile_overview_buttons_height" />-->
+
+            <!--<mehdi.sakout.fancybuttons.FancyButton-->
+                <!--android:id="@+id/profile_overview_share_profile_button"-->
+                <!--android:layout_width="@dimen/profile_overview_buttons_width"-->
+                <!--android:layout_height="@dimen/profile_overview_buttons_height"-->
+                <!--android:gravity="center_vertical"-->
+                <!--fancy:fb_borderColor="@color/friends_search_button_primary_color"-->
+                <!--fancy:fb_borderWidth="@dimen/search_friends_ghost_button_border_width"-->
+                <!--fancy:fb_defaultColor="@color/lower_bar_active_color"-->
+                <!--fancy:fb_focusColor="@color/friends_search_button_focus_color"-->
+                <!--fancy:fb_ghost="true"-->
+                <!--fancy:fb_radius="@dimen/buttons_corner_radius"-->
+                <!--fancy:fb_text="@string/profile_overview_right_button_text"-->
+                <!--fancy:fb_textColor="@color/main_screen_question_font_color"-->
+                <!--fancy:fb_textSize="@dimen/profile_overview_buttons_text_size"-->
+                <!--fancy:fb_iconPosition="left"-->
+                <!--fancy:fb_iconResource="@drawable/white_plus"-->
+                <!--/>-->
+
+
+        <!--</LinearLayout>-->
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="@dimen/profile_overview_numbers_panel_height"-->
+            <!--android:layout_marginTop="@dimen/profile_overview_margin_5"-->
+            <!--android:background="@drawable/top_bottom_type_2"-->
+            <!--android:orientation="horizontal">-->
+
+            <!--&lt;!&ndash;Dopes&ndash;&gt;-->
+            <!--<LinearLayout-->
+                <!--android:id="@+id/profile_overview_dopes_info"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="0.333"-->
+                <!--android:clickable="true"-->
+                <!--android:gravity="center"-->
+                <!--android:orientation="vertical">-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/profile_overview_number_of_dopes"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="180"-->
+                    <!--android:textSize="@dimen/profile_overview_number_text_size"-->
+                    <!--android:textColor="@color/main_screen_question_font_color"-->
+                    <!--android:layout_marginBottom="@dimen/profile_overview_distance_between_number_and_description"-->
+                    <!--/>-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/profile_overview_number_of_dopes_description"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Dopes"-->
+                    <!--android:textSize="@dimen/profile_overview_number_description_text_size"-->
+                    <!--android:textColor="@color/friends_desription_text_color"-->
+                    <!--/>-->
+
+            <!--</LinearLayout>-->
+
+            <!--&lt;!&ndash;Followers&ndash;&gt;-->
+            <!--<LinearLayout-->
+                <!--android:id="@+id/profile_overview_followers_info"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="0.333"-->
+                <!--android:background="@drawable/left_right_border_1_px"-->
+                <!--android:clickable="true"-->
+                <!--android:gravity="center"-->
+                <!--android:orientation="vertical">-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/profile_overview_number_of_followERS"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="0"-->
+                    <!--android:textSize="@dimen/profile_overview_number_text_size"-->
+                    <!--android:textColor="@color/main_screen_question_font_color"-->
+                    <!--android:layout_marginBottom="@dimen/profile_overview_distance_between_number_and_description"-->
+                    <!--/>-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/profile_overview_number_of_followERS_description"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Followers"-->
+                    <!--android:textSize="@dimen/profile_overview_number_description_text_size"-->
+                    <!--android:textColor="@color/friends_desription_text_color"-->
+                    <!--/>-->
+
+            <!--</LinearLayout>-->
+
+            <!--&lt;!&ndash;Followings&ndash;&gt;-->
+            <!--<LinearLayout-->
+                <!--android:id="@+id/profile_overview_followings_info"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="match_parent"-->
+                <!--android:layout_weight="0.333"-->
+                <!--android:clickable="true"-->
+                <!--android:gravity="center"-->
+                <!--android:orientation="vertical">-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/profile_overview_number_of_followINGS"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="0"-->
+                    <!--android:textSize="@dimen/profile_overview_number_text_size"-->
+                    <!--android:textColor="@color/main_screen_question_font_color"-->
+                    <!--android:layout_marginBottom="@dimen/profile_overview_distance_between_number_and_description"-->
+                    <!--/>-->
+
+                <!--<TextView-->
+                    <!--android:id="@+id/profile_overview_number_of_followINGS_description"-->
+                    <!--android:layout_width="wrap_content"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:text="Following"-->
+                    <!--android:textSize="@dimen/profile_overview_number_description_text_size"-->
+                    <!--android:textColor="@color/friends_desription_text_color"-->
+                    <!--/>-->
+
+            <!--</LinearLayout>-->
+
+        <!--</LinearLayout>-->
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/profile_overview_there_are_no_dopes"
+        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/profile_overview_created_dopes_panel_height"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_alignParentBottom="true"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profile_overview_there_are_no_dopes_text_1"
+            android:textSize="@dimen/profile_overview_number_description_text_size"
+            android:textColor="@color/friends_desription_text_color"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profile_overview_there_are_no_dopes_text_2"
+            android:textSize="@dimen/profile_overview_number_description_text_size"
+            android:textColor="@color/friends_desription_text_color"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/profile_overview_there_are_no_dopes_text_3"
+            android:textSize="@dimen/profile_overview_number_description_text_size"
+            android:textColor="@color/friends_desription_text_color"
+            android:layout_marginBottom="@dimen/profile_overview_there_are_no_dopes_button_margin_top"
+            />
+
+        <!--FnacyButton-->
+        <!--android:layout_marginTop="@dimen/friends_profile_message_margin_4"-->
+        <!--android:paddingLeft="20dp"-->
+        <!--android:paddingRight="20dp"-->
+        <mehdi.sakout.fancybuttons.FancyButton
+            android:id="@+id/profile_overview_there_are_no_dopes_button"
+            android:layout_width="@dimen/profile_overview_there_are_no_dopes_button_width"
+            android:layout_height="@dimen/button_height"
+            android:paddingBottom="10dp"
+            android:paddingTop="10dp"
+            fancy:fb_defaultColor="@color/friends_search_button_primary_color"
+            fancy:fb_focusColor="@color/friends_search_button_focus_color"
+            fancy:fb_iconPosition="left"
+            fancy:fb_radius="@dimen/buttons_corner_radius"
+            fancy:fb_text="@string/profile_overview_there_are_no_dopes_create_first_dope_button_text"
+            fancy:fb_textSize="@dimen/button_text_size"
+            fancy:fb_textColor="@color/white_text_color" />
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/profile_overview_posted_dopes_list"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/profile_overview_margin_6"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/profile_overview_created_dopes_panel_height"
+        android:background="@drawable/top_border_1_px_white"
+        android:layout_below="@+id/profile_overview_main_panel"
+        android:layout_alignParentBottom="true"
+        android:paddingTop="@dimen/profile_overview_recycler_view_padding"
+        android:paddingLeft="@dimen/profile_overview_recycler_view_padding"
+        android:paddingRight="@dimen/profile_overview_recycler_view_padding"
+        >
+
+    </android.support.v7.widget.RecyclerView>
+
+</RelativeLayout>

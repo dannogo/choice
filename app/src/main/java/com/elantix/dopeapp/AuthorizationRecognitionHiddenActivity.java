@@ -6,8 +6,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
-import com.elantix.dopeapp.services.MyFirebaseInstanceIDService;
-
 /**
  * Created by oleh on 4/19/16.
  */

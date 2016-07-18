@@ -142,7 +142,7 @@
                         android:id="@+id/profile_overview_number_of_dopes"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="180"
+                        android:text="0"
                         android:textSize="@dimen/profile_overview_number_text_size"
                         android:textColor="@color/main_screen_question_font_color"
                         android:layout_marginBottom="@dimen/profile_overview_distance_between_number_and_description"

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.facebook.internal.AttributionIdentifiers;
+import com.facebook.internal.Utility;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import org.w3c.dom.Text;
@@ -33,6 +34,9 @@ public class ShareProfileActivity extends AppCompatActivity implements View.OnCl
     private ImageView mAvatarPlaceholder;
     private TextView mUsername;
     private TextView mFirstLastNames;
+    private FancyButton mFacebookBtn;
+    private String mLink;
+    private String username;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,12 @@ public class ShareProfileActivity extends AppCompatActivity implements View.OnCl
         buttonsAppearenceHandling();
         mCloseButton = (ImageButton) findViewById(R.id.share_profile_left_toolbar_button);
         mCloseButton.setOnClickListener(this);
+        mFacebookBtn = (FancyButton) findViewById(R.id.share_panel_facebook_button);
+        mFacebookBtn.setOnClickListener(this);
+
+        TextView linkField = (TextView) findViewById(R.id.share_profile_link_text);
+        mLink = "http://dopeapi.elantix.net/user/"+Utilities.sCurProfile.id;
+        linkField.setText(mLink);
 
         mUsername = (TextView) findViewById(R.id.share_profile_user_name);
         mFirstLastNames = (TextView) findViewById(R.id.share_profile_first_last_names);
@@ -62,7 +72,7 @@ public class ShareProfileActivity extends AppCompatActivity implements View.OnCl
             mAvatar.setVisibility(View.GONE);
             mAvatarPlaceholder.setVisibility(View.VISIBLE);
         }
-        String username = (Utilities.sCurProfile.username.isEmpty()) ? getResources().getString(R.string.profile_settings_username_placeholder_text) : Utilities.sCurProfile.username;
+        username = (Utilities.sCurProfile.username.isEmpty()) ? getResources().getString(R.string.profile_settings_username_placeholder_text) : Utilities.sCurProfile.username;
         mUsername.setText(username);
         String firstLastNames = (Utilities.sCurProfile.fullname.isEmpty()) ? getResources().getString(R.string.profile_settings_firstlastnames_placeholder_text) : Utilities.sCurProfile.fullname;
         mFirstLastNames.setText(firstLastNames);
@@ -86,6 +96,8 @@ public class ShareProfileActivity extends AppCompatActivity implements View.OnCl
         int id = v.getId();
         if (id == mCloseButton.getId()){
             finish();
+        }else if(id == mFacebookBtn.getId()){
+            Utilities.shareOnFacebook(ShareProfileActivity.this, mLink, Uri.parse(Utilities.sCurProfile.avatar), username);
         }
     }
 }
