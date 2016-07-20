@@ -46,4 +46,19 @@
         android:layout_marginRight="@dimen/toolbar_button_right_margin"
         />
 
+    <ImageButton
+        android:id="@+id/right_button_2"
+        android:layout_width="@dimen/toolbar_button_size"
+        android:layout_height="@dimen/toolbar_button_size"
+        android:background="@android:color/transparent"
+        android:layout_gravity="right"
+        android:src="@drawable/toolbar_upload_icon_ios_style"
+        android:adjustViewBounds="true"
+        android:padding="@dimen/toolbar_button_padding"
+        android:cropToPadding="false"
+        android:scaleType="centerInside"
+        android:layout_marginRight="@dimen/toolbar_button_right_margin"
+        android:visibility="gone"
+        />
+
 </android.support.v7.widget.Toolbar>

@@ -76,6 +76,11 @@
     <string name="main_activity_context_option_3_text">Report this Post</string>
     <string name="main_activity_context_option_cancel_text">Cancel</string>
 
+    <string name="main_activity_profile_option_1_text">Share Profile</string>
+    <string name="main_activity_profile_option_2_text">Block User</string>
+    <string name="main_activity_profile_option_3_text">Report User</string>
+    <string name="main_activity_profile_option_cancel_text">Cancel</string>
+
     <string name="profile_overview_left_button_text">Follow</string>
     <string name="profile_overview_right_button_text">Share in Socials</string>
     <string name="profile_overview_dummy_user_name">Anya@</string>

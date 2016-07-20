@@ -1,6 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/context_options_outer_background_color"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/context_options_horizontal_padding"
+    android:paddingRight="@dimen/context_options_horizontal_padding"
+    android:paddingTop="@dimen/context_options_top_padding"
+    android:paddingBottom="@dimen/context_options_bottom_padding"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rounded_rectangle"
+        android:orientation="vertical"
+        >
+
+        <RelativeLayout
+            android:id="@+id/profile_options_1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/context_options_height"
+            android:clickable="true"
+            >
+
+            <TextView
+                android:id="@+id/profile_options_1_textview"
+                style="@style/ContextOptionsTextStyle"
+                android:text="@string/context_options_take_photo" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/profile_options_2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/context_options_height"
+            android:background="@drawable/context_options_top_bottom_border"
+            >
+
+            <TextView
+                android:id="@+id/profile_options_2_textview"
+                style="@style/ContextOptionsTextStyle"
+                android:text="@string/context_options_choose_from_library" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/profile_options_3"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/context_options_height"
+            >
+
+            <TextView
+                android:id="@+id/profile_options_3_textview"
+                style="@style/ContextOptionsTextStyle"
+                android:text="@string/context_options_search_web" />
+
+        </RelativeLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/profile_options_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/context_options_cancel_height"
+        android:layout_marginTop="@dimen/context_options_cancel_button_top_margin"
+        android:background="@drawable/rounded_rectangle">
+
+        <TextView
+            android:id="@+id/profile_options_cancel_textview"
+            style="@style/ContextOptionsTextStyle"
+            android:text="@string/context_options_cancel"
+            android:textColor="@color/context_options_cancel_bottom_text_color"
+            />
+
+    </RelativeLayout>
 
 </LinearLayout>

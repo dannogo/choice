@@ -3,40 +3,76 @@
     android:layout_width="match_parent"
     android:layout_height="150dp"
     android:orientation="vertical"
-    android:padding="5dp"
-    >
+    android:padding="5dp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="0.7"
-        android:orientation="horizontal">
-        <ImageView
-            android:id="@+id/profile_overview_row_image_1"
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            />
+        android:layout_weight="0.7">
 
-        <ImageView
-            android:id="@+id/profile_overview_row_image_2"
-            android:layout_width="0dp"
-            android:layout_weight="0.5"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            />
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/profile_overview_row_image_1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:scaleType="centerCrop" />
 
-    </LinearLayout>
+            <ImageView
+                android:id="@+id/profile_overview_row_image_2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.5"
+                android:scaleType="centerCrop" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/profile_overview_featured_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/profile_overview_recycler_view_item_overlay_color"
+            android:gravity="center"
+            android:visibility="gone"
+            >
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                >
+
+                <ImageView
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/diamond_for_choice"
+                    />
+
+                <TextView
+                    android:layout_marginTop="3dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Featured"
+                    android:textSize="14sp"
+                    android:textColor="@android:color/white"
+                    />
+
+            </LinearLayout>
+        </RelativeLayout>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/profile_overview_list_row_percentage_panel"
-        android:layout_marginTop="5dp"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="5dp"
         android:layout_weight="0.3"
-        >
+        android:visibility="gone">
 
         <TextView
             android:id="@+id/profile_overview_row_percent_left"
@@ -46,8 +82,7 @@
             android:gravity="center"
             android:text="0%"
             android:textColor="@color/black_text_color"
-            android:textSize="12sp"
-            />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/profile_overview_row_percent_right"
@@ -57,26 +92,24 @@
             android:gravity="center"
             android:text="0%"
             android:textColor="@color/black_text_color"
-            android:textSize="12sp"
-            />
+            android:textSize="12sp" />
 
     </LinearLayout>
 
     <TextView
         android:id="@+id/profile_overview_list_row_question"
-        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.3"
-        android:gravity="center_vertical"
-        android:text="@string/fish_question"
         android:ellipsize="end"
-        android:singleLine="false"
+        android:gravity="center_vertical"
         android:maxLines="2"
         android:paddingLeft="6dp"
         android:paddingRight="6dp"
-        android:textSize="@dimen/profile_overview_recycler_view_item_text_size"
+        android:singleLine="false"
+        android:text="@string/fish_question"
         android:textColor="@color/profile_overview_recycler_view_item_text_color"
-        />
+        android:textSize="@dimen/profile_overview_recycler_view_item_text_size"
+        android:visibility="gone" />
 
 </LinearLayout>

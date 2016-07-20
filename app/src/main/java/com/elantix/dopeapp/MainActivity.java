@@ -43,7 +43,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Toolbar toolbar;
     private ImageView mLeftToolbarButton;
-    private ImageView mRightToolbarButton;
+    public ImageView mRightToolbarButton;
+    public ImageView mRightToolbarButton2;
     private LinearLayout lowerTab;
 
     private LinearLayout dailyDopeLL;
@@ -76,6 +77,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RelativeLayout mContextOptionsReportPost;
     private RelativeLayout mContextOptionsCancel;
 
+    private LinearLayout mProfileOptionsPanel;
+    private RelativeLayout mProfileOptionsShareProfile;
+    private RelativeLayout mProfileOptionsBlockUser;
+    private RelativeLayout mProfileOptionsReportUser;
+    private RelativeLayout mProfileOptionsCancel;
+
     public Fragment mCurrentFragment;
     public Fragment mPreviousFragment;
 
@@ -86,6 +93,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     Page page = Page.Daily;
     private boolean isContextOptionsPanelShown = false;
+    public boolean isProfileOptionsPanelShown = false;
     public String mListUserId = null;
 
     @Override
@@ -159,6 +167,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         toolbarTitle = (TextView) toolbar.findViewById(R.id.toolbar_title);
         mLeftToolbarButton = (ImageView) toolbar.findViewById(R.id.left_button);
         mRightToolbarButton = (ImageView) toolbar.findViewById(R.id.right_button);
+        mRightToolbarButton2 = (ImageView) toolbar.findViewById(R.id.right_button_2);
         lowerTab = (LinearLayout) findViewById(R.id.lower_tab);
 
         dailyDopeLL = (LinearLayout) findViewById(R.id.daily_dope_linlay);
@@ -173,6 +182,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         profileLL.setOnClickListener(this);
 
         prepareContextOptionsViews();
+        prepareProfileOptionsViews();
 
     }
 
@@ -303,16 +313,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                 }else {
 
+                    // NOT TESTED UNDER
                     DopeInfo curItem;
                     if (Utilities.sDopeListType == Utilities.DopeListType.Ten) {
-                        curItem = Utilities.sDopes10[mContextOptionsDopeNum];
+//                        Log.e("MainActivity", "Utilities.sDopes10: "+Utilities.sDopes10);
+//                        if (Utilities.sDopes10.length > mContextOptionsDopeNum) {
+                            curItem = Utilities.sDopes10[mContextOptionsDopeNum];
+//                        }
                     } else if (Utilities.sDopeListType == Utilities.DopeListType.Hundred){
-                        curItem = Utilities.sDopes100[mContextOptionsDopeNum];
+//                        if (Utilities.sDopes100.length > mContextOptionsDopeNum) {
+                            curItem = Utilities.sDopes100[mContextOptionsDopeNum];
+//                        }
                     }else {
-                        curItem = Utilities.sDopesFriendsFeed[mContextOptionsDopeNum];
+//                        if(Utilities.sDopesFriendsFeed.length > mContextOptionsDopeNum) {
+                            curItem = Utilities.sDopesFriendsFeed[mContextOptionsDopeNum];
+//                        }
                     }
 
+//                    Log.e("MainActivity", "mListUserId: "+mListUserId);
+
                     String userId = (mListUserId == null) ? curItem.userId : mListUserId;
+
                     boolean isOwn = (userId.equals(Utilities.sUid)) ? true : false;
                     bundle.putBoolean("own", isOwn);
                     bundle.putString("uid", userId);
@@ -517,7 +538,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mCurrentFragment = fragmentTo;
     }
 
-    private void launchCommentsActivity(){
+    public void launchCommentsActivity(){
         Intent intent = new Intent(MainActivity.this, MessageActivity.class);
         startActivity(intent);
     }
@@ -527,6 +548,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case Daily:
                 toolbarTitle.setText(R.string.lower_tab_daily_dope);
                 mLeftToolbarButton.setVisibility(View.GONE);
+                mRightToolbarButton2.setVisibility(View.GONE);
                 mRightToolbarButton.setVisibility(View.VISIBLE);
                 mRightToolbarButton.setImageResource(R.drawable.dir_message);
                 mRightToolbarButton.setOnClickListener(new View.OnClickListener() {
@@ -539,6 +561,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case Tranding:
                 toolbarTitle.setText(R.string.lower_tab_tranding);
                 mLeftToolbarButton.setVisibility(View.GONE);
+                mRightToolbarButton2.setVisibility(View.GONE);
                 mRightToolbarButton.setVisibility(View.VISIBLE);
                 mRightToolbarButton.setImageResource(R.drawable.dir_message);
                 mRightToolbarButton.setOnClickListener(new View.OnClickListener() {
@@ -551,6 +574,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case Friends:
                 toolbarTitle.setText(R.string.lower_tab_friends);
                 mLeftToolbarButton.setVisibility(View.GONE);
+                mRightToolbarButton2.setVisibility(View.GONE);
                 mRightToolbarButton.setVisibility(View.VISIBLE);
                 mRightToolbarButton.setImageResource(R.drawable.dir_message);
                 mRightToolbarButton.setOnClickListener(new View.OnClickListener() {
@@ -563,6 +587,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case FriendsSearch:
                 toolbarTitle.setText(R.string.search_friends_toolbar_title);
                 mLeftToolbarButton.setVisibility(View.VISIBLE);
+                mRightToolbarButton2.setVisibility(View.GONE);
                 mRightToolbarButton.setVisibility(View.GONE);
                 mLeftToolbarButton.setImageResource(R.drawable.toolbar_left_arrow);
                 mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
@@ -585,6 +610,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case FriendsDope:
                 toolbarTitle.setText(R.string.lower_tab_friends);
                 mLeftToolbarButton.setVisibility(View.VISIBLE);
+                mRightToolbarButton2.setVisibility(View.GONE);
                 mRightToolbarButton.setVisibility(View.VISIBLE);
                 mRightToolbarButton.setImageResource(R.drawable.dir_message);
                 mRightToolbarButton.setOnClickListener(new View.OnClickListener() {
@@ -604,6 +630,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case Profile:
                 toolbarTitle.setText(R.string.lower_tab_profile);
                 mLeftToolbarButton.setVisibility(View.VISIBLE);
+                mRightToolbarButton2.setVisibility(View.GONE);
                 if(Utilities.sToken != null) {
                     mRightToolbarButton.setVisibility(View.VISIBLE);
                 }else {
@@ -622,6 +649,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 break;
             case ProfileOverview:
                 mLeftToolbarButton.setVisibility(View.VISIBLE);
+                mRightToolbarButton2.setVisibility(View.GONE);
                 mRightToolbarButton.setVisibility(View.GONE);
                 mLeftToolbarButton.setImageResource(R.drawable.toolbar_left_arrow);
                 mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
@@ -639,6 +667,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case ProfileFollowers:
                 toolbarTitle.setText(R.string.profile_followers_toolbar_title);
                 mLeftToolbarButton.setVisibility(View.VISIBLE);
+                mRightToolbarButton2.setVisibility(View.GONE);
                 mRightToolbarButton.setVisibility(View.GONE);
                 mLeftToolbarButton.setImageResource(R.drawable.toolbar_left_arrow);
                 mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
@@ -660,6 +689,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case ProfileFollowings:
                 toolbarTitle.setText(R.string.profile_following_toolbar_title);
                 mLeftToolbarButton.setVisibility(View.VISIBLE);
+                mRightToolbarButton2.setVisibility(View.GONE);
                 mRightToolbarButton.setVisibility(View.VISIBLE);
                 mLeftToolbarButton.setImageResource(R.drawable.toolbar_left_arrow);
                 mRightToolbarButton.setImageResource(R.drawable.toolbar_magnifier_icon);
@@ -679,6 +709,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case ProfileSettings:
                 toolbarTitle.setText(R.string.profile_settings_toolbar_title);
                 mLeftToolbarButton.setVisibility(View.VISIBLE);
+                mRightToolbarButton2.setVisibility(View.GONE);
                 mRightToolbarButton.setVisibility(View.GONE);
                 mLeftToolbarButton.setImageResource(R.drawable.toolbar_left_arrow);
                 mLeftToolbarButton.setOnClickListener(new View.OnClickListener() {
@@ -749,14 +780,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //            intent.putExtra("post_id", 10);
             intent.putExtra("dopeNum", mContextOptionsDopeNum);
             startActivityForResult(intent, REPORT_POST_REQUEST_CODE);
+        }else if (id == mProfileOptionsShareProfile.getId()){
+            Intent intent = new Intent(MainActivity.this, ShareProfileActivity.class);
+            startActivity(intent);
+            showProfileOptions(false, null);
+        }else if (id == mProfileOptionsBlockUser.getId()){
+            showProfileOptions(false, null);
+        }else if (id == mProfileOptionsReportUser.getId()){
+            showProfileOptions(false, null);
+        }else if (id == mProfileOptionsCancel.getId()){
+            showProfileOptions(false, null);
+        }else if (id == mOverlay.getId()){
+            showProfileOptions(false, null);
         }
 
     }
 
-//    public void profileLLCLickAction(){
-//        mListUserId = null;
-//        switchPageHandler(Page.Profile);
-//    }
 
     private void checkLowertabItem(Page page){
         switch (page){
@@ -848,7 +887,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onBackPressed() {
         if (isContextOptionsPanelShown) {
             showContextOptions(false, null);
-        }else {
+        }else if(isProfileOptionsPanelShown){
+            showProfileOptions(false, null);
+        } else {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setMessage("Are you sure you want to exit?");
             builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -904,6 +945,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void prepareContextOptionsViews(){
         mContextOptionsPanel = (LinearLayout) findViewById(R.id.main_activity_context_options_panel);
         mOverlay = findViewById(R.id.main_activity_overlay);
+        mOverlay.setOnClickListener(this);
 
         TextView optionOneTextView = (TextView) mContextOptionsPanel.findViewById(R.id.context_options_1_textview);
         TextView optionTwoTextView = (TextView) mContextOptionsPanel.findViewById(R.id.context_options_2_textview);
@@ -927,18 +969,33 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    /**
-     * Shows and Hides context options panel
-     * @param show
-     */
-    protected void showContextOptions(Boolean show, Integer dopeNum){
+    private void prepareProfileOptionsViews(){
+        mProfileOptionsPanel = (LinearLayout) findViewById(R.id.main_activity_profile_options_panel);
 
-        if (dopeNum != null) {
-            mContextOptionsDopeNum = dopeNum;
-        }
+        TextView optionOneTextView = (TextView) mProfileOptionsPanel.findViewById(R.id.profile_options_1_textview);
+        TextView optionTwoTextView = (TextView) mProfileOptionsPanel.findViewById(R.id.profile_options_2_textview);
+        TextView optionThreeTextView = (TextView) mProfileOptionsPanel.findViewById(R.id.profile_options_3_textview);
+        TextView optionCancelTextView = (TextView) mProfileOptionsPanel.findViewById(R.id.profile_options_cancel_textview);
 
-        if (show){
-            isContextOptionsPanelShown = true;
+        optionOneTextView.setText(R.string.main_activity_profile_option_1_text);
+        optionTwoTextView.setText(R.string.main_activity_profile_option_2_text);
+        optionThreeTextView.setText(R.string.main_activity_profile_option_3_text);
+        optionCancelTextView.setText(R.string.main_activity_profile_option_cancel_text);
+
+        mProfileOptionsShareProfile = (RelativeLayout) mProfileOptionsPanel.findViewById(R.id.profile_options_1);
+        mProfileOptionsBlockUser = (RelativeLayout) mProfileOptionsPanel.findViewById(R.id.profile_options_2);
+        mProfileOptionsReportUser = (RelativeLayout) mProfileOptionsPanel.findViewById(R.id.profile_options_3);
+        mProfileOptionsCancel = (RelativeLayout) mProfileOptionsPanel.findViewById(R.id.profile_options_cancel);
+
+        mProfileOptionsShareProfile.setOnClickListener(this);
+        mProfileOptionsBlockUser.setOnClickListener(this);
+        mProfileOptionsReportUser.setOnClickListener(this);
+        mProfileOptionsCancel.setOnClickListener(this);
+
+    }
+
+    private void showHideOverlay(boolean show){
+        if (show) {
             WindowManager.LayoutParams mLP = new WindowManager.LayoutParams(
                     WindowManager.LayoutParams.MATCH_PARENT,
                     Utilities.getStatusBarHeight(MainActivity.this),
@@ -952,7 +1009,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
                     PixelFormat.TRANSLUCENT);
 
-            mLP.gravity =  Gravity.TOP|Gravity.CENTER;
+            mLP.gravity = Gravity.TOP | Gravity.CENTER;
 
             mWindowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
             mStatusBarOverlay = new View(MainActivity.this);
@@ -964,17 +1021,53 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mWindowManager.addView(mStatusBarOverlay, mLP);
 
             mOverlay.setVisibility(View.VISIBLE);
+        }else{
+            if(mStatusBarOverlay.getWindowToken() != null){
+                mWindowManager.removeView(mStatusBarOverlay);
+            }
+            mOverlay.setVisibility(View.GONE);
+        }
+    }
 
+    public void showProfileOptions(Boolean show, Integer profileId){
+        showHideOverlay(show);
+
+        if (show){
+            isProfileOptionsPanelShown = true;
+
+            Animation bottomUp = AnimationUtils.loadAnimation(MainActivity.this,
+                    R.anim.bottom_up);
+            mProfileOptionsPanel.startAnimation(bottomUp);
+            mProfileOptionsPanel.setVisibility(View.VISIBLE);
+        }else{
+            isProfileOptionsPanelShown = false;
+            Animation bottomDown = AnimationUtils.loadAnimation(MainActivity.this,
+                    R.anim.bottom_down);
+            mProfileOptionsPanel.startAnimation(bottomDown);
+            mProfileOptionsPanel.setVisibility(View.GONE);
+        }
+    }
+
+    /**
+     * Shows and Hides context options panel
+     * @param show
+     */
+    protected void showContextOptions(Boolean show, Integer dopeNum){
+
+        if (dopeNum != null) {
+            mContextOptionsDopeNum = dopeNum;
+        }
+
+        showHideOverlay(show);
+
+        if (show){
+            isContextOptionsPanelShown = true;
             Animation bottomUp = AnimationUtils.loadAnimation(MainActivity.this,
                     R.anim.bottom_up);
             mContextOptionsPanel.startAnimation(bottomUp);
             mContextOptionsPanel.setVisibility(View.VISIBLE);
         }else{
             isContextOptionsPanelShown = false;
-            mWindowManager.removeView(mStatusBarOverlay);
-
-            mOverlay.setVisibility(View.GONE);
-
             Animation bottomDown = AnimationUtils.loadAnimation(MainActivity.this,
                     R.anim.bottom_down);
             mContextOptionsPanel.startAnimation(bottomDown);

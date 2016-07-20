@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -58,6 +59,12 @@ public class AdapterProfileOverview extends RecyclerView.Adapter<AdapterProfileO
             holder.mQuestion.setVisibility(View.VISIBLE);
         }
 
+        if (mDopes.get(position).top10.equals("1") || mDopes.get(position).top100.equals("1")){
+            holder.mOverlay.setVisibility(View.VISIBLE);
+        }else{
+            holder.mOverlay.setVisibility(View.GONE);
+        }
+
         Glide.with(context).load(mDopes.get(position).photo1).thumbnail(0.05f).into(holder.mImage1);
         Glide.with(context).load(mDopes.get(position).photo2).thumbnail(0.05f).into(holder.mImage2);
 
@@ -80,6 +87,7 @@ public class AdapterProfileOverview extends RecyclerView.Adapter<AdapterProfileO
         private LinearLayout mPercentagePanel;
         private TextView mPercentLeft;
         private TextView mPercentRight;
+        private RelativeLayout mOverlay;
 
         public ProfViewHolder(View itemView) {
             super(itemView);
@@ -89,6 +97,7 @@ public class AdapterProfileOverview extends RecyclerView.Adapter<AdapterProfileO
             mPercentagePanel = (LinearLayout) itemView.findViewById(R.id.profile_overview_list_row_percentage_panel);
             mPercentLeft = (TextView) itemView.findViewById(R.id.profile_overview_row_percent_left);
             mPercentRight = (TextView) itemView.findViewById(R.id.profile_overview_row_percent_right);
+            mOverlay = (RelativeLayout) itemView.findViewById(R.id.profile_overview_featured_overlay);
             itemView.setOnClickListener(this);
             itemView.setOnLongClickListener(this);
 

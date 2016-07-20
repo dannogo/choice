@@ -108,24 +108,30 @@
 
     <dimen name="profile_overview_margin_1">13dp</dimen>
     <dimen name="profile_overview_margin_2">5dp</dimen>
-    <dimen name="profile_overview_margin_3">0dp</dimen>
+    <dimen name="profile2_overview_margin_2">20dp</dimen>
+    <dimen name="profile_overview_margin_3">3dp</dimen>
     <dimen name="profile_overview_margin_4">12dp</dimen>
     <dimen name="profile_overview_margin_5">21dp</dimen>
     <dimen name="profile_overview_margin_6">10dp</dimen>
+    <dimen name="profile_overview2_margin_7">15dp</dimen>
 
     <dimen name="profile_overview_circular_avatar_size">115dp</dimen>
     <dimen name="profile_overview_circular_avatar_outer_border_shape_size">117dp</dimen>
 
     <dimen name="profile_overview_numbers_panel_height">56dp</dimen>
     <dimen name="profile_overview_user_name_text_size">18sp</dimen>
+    <dimen name="profile_overview2_user_name_text_size">16sp</dimen>
     <dimen name="profile_overview_user_name_description_text_size">13sp</dimen>
     <dimen name="profile_overview_number_text_size">18sp</dimen>
+    <dimen name="profile_overview2_number_text_size">23sp</dimen>
     <dimen name="profile_overview_number_description_text_size">13sp</dimen>
     <dimen name="profile_overview_distance_between_number_and_description">-2dp</dimen>
 
     <dimen name="profile_overview_buttons_width">122dp</dimen>
     <dimen name="profile_overview_buttons_height">31dp</dimen>
+    <dimen name="profile_overview2_buttons_height">35dp</dimen>
     <dimen name="profile_overview_buttons_text_size">11sp</dimen>
+    <dimen name="profile_overview2_buttons_text_size">12sp</dimen>
     <dimen name="profile_overview_disctance_between_buttons">10dp</dimen>
     <dimen name="profile_overview_recycler_view_item_text_size">11sp</dimen>
     <dimen name="profile_overview_recycler_view_padding">5dp</dimen>
@@ -193,8 +199,13 @@
     <dimen name="profile_settings_text_in_between_sections_size">14sp</dimen>
     <dimen name="profile_settings_avatar_outer_circle_diameter">116dp</dimen>
     <dimen name="profile_settings_avatar_inner_circle_diameter">106dp</dimen>
+
+    <dimen name="profile2_settings_avatar_outer_circle_diameter">100dp</dimen>
+    <dimen name="profile2_settings_avatar_inner_circle_diameter">92dp</dimen>
+
     <dimen name="profile_settings_avatar_camera_icon_size">42dp</dimen>
     <dimen name="profile_settings_avatar_user_icon_size">60dp</dimen>
+    <dimen name="profile2_settings_avatar_user_icon_size">55dp</dimen>
 
     <dimen name="profile_overview_created_dopes_panel_height">200dp</dimen>
     <dimen name="profile_overview_there_are_no_dopes_button_width">280dp</dimen>

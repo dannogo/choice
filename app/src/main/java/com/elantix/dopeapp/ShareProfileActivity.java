@@ -13,8 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.facebook.internal.AttributionIdentifiers;
-import com.facebook.internal.Utility;
+//import com.facebook.internal.AttributionIdentifiers;
+//import com.facebook.internal.Utility;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import org.w3c.dom.Text;

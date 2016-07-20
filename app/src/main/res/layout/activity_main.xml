@@ -50,4 +50,12 @@
         android:visibility="gone"
         />
 
+    <include layout="@layout/profile_options"
+        android:id="@+id/main_activity_profile_options_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="gone"
+        />
+
 </RelativeLayout>

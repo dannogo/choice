@@ -64,6 +64,8 @@
 
     <!--<color name="profile_overview_recycler_view_item_text_color">#9FA8A9</color>-->
     <color name="profile_overview_recycler_view_item_text_color">#798081</color>
+    <color name="profile_overview_recycler_view_item_overlay_color">#9d030303</color>
+    <!--<color name="profile_overview_recycler_view_item_overlay_color">#98fdfdfd</color>-->
     <color name="report_post_red_ring_color">#E14A42</color>
     <color name="report_post_cause_options_panel_background_color">#010a2b2e</color>
     <color name="report_post_second_cause_top_bottom_borders_color">#45FFFFFF</color>

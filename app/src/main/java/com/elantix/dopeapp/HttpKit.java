@@ -86,6 +86,17 @@ public class HttpKit {
         task.execute(params);
     }
 
+    public void reportUser(String token, String user_id, String report_id){
+        String[] params = {token, user_id, report_id};
+        ReportUserTask task = new ReportUserTask();
+        task.execute(params);
+    }
+
+    public void getReportStatus(String token){
+        ReportStatusTask task = new ReportStatusTask();
+        task.execute(token);
+    }
+
     public void changePassword(String token, String oldPass, String newPass, String confirmPass) {
         String[] params = {token, oldPass, newPass, confirmPass};
         ChangePasswordTask task = new ChangePasswordTask();
@@ -1414,16 +1425,90 @@ public class HttpKit {
                         ((FragmentProfileOverview2) activity.mCurrentFragment).handleDopeDeleting(Integer.parseInt((String) result[2]));
                     }
 
-////                    if (activity.mCurrentFragment instanceof FragmentProfileOverview){
-//                    if (activity.mCurrentFragment instanceof FragmentProfileOverview2){
-////                        ((FragmentProfileOverview) activity.mCurrentFragment).handleDopeDeleting(Integer.parseInt((String) result[2]));
-//                        ((FragmentProfileOverview2) activity.mCurrentFragment).handleDopeDeleting(Integer.parseInt((String) result[2]));
-//                    }
                     Utilities.showExtremelyShortToast(mContext, ""+result[1], 300);
                 }else {
                     Toast.makeText(mContext, "" + result[1], Toast.LENGTH_SHORT).show();
                 }
             }
+        }
+    }
+
+    public class ReportUserTask extends AsyncTask<String, Void, Object[]>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            ((MainActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+        }
+
+        @Override
+        protected Object[] doInBackground(String... params) {
+            String urlStr = "http://dopeapi.elantix.net/users.report";
+            String paramsStr = "token="+params[0]+"&user_id="+params[1]+"&report_id="+params[2];
+            String response = Utilities.requestToServerPOST(urlStr, paramsStr);
+
+            try {
+                JSONObject json = new JSONObject(response);
+                boolean success = json.getBoolean("success");
+
+                String response_text = (success) ? json.getString("response") : json.getString("response_text");
+
+                Object[] result = {success, response_text};
+                return result;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object[] result) {
+            super.onPostExecute(result);
+            ((MainActivity) mContext).mProgressDialog.dismiss();
+
+            if (result != null) {
+                if ((boolean) result[0]) {
+                    Utilities.showExtremelyShortToast(mContext, "User reported", 300);
+                }else{
+                    Toast.makeText(mContext, "" + result[1], Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    public class ReportStatusTask extends AsyncTask<String, Void, Object[]>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            ((MainActivity) mContext).mProgressDialog = ProgressDialog.show(mContext, null, "Please wait...", true);
+        }
+
+        @Override
+        protected Object[] doInBackground(String... params) {
+            String urlStr = "http://dopeapi.elantix.net/users.reports";
+            String paramsStr = "token="+params[0];
+            String response = Utilities.requestToServerPOST(urlStr, paramsStr);
+
+            try {
+                JSONObject json = new JSONObject(response);
+                boolean success = json.getBoolean("success");
+
+                String response_text = (success) ? json.getString("response") : json.getString("response_text");
+
+                Object[] result = {success, response_text};
+                return result;
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Object[] result) {
+            super.onPostExecute(result);
+            ((MainActivity) mContext).mProgressDialog.dismiss();
         }
     }
 

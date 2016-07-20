@@ -90,7 +90,7 @@ public class Utilities {
     public static final String ADCOLONY_ZONE_ID = "vzadc01d03c0db434790";
 //    public static String ANDROID_ID;
     public static String FirebaseCloudToken;
-    public static DecorStyle decorStyle = DecorStyle.First;
+    public static DecorStyle decorStyle = DecorStyle.Second;
 
     public enum DecorStyle{
         First, Second

@@ -52,12 +52,15 @@ public class FragmentProfileOverview extends Fragment implements View.OnClickLis
     private TextView mNumberOfDopesView;
     private String uid;
     private AdapterProfileOverview adapter;
+    private static String TAG;
 
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mFragmentView = inflater.inflate(R.layout.fragment_profile_overview, container, false);
+
+        TAG = getClass().getSimpleName();
 
         Utilities.sCurProfile = null;
         Bundle bundle = this.getArguments();
@@ -85,13 +88,40 @@ public class FragmentProfileOverview extends Fragment implements View.OnClickLis
         mFollowButton = (FancyButton) mFragmentView.findViewById(R.id.profile_overview_follow_button);
         mFollowButton.setOnClickListener(this);
         ImageView followButtonIconView = mFollowButton.getIconImageObject();
+        final MainActivity act = (MainActivity)getActivity();
         if (mIsOwn){
+            Log.w(TAG, "isOwn: "+mIsOwn);
             followButtonIconView.setImageResource(R.drawable.profile_edit_pencil_white);
             mFollowButton.getTextViewObject().setText(R.string.profile_settings_edit_profile_left_button_text);
             followButtonIconView.setLayoutParams(new LinearLayout.LayoutParams(60, 60));
+            act.mRightToolbarButton.setImageResource(R.drawable.dir_message);
+            act.mRightToolbarButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    act.launchCommentsActivity();
+                }
+            });
         }else{
+            Log.w(TAG, "isOwn: "+mIsOwn);
             followButtonIconView.setLayoutParams(new LinearLayout.LayoutParams(50, 50));
             mAvatar.setVisibility(View.VISIBLE);
+//            final MainActivity act = (MainActivity)getActivity();
+            act.mRightToolbarButton.setVisibility(View.VISIBLE);
+            act.mRightToolbarButton.setImageResource(R.drawable.more);
+            act.mRightToolbarButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    MainActivity act = (MainActivity)getActivity();
+                    Log.w(getClass().getSimpleName(), "activity: "+act);
+                    boolean show;
+                    if (act.isProfileOptionsPanelShown){
+                        show = false;
+                    }else{
+                        show = true;
+                    }
+                    act.showProfileOptions(show, null);
+                }
+            });
         }
 
         mShareProfileButton = (FancyButton) mFragmentView.findViewById(R.id.profile_overview_share_profile_button);

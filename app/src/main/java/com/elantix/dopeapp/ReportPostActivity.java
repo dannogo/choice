@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -68,8 +69,10 @@ public class ReportPostActivity extends AppCompatActivity implements View.OnClic
         }else if (id == mOption3.getId()){
             result = R.string.report_post_option_cause_3;
         }else{
+
             setResult(Activity.RESULT_CANCELED, returnIntent);
             finish();
+            return;
         }
 
         if (Utilities.sToken == null){

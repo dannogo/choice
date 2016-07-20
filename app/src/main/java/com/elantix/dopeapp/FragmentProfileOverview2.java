@@ -50,6 +50,7 @@ public class FragmentProfileOverview2 extends Fragment implements View.OnClickLi
     private TextView mNumberOfDopesView;
     private String uid;
     private AdapterProfileOverview adapter;
+    private static String TAG;
 
 
     @Nullable
@@ -57,6 +58,7 @@ public class FragmentProfileOverview2 extends Fragment implements View.OnClickLi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         mFragmentView = inflater.inflate(R.layout.fragment_profile_overview2, container, false);
 
+        TAG = getClass().getSimpleName();
         Utilities.sCurProfile = null;
         Bundle bundle = this.getArguments();
         mIsOwn = bundle.getBoolean("own");
@@ -77,19 +79,56 @@ public class FragmentProfileOverview2 extends Fragment implements View.OnClickLi
 
         mAvatar = (CircularImageView) mFragmentView.findViewById(R.id.profile_overview_avatar);
         mAvatar.setOnLongClickListener(this);
+        mAvatar.setOnClickListener(this);
         mAvatarPlaceHolder = (ImageView) mFragmentView.findViewById(R.id.profile_settings_user_icon);
         mRecyclerView = (RecyclerView) mFragmentView.findViewById(R.id.profile_overview_posted_dopes_list);
 
         mFollowButton = (FancyButton) mFragmentView.findViewById(R.id.profile_overview_follow_button);
         mFollowButton.setOnClickListener(this);
         ImageView followButtonIconView = mFollowButton.getIconImageObject();
+        final MainActivity act = (MainActivity)getActivity();
         if (mIsOwn){
+            Log.w(TAG, "isOwn: "+mIsOwn);
             followButtonIconView.setImageResource(R.drawable.profile_edit_pencil_white);
             mFollowButton.getTextViewObject().setText(R.string.profile_settings_edit_profile_left_button_text);
             followButtonIconView.setLayoutParams(new LinearLayout.LayoutParams(60, 60));
+            act.mRightToolbarButton2.setVisibility(View.VISIBLE);
+            act.mRightToolbarButton2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(getActivity(), ShareProfileActivity.class);
+                    intent.putExtra("own", mIsOwn);
+                    getActivity().startActivity(intent);
+                }
+            });
+            act.mRightToolbarButton.setImageResource(R.drawable.dir_message);
+            act.mRightToolbarButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    act.launchCommentsActivity();
+                }
+            });
         }else{
+            Log.w(TAG, "isOwn: "+mIsOwn);
             followButtonIconView.setLayoutParams(new LinearLayout.LayoutParams(50, 50));
             mAvatar.setVisibility(View.VISIBLE);
+
+            act.mRightToolbarButton.setVisibility(View.VISIBLE);
+            act.mRightToolbarButton.setImageResource(R.drawable.more);
+            act.mRightToolbarButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+//                    MainActivity act = (MainActivity)getActivity();
+                    Log.w(getClass().getSimpleName(), "activity: "+act);
+                    boolean show;
+                    if (act.isProfileOptionsPanelShown){
+                        show = false;
+                    }else{
+                        show = true;
+                    }
+                    act.showProfileOptions(show, null);
+                }
+            });
         }
 
 //        mShareProfileButton = (FancyButton) mFragmentView.findViewById(R.id.profile_overview_share_profile_button);
@@ -219,6 +258,16 @@ public class FragmentProfileOverview2 extends Fragment implements View.OnClickLi
 //        }else if (id == mDopesInfo.getId()){
         if (id == mDopesInfo.getId()){
 
+        }else if (id == mAvatar.getId()) {
+            MainActivity act = (MainActivity)getActivity();
+            boolean show;
+            if (act.isProfileOptionsPanelShown){
+                show = false;
+            }else{
+                show = true;
+            }
+            act.showProfileOptions(show, null);
+
         }else if (id == mFollowersInfo.getId()){
             ((MainActivity)getActivity()).switchPageHandler(MainActivity.Page.ProfileFollowers);
         }else if (id == mFollowingsInfo.getId()){
@@ -267,10 +316,7 @@ public class FragmentProfileOverview2 extends Fragment implements View.OnClickLi
                 if (Utilities.sCurProfile.username != null && !Utilities.sCurProfile.username.isEmpty()) {
                     mUsername.setText(Utilities.sCurProfile.username);
                 }
-//                if (Utilities.sCurProfile.fullname != null && !Utilities.sCurProfile.fullname.isEmpty()) {
-//                    mDescription.setText(Utilities.sCurProfile.fullname);
-//                }
-                    mDescription.setText(Utilities.sCurProfile.bio);
+                mDescription.setText(Utilities.sCurProfile.bio);
             }
             if (resultCode == Activity.RESULT_CANCELED) {
 
@@ -286,7 +332,7 @@ public class FragmentProfileOverview2 extends Fragment implements View.OnClickLi
         }
 
         Utilities.decorStyle = Utilities.DecorStyle.First;
-        Toast.makeText(getActivity(), "Switch to OLD scool decor style", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Switch to OLD school decor style", Toast.LENGTH_SHORT).show();
         ((MainActivity)getActivity()).switchPageHandler(Utilities.sFragmentHistory.get(Utilities.sFragmentHistory.size() - 1).fragment, true);
 
         return true;
