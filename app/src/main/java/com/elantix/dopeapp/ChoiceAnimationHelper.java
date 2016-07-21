@@ -166,8 +166,7 @@ public class ChoiceAnimationHelper {
             mRightText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSmallTextSize);
             leftLineWidth = mChosenLineWidth;
             rightLineWidth = mNotChosenLineWidth;
-//        }else if (mChosenSide == ChoiceSide.Right){
-        }else {
+        }else if (mChosenSide == ChoiceSide.Right){
             mRightDiamondView.setVisibility(View.VISIBLE);
             mDiamond = mRightDiamondView;
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mLeftPercentageCircle.getLayoutParams();
@@ -177,6 +176,22 @@ public class ChoiceAnimationHelper {
             mLeftText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSmallTextSize);
             leftLineWidth = mNotChosenLineWidth;
             rightLineWidth = mChosenLineWidth;
+        }else{
+
+            RelativeLayout.LayoutParams paramsL = (RelativeLayout.LayoutParams) mLeftPercentageCircle.getLayoutParams();
+            paramsL.width = mSmallCircleSize;
+            paramsL.height = mSmallCircleSize;
+            mLeftPercentageCircle.setLayoutParams(paramsL);
+            mLeftText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSmallTextSize);
+
+            RelativeLayout.LayoutParams paramsR = (RelativeLayout.LayoutParams) mRightPercentageCircle.getLayoutParams();
+            paramsR.width = mSmallCircleSize;
+            paramsR.height = mSmallCircleSize;
+            mRightPercentageCircle.setLayoutParams(paramsR);
+            mRightText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSmallTextSize);
+
+            leftLineWidth = mNotChosenLineWidth;
+            rightLineWidth = mNotChosenLineWidth;
         }
 
 
@@ -246,8 +261,10 @@ public class ChoiceAnimationHelper {
 
             animation.playTogether(leftProgressAnimation, rightProgressAnimation);
 
-            Animation diamondAnimation = AnimationUtils.loadAnimation(mActivity, R.anim.bounce);
-            mDiamond.startAnimation(diamondAnimation);
+            if (mChosenSide != ChoiceSide.None) {
+                Animation diamondAnimation = AnimationUtils.loadAnimation(mActivity, R.anim.bounce);
+                mDiamond.startAnimation(diamondAnimation);
+            }
             Animation textAnimation = AnimationUtils.loadAnimation(mActivity, R.anim.bounce_text);
             mLeftText.startAnimation(textAnimation);
             mRightText.startAnimation(textAnimation);

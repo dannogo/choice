@@ -115,7 +115,20 @@ public class DopeStatisticsActivity extends AppCompatActivity implements View.On
             final ViewGroup activityView = (ViewGroup) ((ViewGroup) this
                     .findViewById(android.R.id.content)).getChildAt(0);
 
-            ChoiceAnimationHelper.ChoiceSide side = (mInfo.myVote == 1) ? ChoiceAnimationHelper.ChoiceSide.Left : ChoiceAnimationHelper.ChoiceSide.Right;
+            ChoiceAnimationHelper.ChoiceSide side;
+
+            switch (mInfo.myVote){
+                case 1:
+                    side = ChoiceAnimationHelper.ChoiceSide.Left;
+                    break;
+                case 2:
+                    side = ChoiceAnimationHelper.ChoiceSide.Right;
+                    break;
+                default:
+                    side = ChoiceAnimationHelper.ChoiceSide.None;
+
+            }
+
             Log.w(TAG, "myVote: " + mInfo.myVote);
             Log.w(TAG, "side: " + side);
 
