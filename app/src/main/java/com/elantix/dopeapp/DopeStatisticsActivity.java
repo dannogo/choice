@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -31,11 +32,13 @@ public class DopeStatisticsActivity extends AppCompatActivity implements View.On
     DopeInfo mInfo;
     private TextView mCommentsCntView;
     public static int sNumOfComments;
+    private static String TAG;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dope_statistics);
+        TAG = getClass().getSimpleName();
 
         Intent intent = getIntent();
         mInfo = new DopeInfo();
@@ -49,6 +52,14 @@ public class DopeStatisticsActivity extends AppCompatActivity implements View.On
         mInfo.comments = intent.getIntExtra("comments", 0);
         mInfo.photo1 = Uri.parse(intent.getStringExtra("photo1"));
         mInfo.photo2 = Uri.parse(intent.getStringExtra("photo2"));
+        mInfo.myVote = intent.getIntExtra("myVote", 0);
+
+        mInfo.userId = intent.getStringExtra("userId");
+
+        if (!mInfo.userId.equals(Utilities.sMyProfile.id)){
+            findViewById(R.id.statistics_percentage_bar).setVisibility(View.INVISIBLE);
+            showPercentage();
+        }
 
         sNumOfComments = mInfo.comments;
 
@@ -95,6 +106,26 @@ public class DopeStatisticsActivity extends AppCompatActivity implements View.On
         Glide.with(this).load(mInfo.photo2)
                 .bitmapTransform(new BlurTransformation(this))
                 .into(blurredPicture2);
+    }
+
+    private void showPercentage(){
+
+        if (mInfo.votesAll != 0) {
+
+            final ViewGroup activityView = (ViewGroup) ((ViewGroup) this
+                    .findViewById(android.R.id.content)).getChildAt(0);
+
+            ChoiceAnimationHelper.ChoiceSide side = (mInfo.myVote == 1) ? ChoiceAnimationHelper.ChoiceSide.Left : ChoiceAnimationHelper.ChoiceSide.Right;
+            Log.w(TAG, "myVote: " + mInfo.myVote);
+            Log.w(TAG, "side: " + side);
+
+            int leftRate = mInfo.percent1;
+            Boolean directionInside = Math.random() < 0.5;
+
+            ChoiceAnimationHelper animHelper = new ChoiceAnimationHelper(DopeStatisticsActivity.this, activityView);
+            animHelper.setParameters(side, leftRate, directionInside);
+            animHelper.draw(false);
+        }
     }
 
     @Override

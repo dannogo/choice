@@ -60,7 +60,7 @@ public class ChoiceAnimationHelper {
 //    private int m
 
     public enum ChoiceSide{
-        Left, Right
+        Left, Right, None
     }
 
     private enum WiningSide{
@@ -166,7 +166,8 @@ public class ChoiceAnimationHelper {
             mRightText.setTextSize(TypedValue.COMPLEX_UNIT_PX, mSmallTextSize);
             leftLineWidth = mChosenLineWidth;
             rightLineWidth = mNotChosenLineWidth;
-        }else{
+//        }else if (mChosenSide == ChoiceSide.Right){
+        }else {
             mRightDiamondView.setVisibility(View.VISIBLE);
             mDiamond = mRightDiamondView;
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) mLeftPercentageCircle.getLayoutParams();

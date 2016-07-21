@@ -137,7 +137,7 @@ public class HttpChat {
         protected Object[] doInBackground(String... params) {
 
             Log.e("HttpChat GetDialog", "Dialog id: "+params[1]);
-            String urlStr = "http://dopeapi.elantix.net/im.dialog";
+            String urlStr = "http://getdopeapp.com/im.dialog";
             String paramStr = "token="+params[0]+"&dialog="+params[1];
             if (params[2] != null) paramStr += "&p="+params[2];
             if (params[3] != null) paramStr += "&count="+params[3];
@@ -231,7 +231,7 @@ public class HttpChat {
         @Override
         protected Object[] doInBackground(Object... params) {
 
-            String urlStr = "http://dopeapi.elantix.net/im.vote";
+            String urlStr = "http://getdopeapp.com/im.vote";
             String paramStr = "token="+params[0]+"&message_id="+params[1]+"&vote="+params[2];
 
             String response = Utilities.requestToServerPOST(urlStr, paramStr);
@@ -295,7 +295,7 @@ public class HttpChat {
         @Override
         protected Object[] doInBackground(String... params) {
             String charset = "UTF-8";
-            String requestURL = "http://dopeapi.elantix.net/im.send";
+            String requestURL = "http://getdopeapp.com/im.send";
             Log.e("HttpChat", "sendDopeToChat Dialog id: "+params[1]);
             try {
                 MultipartUtility multipart = new MultipartUtility(requestURL, charset);
@@ -397,7 +397,7 @@ public class HttpChat {
         @Override
         protected Object[] doInBackground(String... params) {
 
-            String urlStr = "http://dopeapi.elantix.net/im.removemember";
+            String urlStr = "http://getdopeapp.com/im.removemember";
             String paramStr = "token="+params[0]+"&dialog="+params[1]+"&uid="+params[2];
 
             String response = Utilities.requestToServerPOST(urlStr, paramStr);
@@ -445,7 +445,7 @@ public class HttpChat {
 
         @Override
         protected Object[] doInBackground(String... params) {
-            String urlStr = "http://dopeapi.elantix.net/im.recent";
+            String urlStr = "http://getdopeapp.com/im.recent";
             String paramStr = "token="+params[0];
 
             String response = Utilities.requestToServerPOST(urlStr, paramStr);
@@ -500,7 +500,7 @@ public class HttpChat {
         @Override
         protected Object[] doInBackground(String... params) {
 
-            String urlStr = "http://dopeapi.elantix.net/im.leave";
+            String urlStr = "http://getdopeapp.com/im.leave";
             String paramStr = "token="+params[0]+"&dialog="+params[1];
 
             String response = Utilities.requestToServerPOST(urlStr, paramStr);
@@ -558,7 +558,7 @@ public class HttpChat {
 
         @Override
         protected Object[] doInBackground(String... params) {
-            String urlStr = "http://dopeapi.elantix.net/im.delete";
+            String urlStr = "http://getdopeapp.com/im.delete";
             String paramStr = "token="+params[0]+"&dialog="+params[1];
 
             String response = Utilities.requestToServerPOST(urlStr, paramStr);
@@ -613,7 +613,7 @@ public class HttpChat {
         @Override
         protected Object[] doInBackground(String... params) {
 
-            String urlStr = "http://dopeapi.elantix.net/im.addmember";
+            String urlStr = "http://getdopeapp.com/im.addmember";
             String paramStr = "token="+params[0]+"&dialogId="+params[1]+"&uids="+params[2];
 
             String response = Utilities.requestToServerPOST(urlStr, paramStr);
@@ -659,7 +659,7 @@ public class HttpChat {
         @Override
         protected Object[] doInBackground(String... params) {
 
-            String urlStr = "http://dopeapi.elantix.net/im.create";
+            String urlStr = "http://getdopeapp.com/im.create";
             String paramStr = "token="+params[0]+"&uids="+params[1];
             String[] uids = params[1].split(",");
 
@@ -748,7 +748,7 @@ public class HttpChat {
 
         @Override
         protected Object[] doInBackground(String... params) {
-            String urlStr = "http://dopeapi.elantix.net/im.list?token="+params[0]+"&uid="+params[1];
+            String urlStr = "http://getdopeapp.com/im.list?token="+params[0]+"&uid="+params[1];
             if (params[2] != null) urlStr += "&p="+params[2];
             if (params[3] != null) urlStr += "&count="+params[3];
 
@@ -893,7 +893,7 @@ public class HttpChat {
         @Override
         protected Object[] doInBackground(String... params) {
 
-            String urlStr = "http://dopeapi.elantix.net/users.friends";
+            String urlStr = "http://getdopeapp.com/users.friends";
             String paramStr = "token="+params[0];
             if (params[1] != null) paramStr += "&q="+params[1];
             if (params[2] != null) paramStr += "&p="+params[2];

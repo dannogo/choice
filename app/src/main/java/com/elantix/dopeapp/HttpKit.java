@@ -342,7 +342,7 @@ public class HttpKit {
              */
 
             String charset = "UTF-8";
-            String requestURL = "http://dopeapi.elantix.net/users.editprofile";
+            String requestURL = "http://getdopeapp.com/users.editprofile";
             try {
                 MultipartUtility multipart = new MultipartUtility(requestURL, charset);
                 multipart.addFormField("uid", params[0]);
@@ -407,7 +407,7 @@ public class HttpKit {
         protected String[] doInBackground(String... params) {
             String charset = "UTF-8";
 //            String requestURL = "http://api.svcontact.ru/dopes.create";
-            String requestURL = "http://dopeapi.elantix.net/dopes.create";
+            String requestURL = "http://getdopeapp.com/dopes.create";
             try {
                 MultipartUtility multipart = new MultipartUtility(requestURL, charset);
                 multipart.addFormField("token", params[0]);
@@ -465,7 +465,7 @@ public class HttpKit {
 
         @Override
         protected String[] doInBackground(String... params) {
-            String urlStr = "http://dopeapi.elantix.net/users.changepass";
+            String urlStr = "http://getdopeapp.com/users.changepass";
             String response = requestToServerPOST(urlStr, params, POSTRequestPurpose.ChangePassword);
 
             try {
@@ -508,7 +508,7 @@ public class HttpKit {
 
         @Override
         protected Object[] doInBackground(Object... params) {
-            String urlStr = "http://dopeapi.elantix.net/users.checkname";
+            String urlStr = "http://getdopeapp.com/users.checkname";
             String response = requestToServerPOST(urlStr, (String[])params[0], POSTRequestPurpose.CheckUsername);
 
             try{
@@ -562,7 +562,7 @@ public class HttpKit {
         @Override
         protected String[] doInBackground(String... params) {
 
-            String urlStr = "http://dopeapi.elantix.net/users.reg";
+            String urlStr = "http://getdopeapp.com/users.reg";
             String response = requestToServerPOST(urlStr, params, POSTRequestPurpose.Registration);
 
             try {
@@ -606,7 +606,7 @@ public class HttpKit {
         @Override
         protected String[] doInBackground(String... params) {
 
-            String urlStr = "http://dopeapi.elantix.net/users.login";
+            String urlStr = "http://getdopeapp.com/users.login";
             String response = requestToServerPOST(urlStr, params, POSTRequestPurpose.Login);
 
             try {
@@ -681,8 +681,8 @@ public class HttpKit {
         @Override
         protected String doInBackground(String... params) {
 
-//            String urlStr = "http://dopeapi.elantix.net/dopes.share?dope=" + params[0];
-            String urlStr = "http://dopeapi.elantix.net/dopes.share";
+//            String urlStr = "http://getdopeapp.com/dopes.share?dope=" + params[0];
+            String urlStr = "http://getdopeapp.com/dopes.share";
             String paramsStr = "dope=" + params[0];
             if (params[1] != null) {
 //                urlStr += "&token=" + params[1];
@@ -745,7 +745,7 @@ public class HttpKit {
         @Override
         protected Object[] doInBackground(String... params) {
 
-            String urlStr = "http://dopeapi.elantix.net/dopes.user?uid=" + params[0];
+            String urlStr = "http://getdopeapp.com/dopes.user?uid=" + params[0];
 
 //            if (params[0] instanceof String[]){
 //                String[] uidList = (String[]) params[0];
@@ -842,7 +842,7 @@ public class HttpKit {
         protected Object doInBackground(String... params) {
 
 
-            String urlStr = "http://dopeapi.elantix.net/users.profile?uid=" + params[0];
+            String urlStr = "http://getdopeapp.com/users.profile?uid=" + params[0];
             if (params[1] != null) {
                 urlStr += "&token=" + params[1];
             }
@@ -850,7 +850,7 @@ public class HttpKit {
 
 
 //            String followString = "http://api.svcontact.ru/users.followings?uid="+Utilities.sUid;
-            String followString = "http://dopeapi.elantix.net/users.followings?uid="+Utilities.sUid;
+            String followString = "http://getdopeapp.com/users.followings?uid="+Utilities.sUid;
             followString += "&fields=id";
 //            followString += "&count="+999;
             String responseFollowings = Utilities.RequestToServerGET(followString);
@@ -957,7 +957,7 @@ public class HttpKit {
         protected Object doInBackground(String... params) {
 
 //            String urlStr = "http://api.svcontact.ru/users.profile?uid=" + Utilities.sUid+"&token="+Utilities.sToken;
-            String urlStr = "http://dopeapi.elantix.net/users.profile";
+            String urlStr = "http://getdopeapp.com/users.profile";
             String paramsStr = "uid=" + Utilities.sUid+"&token="+Utilities.sToken;
 
 //            String response = RequestToServerGET(urlStr);
@@ -1042,7 +1042,7 @@ public class HttpKit {
 
         @Override
         protected String doInBackground(String... params) {
-            String urlStr = "http://dopeapi.elantix.net/users.logout";
+            String urlStr = "http://getdopeapp.com/users.logout";
             String paramStr = "token=" + params[0]+"&android_id="+Utilities.FirebaseCloudToken;
             String response = Utilities.requestToServerPOST(urlStr, paramStr);
 
@@ -1079,7 +1079,7 @@ public class HttpKit {
         @Override
         protected String[] doInBackground(String... params) {
             String replacedSpaces = params[2].replaceAll(" ", "%20");
-            String urlStr = "http://dopeapi.elantix.net/dopes.comment";
+            String urlStr = "http://getdopeapp.com/dopes.comment";
             String paramsStr = "token="+params[0]+"&dope="+params[1]+"&text="+replacedSpaces;
             if (params[3] != null){
                 paramsStr += "&parent="+params[3];
@@ -1129,7 +1129,7 @@ public class HttpKit {
         protected String[] doInBackground(String... params) {
 
             String insert = (params[0].equals("follow")) ? "follow" : "unfollow";
-            String urlStr = "http://dopeapi.elantix.net/users."+insert;
+            String urlStr = "http://getdopeapp.com/users."+insert;
             String paramsStr = "uid=" + params[1]+"&token="+params[2];
             String response = Utilities.requestToServerPOST(urlStr, paramsStr);
             try {
@@ -1173,7 +1173,7 @@ public class HttpKit {
 
         @Override
         protected Object[] doInBackground(String... params) {
-            String urlStr = "http://dopeapi.elantix.net/users.lists";
+            String urlStr = "http://getdopeapp.com/users.lists";
             String paramsStr = "token="+params[0];
             if (params[1] != null) paramsStr += "&p="+params[1];
             if (params[2] != null) paramsStr += "&q="+params[2];
@@ -1251,7 +1251,7 @@ public class HttpKit {
 
         @Override
         protected Boolean doInBackground(Void... params) {
-            String urlStr = "http://dopeapi.elantix.net/users.followings";
+            String urlStr = "http://getdopeapp.com/users.followings";
             String paramsStr = "uid="+Utilities.sUid+"&token="+Utilities.sToken;
             String response = Utilities.requestToServerPOST(urlStr, paramsStr);
 //            String response = RequestToServerGET(urlStr);
@@ -1299,7 +1299,7 @@ public class HttpKit {
 
         @Override
         protected Object[] doInBackground(String... params) {
-            String urlStr = "http://dopeapi.elantix.net/users."+params[6];
+            String urlStr = "http://getdopeapp.com/users."+params[6];
             String paramsStr = "uid="+params[0];
 
             String fields = "id,username,fullname,avatar,bio";
@@ -1391,7 +1391,7 @@ public class HttpKit {
 
         @Override
         protected Object[] doInBackground(String... params) {
-            String urlStr = "http://dopeapi.elantix.net/dopes.delete";
+            String urlStr = "http://getdopeapp.com/dopes.delete";
             String paramsStr = "token="+params[0]+"&dope_id="+params[1];
             String response = Utilities.requestToServerPOST(urlStr, paramsStr);
 
@@ -1443,7 +1443,7 @@ public class HttpKit {
 
         @Override
         protected Object[] doInBackground(String... params) {
-            String urlStr = "http://dopeapi.elantix.net/users.report";
+            String urlStr = "http://getdopeapp.com/users.report";
             String paramsStr = "token="+params[0]+"&user_id="+params[1]+"&report_id="+params[2];
             String response = Utilities.requestToServerPOST(urlStr, paramsStr);
 
@@ -1487,7 +1487,7 @@ public class HttpKit {
 
         @Override
         protected Object[] doInBackground(String... params) {
-            String urlStr = "http://dopeapi.elantix.net/users.reports";
+            String urlStr = "http://getdopeapp.com/users.reports";
             String paramsStr = "token="+params[0];
             String response = Utilities.requestToServerPOST(urlStr, paramsStr);
 
@@ -1523,8 +1523,8 @@ public class HttpKit {
         @Override
         protected String[] doInBackground(String... params) {
             String replacedSpaces = params[2].replaceAll(" ", "%20");
-//            String urlStr = "http://dopeapi.elantix.net/dopes.report?token="+params[0]+"&dope="+params[1]+"&report="+replacedSpaces;
-            String urlStr = "http://dopeapi.elantix.net/dopes.report";
+//            String urlStr = "http://getdopeapp.com/dopes.report?token="+params[0]+"&dope="+params[1]+"&report="+replacedSpaces;
+            String urlStr = "http://getdopeapp.com/dopes.report";
             String paramsStr = "token="+params[0]+"&dope="+params[1]+"&report="+replacedSpaces;
 //            String response = RequestToServerGET(urlStr);
             String response = Utilities.requestToServerPOST(urlStr, paramsStr);
@@ -1563,8 +1563,8 @@ public class HttpKit {
 
         @Override
         protected String[] doInBackground(String... params) {
-//            String urlStr = "http://dopeapi.elantix.net/dopes.deletecomment?token="+params[0]+"&comment_id="+params[1];
-            String urlStr = "http://dopeapi.elantix.net/dopes.deletecomment?token="+params[0]+"&comment_id="+params[1];
+//            String urlStr = "http://getdopeapp.com/dopes.deletecomment?token="+params[0]+"&comment_id="+params[1];
+            String urlStr = "http://getdopeapp.com/dopes.deletecomment?token="+params[0]+"&comment_id="+params[1];
             String paramsStr = "token="+params[0]+"&comment_id="+params[1];
             if (params[2] != null){
                 paramsStr += "&flag_id="+params[2];
@@ -1613,7 +1613,7 @@ public class HttpKit {
         @Override
         protected Object[] doInBackground(String... params) {
 
-            String urlStr = "http://dopeapi.elantix.net/dopes.comments?dope="+params[0];
+            String urlStr = "http://getdopeapp.com/dopes.comments?dope="+params[0];
             String paramsStr = "dope="+params[0];
 
             if (params[1] != null)  paramsStr += "&token="+params[1];
@@ -1684,7 +1684,7 @@ public class HttpKit {
 
         @Override
         protected String doInBackground(String... params) {
-            String urlStr = "http://dopeapi.elantix.net/dopes.vote?token=" + params[0] + "&dope=" + params[1] + "&vote=" + params[2];
+            String urlStr = "http://getdopeapp.com/dopes.vote?token=" + params[0] + "&dope=" + params[1] + "&vote=" + params[2];
             String response = Utilities.RequestToServerGET(urlStr);
 
             try {
@@ -1720,7 +1720,7 @@ public class HttpKit {
         @Override
         protected Object[] doInBackground(String... params) {
 
-            String urlStr = "http://dopeapi.elantix.net/dopes.feed?token="+params[0];
+            String urlStr = "http://getdopeapp.com/dopes.feed?token="+params[0];
             if (params[1] != null) urlStr += "&p="+params[1];
             if (params[2] != null) urlStr += "&count="+params[2];
 
@@ -1812,7 +1812,7 @@ public class HttpKit {
         protected Object[] doInBackground(String... params) {
 
 //            String urlStr = "http://api.svcontact.ru/dopes.day10";
-            String urlStr = "http://dopeapi.elantix.net/dopes.day10";
+            String urlStr = "http://getdopeapp.com/dopes.day10";
 //            String paramStr = "";
 
 //            if (params[0].equals("100")) {
@@ -1950,7 +1950,7 @@ public class HttpKit {
 
         @Override
         protected String[] doInBackground(String... params) {
-            String urlStr = "http://dopeapi.elantix.net/users.forgot?email=" + params[0];
+            String urlStr = "http://getdopeapp.com/users.forgot?email=" + params[0];
 
             String response = Utilities.RequestToServerGET(urlStr);
 

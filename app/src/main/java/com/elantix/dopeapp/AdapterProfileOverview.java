@@ -125,6 +125,10 @@ public class AdapterProfileOverview extends RecyclerView.Adapter<AdapterProfileO
                 intent.putExtra("comments", mDopes.get(position).comments);
                 intent.putExtra("photo1", mDopes.get(position).photo1.toString());
                 intent.putExtra("photo2", mDopes.get(position).photo2.toString());
+//                intent.putExtra("photoSoc", mDopes.get(position).photoSoc.toString());
+                intent.putExtra("percent1", mDopes.get(position).percent1);
+                intent.putExtra("myVote", mDopes.get(position).myVote);
+                intent.putExtra("userId", mDopes.get(position).userId.toString());
 
                 context.startActivity(intent);
             }

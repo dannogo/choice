@@ -358,21 +358,25 @@ public class FragmentTabPlus extends Fragment implements View.OnClickListener{
 
                 String dialogMessage;
                 if (!hasLeftImage && !hasRightImage && !hasQuestion){
-                    dialogMessage = "Provide left and right images and question please";
+                    dialogMessage = "Add both images and ask a question";
                 }else if (!hasLeftImage && !hasRightImage && hasQuestion) {
-                    dialogMessage = "Provide left and right images please";
+                    dialogMessage = "Add both images";
                 }else if (hasLeftImage && hasRightImage && !hasQuestion){
-                    dialogMessage = "Provide a question please";
+                    dialogMessage = "Ask a question";
                 }else if (hasLeftImage && !hasRightImage && hasQuestion){
-                    dialogMessage = "Right image is missing";
+                    dialogMessage = "Add left image";
                 }else if (!hasLeftImage && hasRightImage && hasQuestion) {
-                    dialogMessage = "Left image is missing";
+                    dialogMessage = "Add right image";
+                }else if(!hasLeftImage && hasRightImage && !hasQuestion){
+                    dialogMessage = "Add left image and ask a question";
+                }else if(hasLeftImage && !hasRightImage && !hasQuestion){
+                    dialogMessage = "Add right image and ask a question";
                 }else{
-                    dialogMessage = "You should provide both left and right images and a question";
+                    dialogMessage = "Add both images and ask a question";
                 }
 
                 new AlertDialog.Builder(getActivity())
-                        .setTitle("Lack of content")
+                        .setTitle("Almost Done")
                         .setMessage(dialogMessage)
                         .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int which) {
