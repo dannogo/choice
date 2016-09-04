@@ -233,6 +233,7 @@ public class HttpKit {
             if (params[0].equals("facebook")) {
 //                paramsStr += "fb_id=" + params[1] + "&email=" + params[2];
 //                paramsStr += "fb_id=" + params[1] + "&email=" + params[2];
+                Log.w("HttpKit", "email: "+params[2]);
                 paramsStr += "fb_id=" + params[1] + "&email=" + params[2]+"&username=fb_"+params[1];
             } else if (params[0].equals("twitter")) {
                 paramsStr += "tw_id=" + params[1] + "&email=" + params[2]+"&username=tw_"+params[1];
@@ -312,6 +313,8 @@ public class HttpKit {
         }
         return null;
     }
+
+
 
     public class SaveProfileChangesTask extends AsyncTask<String, Void, String[]> {
 
@@ -782,6 +785,7 @@ public class HttpKit {
                         info.question = item.getString("question");
                         info.photo1 = Uri.parse(item.getString("photo1"));
                         info.photo2 = Uri.parse(item.getString("photo2"));
+                        info.photoSoc = Uri.parse(item.getString("photoSoc"));
                         info.dateCreate = item.getString("date_cteate");
                         info.top10 = item.getString("top10");
                         info.top100 = item.getString("top100");
@@ -1745,6 +1749,7 @@ public class HttpKit {
                         dopeInfo.question = item.getString("question");
                         dopeInfo.photo1 = Uri.parse(item.getString("photo1"));
                         dopeInfo.photo2 = Uri.parse(item.getString("photo2"));
+                        dopeInfo.photoSoc = Uri.parse(item.getString("photoSoc"));
                         dopeInfo.dateCreate = item.getString("date_cteate");
                         dopeInfo.top10 = item.getString("top10");
                         dopeInfo.top100 = item.getString("top100");

@@ -6,7 +6,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,6 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -243,13 +241,17 @@ public class FragmentDailyDope extends Fragment implements View.OnClickListener{
             ((MainActivity) getActivity()).showContextOptions(true, mDopeNum);
 
         }else if(id == mMessageButton.getId()){
-            Intent intent = new Intent(getActivity(), CommentsActivity.class);
-            intent.putExtra("dopeId", mCurItem.id);
-            intent.putExtra("question", mCurItem.question);
-            intent.putExtra("votesCnt", mCurItem.votesAll);
-            intent.putExtra("publisherId", mCurItem.userId);
-            intent.putExtra("type", 0);
-            startActivity(intent);
+            if (Utilities.sUid != null) {
+                Intent intent = new Intent(getActivity(), CommentsActivity.class);
+                intent.putExtra("dopeId", mCurItem.id);
+                intent.putExtra("question", mCurItem.question);
+                intent.putExtra("votesCnt", mCurItem.votesAll);
+                intent.putExtra("publisherId", mCurItem.userId);
+                intent.putExtra("type", 0);
+                startActivity(intent);
+            }else{
+                Utilities.loginProposalDialog((MainActivity) getActivity(), Utilities.ActionsWhichRequireLogin.Comment);
+            }
         }
     }
 }

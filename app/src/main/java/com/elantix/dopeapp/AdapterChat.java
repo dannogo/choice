@@ -8,14 +8,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.elantix.dopeapp.entities.ChatMessage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import jp.wasabeef.glide.transformations.CropCircleTransformation;
 
@@ -157,7 +161,8 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 taskOth.execute(paramsOth);
 
                 if (item.myVote > 0) {
-                    launchRateAnimation(odpvh.itemView, item, false);
+//                    launchRateAnimation(odpvh.itemView, item, false);
+                    showVotersAvatars(odpvh.itemView, item);
                 }
                 break;
             case MY_PROPOSAL:
@@ -176,7 +181,8 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 taskMy.execute(paramsMy);
 
                 if (item.myVote > 0) {
-                    launchRateAnimation(mdpvh.itemView, item, false);
+//                    launchRateAnimation(mdpvh.itemView, item, false);
+                    showVotersAvatars(mdpvh.itemView, item);
                 }
                 break;
             default:
@@ -258,39 +264,74 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         @Override
         public void onClick(View v) {
             int id = v.getId();
-            ChatMessage myDopeInfo = mMessages.get(getAdapterPosition());
+            ChatMessage chatMessage = mMessages.get(getAdapterPosition());
 
-            if (myDopeInfo.myVote > 0) {
+            if (chatMessage.myVote > 0) {
                 Utilities.showExtremelyShortToast(mContext, "You have already voted this dope", 500);
                 return;
             }else if (id == leftPicView.getId()){
-                myDopeInfo.myVote = 1;
-                myDopeInfo.leftVote++;
+                chatMessage.myVote = 1;
+                chatMessage.leftVote++;
             }else if (id == rightPicView.getId()){
-                myDopeInfo.myVote = 2;
-                myDopeInfo.rightVote++;
+                chatMessage.myVote = 2;
+                chatMessage.rightVote++;
             }
-            recalculatePercentage(myDopeInfo);
+            recalculatePercentage(chatMessage);
 
-            http.chatVote(Utilities.sToken, myDopeInfo.id, String.valueOf(myDopeInfo.myVote), itemView, myDopeInfo);
-            launchRateAnimation(itemView, myDopeInfo, true);
+            http.chatVote(Utilities.sToken, chatMessage.id, String.valueOf(chatMessage.myVote), itemView, chatMessage);
+//            launchRateAnimation(itemView, chatMessage, true);
+            showVotersAvatars(itemView, chatMessage);
         }
     }
 
-    public void launchRateAnimation(View itemView, ChatMessage messageObj, boolean animatedDraw){
+    public void showVotersAvatars(View itemView, final ChatMessage messageObj){
+        final RelativeLayout leftRL = (RelativeLayout) itemView.findViewById(R.id.chat_left_avatar_container);
+        final RelativeLayout rightRL = (RelativeLayout) itemView.findViewById(R.id.chat_right_avatar_container);
 
-        int leftRate = messageObj.leftPercent;
-        if (leftRate == 0 && leftRate == messageObj.rightPercent){
-            return;
-        }else {
-            ChoiceAnimationHelper.ChoiceSide side = (messageObj.myVote == 1) ? ChoiceAnimationHelper.ChoiceSide.Left : ChoiceAnimationHelper.ChoiceSide.Right;
+        final ViewTreeObserver vtoLeft = leftRL.getViewTreeObserver();
+        vtoLeft.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                ArrayList<String> avatarsPics = new ArrayList<>();
+                for (HashMap.Entry<String, String> entry : messageObj.usersVotedLeft.entrySet()) {
+                    avatarsPics.add(entry.getValue());
+                }
+                leftRL.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                ChatAvatarRelocationHandler avatarHandler = new ChatAvatarRelocationHandler(mContext, leftRL, avatarsPics);
+                avatarHandler.showAvatars();
+            }
+        });
 
-            boolean direction = (messageObj.proposalNum % 2 == 0) ? false : true;
-            mAnimHelper = new ChoiceAnimationHelper(((ChatActivity) mContext), itemView);
-            mAnimHelper.setParameters(side, leftRate, direction, true);
-            mAnimHelper.draw(animatedDraw);
-        }
+        ViewTreeObserver vtoRight = rightRL.getViewTreeObserver();
+        vtoRight.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                ArrayList<String> avatarsPics = new ArrayList<>();
+                for (HashMap.Entry<String, String> entry : messageObj.usersVotedRight.entrySet()) {
+                    avatarsPics.add(entry.getValue());
+                }
+                rightRL.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                ChatAvatarRelocationHandler avatarHandler = new ChatAvatarRelocationHandler(mContext, rightRL, avatarsPics);
+                avatarHandler.showAvatars();
+            }
+        });
+
     }
+
+//    public void launchRateAnimation(View itemView, ChatMessage messageObj, boolean animatedDraw){
+//
+//        int leftRate = messageObj.leftPercent;
+//        if (leftRate == 0 && leftRate == messageObj.rightPercent){
+//            return;
+//        }else {
+//            ChoiceAnimationHelper.ChoiceSide side = (messageObj.myVote == 1) ? ChoiceAnimationHelper.ChoiceSide.Left : ChoiceAnimationHelper.ChoiceSide.Right;
+//
+//            boolean direction = (messageObj.proposalNum % 2 == 0) ? false : true;
+//            mAnimHelper = new ChoiceAnimationHelper(((ChatActivity) mContext), itemView);
+//            mAnimHelper.setParameters(side, leftRate, direction, true);
+//            mAnimHelper.draw(animatedDraw);
+//        }
+//    }
 
     private void recalculatePercentage(ChatMessage info){
         info.votes++;
@@ -338,7 +379,8 @@ public class AdapterChat extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             recalculatePercentage(myDopeInfo);
 
             http.chatVote(Utilities.sToken, myDopeInfo.id, String.valueOf(myDopeInfo.myVote), itemView, myDopeInfo);
-            launchRateAnimation(itemView, myDopeInfo, true);
+//            launchRateAnimation(itemView, myDopeInfo, true);
+            showVotersAvatars(itemView, myDopeInfo);
         }
     }
 

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<shape xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:innerRadius="@dimen/share_profile_avatar_ring_inner_radius"-->
+    <!--android:shape="ring"-->
+    <!--android:thickness="@dimen/share_profile_avatar_ring_thickness"-->
+    <!--android:useLevel="false"-->
+    <!--&gt;-->
+
+    <!--<solid android:color="@color/report_post_cause_question_color"/>-->
+    <!--<size-->
+        <!--android:width="@dimen/profile_settings_avatar_outer_circle_diameter"-->
+        <!--android:height="@dimen/profile_settings_avatar_outer_circle_diameter"/>-->
+    <!--&lt;!&ndash;android:width="@dimen/share_profile_avatar_ring_size"&ndash;&gt;-->
+
+<!--</shape>-->
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+android:shape="oval">
+
+<solid android:color="#fff" />
+
+<size
+    android:width="@dimen/chat_vote_avatar_outer_size"
+    android:height="@dimen/chat_vote_avatar_outer_size"
+    />
+    android:width="@dimen/chat_avatar_outer_circle_diameter"
+    android:height="@dimen/chat_avatar_outer_circle_diameter"
+
+    <stroke
+        android:width="1px"
+        android:color="@color/report_post_cause_question_color"/>
+
+
+</shape>

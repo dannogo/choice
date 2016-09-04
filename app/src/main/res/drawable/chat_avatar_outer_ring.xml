@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:innerRadius="@dimen/chat_avatar_ring_inner_radius"
+    android:shape="ring"
+    android:thickness="@dimen/chat_avatar_ring_thickness"
+    android:useLevel="false">
+
+    <solid android:color="@color/report_post_cause_question_color" />
+    <size
+        android:width="@dimen/chat_vote_avatar_outer_size"
+        android:height="@dimen/chat_vote_avatar_outer_size"
+
+        />
+        android:width="@dimen/chat_avatar_outer_circle_diameter"
+        android:height="@dimen/chat_avatar_outer_circle_diameter"
+    <!--android:width="@dimen/share_profile_avatar_ring_size"-->
+
+</shape>
+

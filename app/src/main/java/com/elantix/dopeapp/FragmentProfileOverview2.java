@@ -273,6 +273,10 @@ public class FragmentProfileOverview2 extends Fragment implements View.OnClickLi
         }else if (id == mFollowingsInfo.getId()){
             ((MainActivity)getActivity()).switchPageHandler(MainActivity.Page.ProfileFollowings);
         }else if(id == mFollowButton.getId()){
+            if (Utilities.sUid == null){
+                Utilities.loginProposalDialog((MainActivity) getActivity(), Utilities.ActionsWhichRequireLogin.Follow);
+                return;
+            }
             if (mIsOwn){
                 Intent i = new Intent(getActivity(), ProfileSettingsActivity.class);
                 startActivityForResult(i, Utilities.EDIT_PROFILE);

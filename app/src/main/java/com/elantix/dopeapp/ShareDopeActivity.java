@@ -37,7 +37,10 @@ public class ShareDopeActivity extends AppCompatActivity implements View.OnClick
     public TextView mLinkField;
     public ProgressDialog mProgressDialog;
     public String mLink;
-    FancyButton mFacebookBtn;
+    private FancyButton mFacebookBtn;
+    private FancyButton mMoreBtn;
+    private FancyButton mWhatsAppBtn;
+    private FancyButton mInstagramBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,8 +104,12 @@ public class ShareDopeActivity extends AppCompatActivity implements View.OnClick
 
         mFacebookBtn = (FancyButton) findViewById(R.id.share_panel_facebook_button);
         mFacebookBtn.setOnClickListener(this);
-
-
+        mMoreBtn = (FancyButton) findViewById(R.id.share_panel_more_button);
+        mMoreBtn.setOnClickListener(this);
+        mWhatsAppBtn = (FancyButton) findViewById(R.id.share_panel_whatsapp_button);
+        mWhatsAppBtn.setOnClickListener(this);
+        mInstagramBtn = (FancyButton) findViewById(R.id.share_panel_instagram_button);
+        mInstagramBtn.setOnClickListener(this);
 
     }
 
@@ -117,7 +124,17 @@ public class ShareDopeActivity extends AppCompatActivity implements View.OnClick
             Toast.makeText(ShareDopeActivity.this, "Link to dope copied to clipboard", Toast.LENGTH_SHORT).show();
         }else if (id == mFacebookBtn.getId()){
             Utilities.shareOnFacebook(ShareDopeActivity.this, mLink, mCurItem.photoSoc, mCurItem.question);
+        }else if (id == mMoreBtn.getId()){
+            Utilities.initShareIntent(ShareDopeActivity.this, mCurItem.photoSoc, mCurItem.question, mLink);
+        }else if(id == mWhatsAppBtn.getId()){
+//            Utilities.shareOnWhatsapp(ShareDopeActivity.this, mCurItem.photoSoc, mCurItem.question, mLink);
+//            Utilities.shareImageWhatsApp(ShareDopeActivity.this, mCurItem.photoSoc, mCurItem.question, mLink);
+            Utilities.initShareIntent(ShareDopeActivity.this, mCurItem.photoSoc, mCurItem.question, mLink, "com.whatsapp");
+        }else if(id == mInstagramBtn.getId()){
+            Utilities.initShareIntent(ShareDopeActivity.this, mCurItem.photoSoc, mCurItem.question, mLink, "com.instagram.android");
         }
+
+
     }
 
     private void buttonsAppearenceHandling(){

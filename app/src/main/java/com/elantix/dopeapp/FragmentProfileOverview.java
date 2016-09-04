@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.style.ParagraphStyle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,7 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.util.Util;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import java.io.File;
@@ -255,6 +253,10 @@ public class FragmentProfileOverview extends Fragment implements View.OnClickLis
         }else if (id == mFollowingsInfo.getId()){
             ((MainActivity)getActivity()).switchPageHandler(MainActivity.Page.ProfileFollowings);
         }else if(id == mFollowButton.getId()){
+            if (Utilities.sUid == null){
+                Utilities.loginProposalDialog((MainActivity) getActivity(), Utilities.ActionsWhichRequireLogin.Follow);
+                return;
+            }
             if (mIsOwn){
                 Intent i = new Intent(getActivity(), ProfileSettingsActivity.class);
                 startActivityForResult(i, Utilities.EDIT_PROFILE);

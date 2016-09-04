@@ -1,6 +1,9 @@
 package com.elantix.dopeapp.entities;
 
+import android.util.Log;
+
 import java.io.Serializable;
+import java.util.HashMap;
 
 /**
  * Created by oleh on 5/28/16.
@@ -30,13 +33,16 @@ public class ChatMessage implements Serializable{
     public int leftPercent;
     public int rightPercent;
     public int myVote;
+    public HashMap<String, String> usersVotedLeft;
+    public HashMap<String, String> usersVotedRight;
 
     public int proposalNum; // for choosing direction of animation
 
     public int viewType;
 
     public ChatMessage(){
-
+        usersVotedLeft = new HashMap<>();
+        usersVotedRight = new HashMap<>();
     }
 
     public ChatMessage(ChatMessage another){
@@ -63,5 +69,8 @@ public class ChatMessage implements Serializable{
         this.proposalNum = another.proposalNum;
 
         this.viewType = another.viewType;
+        usersVotedLeft = new HashMap<>(another.usersVotedLeft);
+        usersVotedRight = new HashMap<>(another.usersVotedRight);
+//        Log.e(getClass().getSimpleName(), "usersVotedLeft: "+usersVotedLeft+"\nusersVotedRight: "+usersVotedRight);
     }
 }

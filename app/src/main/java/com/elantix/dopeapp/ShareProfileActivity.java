@@ -1,5 +1,6 @@
 package com.elantix.dopeapp;
 
+import android.app.ProgressDialog;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -34,7 +35,11 @@ public class ShareProfileActivity extends AppCompatActivity implements View.OnCl
     private ImageView mAvatarPlaceholder;
     private TextView mUsername;
     private TextView mFirstLastNames;
+    public ProgressDialog mProgressDialog;
     private FancyButton mFacebookBtn;
+    private FancyButton mMoreBtn;
+    private FancyButton mWhatsAppBtn;
+    private FancyButton mInstagramBtn;
     private String mLink;
     private String username;
 
@@ -51,6 +56,10 @@ public class ShareProfileActivity extends AppCompatActivity implements View.OnCl
         mCloseButton.setOnClickListener(this);
         mFacebookBtn = (FancyButton) findViewById(R.id.share_panel_facebook_button);
         mFacebookBtn.setOnClickListener(this);
+        mWhatsAppBtn = (FancyButton) findViewById(R.id.share_panel_whatsapp_button);
+        mWhatsAppBtn.setOnClickListener(this);
+        mInstagramBtn = (FancyButton) findViewById(R.id.share_panel_instagram_button);
+        mInstagramBtn.setOnClickListener(this);
 
         TextView linkField = (TextView) findViewById(R.id.share_profile_link_text);
         mLink = "http://dopeapi.elantix.net/user/"+Utilities.sCurProfile.id;
@@ -76,6 +85,9 @@ public class ShareProfileActivity extends AppCompatActivity implements View.OnCl
         mUsername.setText(username);
         String firstLastNames = (Utilities.sCurProfile.fullname.isEmpty()) ? getResources().getString(R.string.profile_settings_firstlastnames_placeholder_text) : Utilities.sCurProfile.fullname;
         mFirstLastNames.setText(firstLastNames);
+
+        mMoreBtn = (FancyButton) findViewById(R.id.share_panel_more_button);
+        mMoreBtn.setOnClickListener(this);
     }
 
     private void buttonsAppearenceHandling(){
@@ -98,6 +110,12 @@ public class ShareProfileActivity extends AppCompatActivity implements View.OnCl
             finish();
         }else if(id == mFacebookBtn.getId()){
             Utilities.shareOnFacebook(ShareProfileActivity.this, mLink, Uri.parse(Utilities.sCurProfile.avatar), username);
+        }else if (id == mMoreBtn.getId()){
+            Utilities.initShareIntent(ShareProfileActivity.this, Uri.parse(Utilities.sCurProfile.avatar), username, mLink);
+        }else if(id == mWhatsAppBtn.getId()){
+            Utilities.initShareIntent(ShareProfileActivity.this, Uri.parse(Utilities.sCurProfile.avatar), username, mLink, "com.whatsapp");
+        }else if(id == mInstagramBtn.getId()){
+            Utilities.initShareIntent(ShareProfileActivity.this, Uri.parse(Utilities.sCurProfile.avatar), username, mLink, "com.instagram.android");
         }
     }
 }

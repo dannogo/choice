@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/chat_avatar_container"
+    android:layout_width="@dimen/chat_avatar_ring_size"
+    android:layout_height="@dimen/chat_avatar_ring_size"
+    android:background="@drawable/chat_profile_ring"
+    android:gravity="center">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="visible">
+
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/chat_avatar_picture"
+            android:layout_width="@dimen/chat_vote_avatar_size"
+            android:layout_height="@dimen/chat_vote_avatar_size"
+            app:civ_border_color="#fff"
+            app:civ_border_width="1px"
+            android:visibility="visible" />
+            <!--android:src="@drawable/ruslana3"-->
+            <!--android:layout_width="@dimen/chat_avatar_inner_circle_diameter"-->
+            <!--android:layout_height="@dimen/chat_avatar_inner_circle_diameter"-->
+
+        <!--<ImageView-->
+            <!--android:id="@+id/chat_avatar_placeholder"-->
+            <!--android:layout_width="@dimen/chat_vote_avatar_placeholder_size"-->
+            <!--android:layout_height="@dimen/chat_vote_avatar_placeholder_size"-->
+            <!--android:src="@drawable/share_profile_user_icon_gray"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:visibility="gone" />-->
+            <!--android:layout_width="@dimen/chat_avatar_user_icon_size"-->
+            <!--android:layout_height="@dimen/chat_avatar_user_icon_size"-->
+
+    </RelativeLayout>
+</RelativeLayout>

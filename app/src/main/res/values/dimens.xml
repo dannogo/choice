@@ -313,4 +313,17 @@
 
     <dimen name="chat_radius">12dp</dimen>
 
+    <dimen name="chat_vote_avatar_size">36dp</dimen>
+    <dimen name="chat_vote_avatar_outer_size">40dp</dimen>
+    <dimen name="chat_vote_avatar_placeholder_size">26dp</dimen>
+
+    <!--<dimen name="chat_pic_and_rate_container_width">140dp</dimen>-->
+    <!--<dimen name="chat_pic_and_rate_container_height">220dp</dimen>-->
+    <dimen name="chat_avatars_container_padding">5dp</dimen>
+    <dimen name="chat_distance_between_avatar_rows">18dp</dimen>
+    <dimen name="chat_avatar_ring_size">120dp</dimen>
+    <dimen name="chat_avatar_inner_ring_diameter">110dp</dimen>
+    <dimen name="chat_avatar_inner_ring_inner_radius">53dp</dimen>
+    <dimen name="chat_avatar_ring_thickness">1px</dimen>
+    <dimen name="chat_avatar_ring_inner_radius">59dp</dimen>
 </resources>

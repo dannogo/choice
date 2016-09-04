@@ -177,6 +177,21 @@ public class HttpChat {
                             JSONObject quantity = votes.getJSONObject("quantity");
                             messageInfo.leftVote = Integer.parseInt(quantity.getString("1"));
                             messageInfo.rightVote = Integer.parseInt(quantity.getString("2"));
+                            JSONObject usersVote = votes.getJSONObject("users_vote");
+                            JSONArray votedLeft = usersVote.getJSONArray("1");
+                            for (int k=0; k<votedLeft.length(); k++){
+                                JSONObject leftVoter = votedLeft.getJSONObject(k);
+                                String user_id = leftVoter.getString("user_id");
+                                String avatar = leftVoter.getString("avatar");
+                                messageInfo.usersVotedLeft.put(user_id, avatar);
+                            }
+                            JSONArray votedRight = usersVote.getJSONArray("2");
+                            for (int k=0; k<votedRight.length(); k++){
+                                JSONObject rightVoter = votedRight.getJSONObject(k);
+                                String user_id = rightVoter.getString("user_id");
+                                String avatar = rightVoter.getString("avatar");
+                                messageInfo.usersVotedRight.put(user_id, avatar);
+                            }
                             JSONObject percent = votes.getJSONObject("percent");
                             messageInfo.leftPercent = percent.getInt("1");
                             messageInfo.rightPercent = percent.getInt("2");

@@ -1,8 +1,11 @@
 package com.elantix.dopeapp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -20,27 +23,29 @@ import android.graphics.PorterDuffXfermode;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.desarrollodroide.libraryfragmenttransactionextended.FragmentTransactionExtended;
+import com.bumptech.glide.Glide;
 import com.elantix.dopeapp.entities.ConversationInfo;
 import com.facebook.FacebookSdk;
 import com.facebook.share.model.ShareLinkContent;
 import com.facebook.share.widget.ShareDialog;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -52,6 +57,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -100,6 +106,195 @@ public class Utilities {
     public enum DopeListType{
         Ten, Hundred, Friends
     }
+
+
+    public static class UriToBitmapTask extends AsyncTask<Uri, Void, Bitmap> {
+
+        private Byte tryCounter = 0;
+        private Context context;
+        private String message;
+        private String link;
+        private String packageName;
+
+        public UriToBitmapTask(Context context, String message, String link, String packageName){
+            this.context = context;
+            this.message = message;
+            this.link = link;
+            this.packageName = packageName;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            if (context instanceof ShareDopeActivity){
+                ((ShareDopeActivity)context).mProgressDialog = ProgressDialog.show(context, null, "Please wait...", true);
+            }else if (context instanceof ShareProfileActivity){
+                ((ShareProfileActivity)context).mProgressDialog = ProgressDialog.show(context, null, "Please wait...", true);
+            }
+            if (packageName != null) {
+                if(!isPackageInstalled(packageName,context)) {
+                    Log.e("UriToBitmapTask", "Cancel");
+                    if (context instanceof ShareDopeActivity) {
+                        ((ShareDopeActivity) context).mProgressDialog.dismiss();
+                    } else if (context instanceof ShareProfileActivity) {
+                        ((ShareProfileActivity) context).mProgressDialog.dismiss();
+                    }
+
+                    String appName = packageName.split("\\.")[1];
+                    String appNameCapitalized = Character.toUpperCase(appName.charAt(0)) + appName.substring(1);
+                    Toast.makeText(context, appNameCapitalized+" have not been installed.", Toast.LENGTH_SHORT).show();
+                    try {
+                        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id="+packageName)));
+                    } catch (android.content.ActivityNotFoundException anfe) {
+                        context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id="+packageName)));
+                    }
+                    this.cancel(true);
+                }
+            }
+        }
+
+        @Override
+        protected Bitmap doInBackground(Uri... params) {
+
+            try {
+                Bitmap bitmap = Glide.with(context).load(params[0]).asBitmap().into(-1, -1).get();
+                return bitmap;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+                if (tryCounter <= 2) {
+                    doInBackground(params);
+                }
+                tryCounter++;
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap bitmap) {
+            super.onPostExecute(bitmap);
+            if (context instanceof ShareDopeActivity){
+                ((ShareDopeActivity)context).mProgressDialog.dismiss();
+            }else if(context instanceof ShareProfileActivity){
+                ((ShareProfileActivity)context).mProgressDialog.dismiss();
+            }
+            Log.w("Utilities", "UtiToBitmapTask result: "+bitmap);
+            if (bitmap != null) {
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("image/jpeg");
+                if (packageName != null) {
+                    share.setPackage(packageName);
+                }
+                ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                File f = new File(Environment.getExternalStorageDirectory()
+                        + File.separator + "temporary_file.jpg");
+                try {
+                    f.createNewFile();
+                    FileOutputStream fo = new FileOutputStream(f);
+                    fo.write(bytes.toByteArray());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                share.putExtra(Intent.EXTRA_TEXT, message + "\n" + link);
+                share.putExtra(Intent.EXTRA_SUBJECT, context.getResources().getString(R.string.app_name));
+//                share.putExtra(Intent.EXTRA_TITLE, context.getResources().getString(R.string.app_name));
+                share.putExtra(Intent.EXTRA_STREAM,
+                        Uri.parse("file:///sdcard/temporary_file.jpg"));
+                context.startActivity(Intent.createChooser(share, "Share to"));
+            }
+        }
+    }
+
+
+    public static void initShareIntent(Context context, Uri imageUri, String message, String link){
+        initShareIntent(context, imageUri, message, link, null);
+    }
+
+    public static void initShareIntent(Context context, Uri imageUri, String message, String link, String packageName){
+        UriToBitmapTask task = new UriToBitmapTask(context, message, link, packageName);
+        task.execute(imageUri);
+    }
+
+//    public static void shareImageWhatsApp(Context context, Uri imageUri, String message, String link) {
+//
+//        Bitmap adv = BitmapFactory.decodeResource(context.getResources(), R.drawable.paper_plane);
+//        Intent share = new Intent(Intent.ACTION_SEND);
+//        share.setType("image/jpeg");
+//        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+//        adv.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+//        File f = new File(Environment.getExternalStorageDirectory()
+//                + File.separator + "temporary_file.jpg");
+//        try {
+//            f.createNewFile();
+//            new FileOutputStream(f).write(bytes.toByteArray());
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+//        share.putExtra(Intent.EXTRA_STREAM,
+//                Uri.parse( Environment.getExternalStorageDirectory()+ File.separator+"temporary_file.jpg"));
+//        share.putExtra(Intent.EXTRA_TEXT, message + "\n" + link);
+//        share.putExtra(Intent.EXTRA_SUBJECT, context.getResources().getString(R.string.app_name));
+//        if(isPackageInstalled("com.whatsapp",context)){
+//            share.setPackage("com.whatsapp");
+//            context.startActivity(Intent.createChooser(share, "Share Image"));
+//
+//        }else{
+//
+//            Toast.makeText(context.getApplicationContext(), "Please Install Whatsapp", Toast.LENGTH_LONG).show();
+//        }
+//
+//    }
+
+    private static boolean isPackageInstalled(String packagename, Context context) {
+        PackageManager pm = context.getPackageManager();
+        try {
+            pm.getPackageInfo(packagename, PackageManager.GET_ACTIVITIES);
+            return true;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
+
+//    public static void shareOnWhatsapp(Context context, Uri imageUri, String message, String link){
+//        /**
+//         * Show share dialog BOTH image and text
+//         */
+////        Uri imageUri = Uri.parse(pictureFile.getAbsolutePath());
+//        Log.w("Utilities", "shareOnWhatsApp");
+//        Intent shareIntent = new Intent();
+//        shareIntent.setAction(Intent.ACTION_SEND);
+//        //Target whatsapp:
+//        shareIntent.setPackage("com.whatsapp");
+//        //Add text and then Image URI
+//        shareIntent.putExtra(Intent.EXTRA_TEXT, message);
+////        shareIntent.putExtra(Intent.EXTRA_ORIGINATING_URI, message);
+//        shareIntent.putExtra(Intent.EXTRA_TITLE, context.getResources().getString(R.string.app_name));
+//        shareIntent.putExtra(Intent.EXTRA_STREAM, imageUri);
+//        shareIntent.setType("image/jpeg");
+//        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//
+////        Intent shareIntent = new Intent();
+////        shareIntent.setAction(Intent.ACTION_SEND);
+////        shareIntent.putExtra(Intent.EXTRA_TEXT,message + "\n\nLink : " + link );
+//////        shareIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse(sharePath));
+////        shareIntent.setType("image/*");
+////        context.startActivity(Intent.createChooser(shareIntent, "Share image via:"));
+//
+//        try {
+//            context.startActivity(shareIntent);
+//        } catch (android.content.ActivityNotFoundException ex) {
+//            Toast.makeText(context, "Whatsapp have not been installed.", Toast.LENGTH_SHORT).show();
+//            try {
+//                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.whatsapp")));
+//            } catch (android.content.ActivityNotFoundException anfe) {
+//                context.startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.whatsapp")));
+//            }
+//        }
+//    }
 
 //    public static void shareOnFacebook(Activity context, String link, DopeInfo dopeInfo){
     public static void shareOnFacebook(Activity context, String link, Uri image, String description){
@@ -336,6 +531,50 @@ public class Utilities {
     public static void logOutWithConfirmation(Context context){
         FragmentLogOutConfirmation dialog = new FragmentLogOutConfirmation();
         dialog.show(((Activity) context).getFragmentManager(), "ConfirmationLogout");
+    }
+
+    public enum ActionsWhichRequireLogin {
+        Comment, Follow, DirectMessage
+    }
+
+    public static void loginProposalDialog(final MainActivity activity, ActionsWhichRequireLogin action){
+        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        builder.setTitle("Username Required");
+        String messageEnd;
+        switch (action){
+            case Comment:
+                messageEnd = "comment!";
+                break;
+            case Follow:
+                messageEnd = "follow others or to be followed!";
+                break;
+            case DirectMessage:
+                messageEnd = "send Direct Messages!";
+                break;
+            default:
+                messageEnd = "comment!";
+        }
+        builder.setMessage("You need to have a username to "+messageEnd);
+        builder.setPositiveButton("Log In", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                activity.switchPageHandler(MainActivity.Page.Profile);
+            }
+        });
+//        builder.setNeutralButton("Pick Username", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialog, int which) {
+//
+//            }
+//        });
+        builder.setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+            }
+        });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     /**

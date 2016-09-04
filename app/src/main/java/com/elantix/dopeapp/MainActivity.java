@@ -554,7 +554,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mRightToolbarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        launchCommentsActivity();
+                        if (Utilities.sUid != null) {
+                            launchCommentsActivity();
+                        }else{
+                            Utilities.loginProposalDialog(MainActivity.this, Utilities.ActionsWhichRequireLogin.DirectMessage);
+                        }
                     }
                 });
                 break;
@@ -567,7 +571,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mRightToolbarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        launchCommentsActivity();
+                        if (Utilities.sUid != null) {
+                            launchCommentsActivity();
+                        }else{
+                            Utilities.loginProposalDialog(MainActivity.this, Utilities.ActionsWhichRequireLogin.DirectMessage);
+                        }
                     }
                 });
                 break;
@@ -580,7 +588,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mRightToolbarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        launchCommentsActivity();
+                        if (Utilities.sUid != null) {
+                            launchCommentsActivity();
+                        }else{
+                            Utilities.loginProposalDialog(MainActivity.this, Utilities.ActionsWhichRequireLogin.DirectMessage);
+                        }
                     }
                 });
                 break;
@@ -616,7 +628,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 mRightToolbarButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        launchCommentsActivity();
+                        if (Utilities.sUid != null) {
+                            launchCommentsActivity();
+                        }else{
+                            Utilities.loginProposalDialog(MainActivity.this, Utilities.ActionsWhichRequireLogin.DirectMessage);
+                        }
                     }
                 });
                 mLeftToolbarButton.setImageResource(R.drawable.toolbar_magnifier_icon);

@@ -85,7 +85,7 @@
                 <com.mikhaellopez.circularimageview.CircularImageView
                     android:visibility="visible"
                     android:id="@+id/share_profile_avatar"
-                    android:layout_width="@dimen/profile_settings_avatar_inner_circle_diameter"
+                    android:layout_width= "@dimen/profile_settings_avatar_inner_circle_diameter"
                     android:layout_height="@dimen/profile_settings_avatar_inner_circle_diameter"
                     app:civ_border_color="#fff"
                     app:civ_border_width="0dp"

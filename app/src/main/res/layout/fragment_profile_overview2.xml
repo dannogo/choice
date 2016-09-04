@@ -209,7 +209,7 @@
             android:textSize="@dimen/profile_overview2_user_name_text_size"
             android:textColor="@color/main_screen_question_font_color"
             android:textStyle="bold"
-            android:text="Name"
+            android:text=""
             />
 
         <TextView
@@ -219,7 +219,7 @@
             android:layout_marginTop="@dimen/profile_overview_margin_3"
             android:textSize="@dimen/profile_overview_user_name_description_text_size"
             android:textColor="@color/friends_desription_text_color"
-            android:text="Description"
+            android:text=""
             android:lineSpacingMultiplier="1.1"
             android:maxLines="6"
             android:ellipsize="end"
